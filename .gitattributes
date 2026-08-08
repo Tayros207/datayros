@@ -1,0 +1,12 @@
+# Normaliza los finales de línea a LF dentro del repositorio.
+# Se desarrolla en Windows (CRLF) pero se sirve desde el edge de Cloudflare
+# (Linux). Sin esto, git guardaría CRLF y cada cambio de plataforma generaría
+# diffs falsos donde no cambió nada.
+* text=auto eol=lf
+
+# Binarios: no tocar.
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff binary
+*.woff2 binary

@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# El endpoint del chat no es contenido indexable.
+Disallow: /chat
+
+# El contexto del asistente se sirve como archivo estático para que la función
+# pueda leerlo. No es secreto, pero tampoco tiene por qué aparecer en Google.
+Disallow: /knowledge/
+
+# TODO: reemplaza el dominio por el real.
+Sitemap: https://tairos.com/sitemap.xml

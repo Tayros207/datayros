@@ -1,0 +1,25 @@
+# Secretos — NUNCA subir
+.env
+.env.local
+.env.*.local
+.dev.vars
+
+# Dependencias (por si más adelante se agregan)
+node_modules/
+
+# Cache y build de Cloudflare / Wrangler
+.wrangler/
+.mf/
+dist/
+.cache/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

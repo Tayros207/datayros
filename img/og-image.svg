@@ -1,0 +1,41 @@
+<!--
+  Plantilla para og-image.png — 1200 × 630.
+  Ábrela en Figma, Illustrator o Inkscape y expórtala como PNG a img/og-image.png.
+  Las tipografías Newsreader / Space Grotesk deben estar instaladas localmente,
+  o conviértelas a trazos antes de exportar.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#F6F3EC"/>
+
+  <!-- Filete superior índigo, como el borde de una ficha del ledger -->
+  <rect x="0" y="0" width="1200" height="6" fill="#2B3F6B"/>
+
+  <!-- Reglas punteadas de cuaderno -->
+  <g stroke="#DBD3BE" stroke-width="1" stroke-dasharray="3 5">
+    <line x1="88" y1="196" x2="1112" y2="196"/>
+    <line x1="88" y1="470" x2="1112" y2="470"/>
+  </g>
+
+  <!-- Logo -->
+  <circle cx="94" cy="130" r="7" fill="#2B3F6B"/>
+  <text x="112" y="139" font-family="Newsreader, Georgia, serif" font-style="italic"
+        font-size="34" fill="#201F1A">Tairos</text>
+
+  <!-- Eyebrow -->
+  <line x1="88" y1="252" x2="112" y2="252" stroke="#2B3F6B" stroke-width="1.5"/>
+  <text x="124" y="257" font-family="'Space Grotesk', sans-serif" font-size="16"
+        letter-spacing="2.1" fill="#2B3F6B">LABORATORIO DE TECNOLOGÍAS EMERGENTES</text>
+
+  <!-- Titular -->
+  <text font-family="Newsreader, Georgia, serif" font-size="60" fill="#201F1A">
+    <tspan x="88" y="336">Software con agentes de </tspan><tspan fill="#2B3F6B" font-style="italic">IA</tspan>
+    <tspan x="88" y="404">para que tu empresa trabaje mejor.</tspan>
+  </text>
+
+  <!-- Pie -->
+  <text x="88" y="524" font-family="Inter, sans-serif" font-size="23" fill="#6C6759">
+    No vendemos tecnología: vendemos tiempo recuperado.
+  </text>
+  <text x="88" y="566" font-family="'Space Grotesk', sans-serif" font-size="16"
+        letter-spacing="1.4" fill="#96907E">26 AÑOS DE INDUSTRIA REAL · ATLANTIS COMO SHOWROOM EN VIVO</text>
+</svg>
