@@ -123,7 +123,39 @@ section{ padding:98px 0; border-bottom:1px solid var(--rule); }
   position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; }
 .founder-initials{ font-family:'Newsreader',serif; font-size:60px; font-style:italic; color:var(--ink); }
 .founder-tag{ position:absolute; bottom:16px; left:16px; right:16px; font-family:'Space Grotesk',sans-serif;
-  font-size:11.5px; color:var(--muted-2); border-top:1px solid var(--rule); padding-top:12px; }
+  font-size:11.5px; color:var(--muted-2); border-top:1px solid var(--rule); padding-top:12px;
+  z-index:2; }
+
+/* ── Retrato del fundador ──────────────────────────────────────────────────
+   La foto llena el marco por encima de las iniciales. Todo lo que sigue está
+   condicionado con :has() a que la imagen exista: si falta el archivo, o si
+   main.js la retira por un error de carga, la tarjeta vuelve exactamente al
+   estado anterior (iniciales sobre papel) sin dejar restos visuales. */
+.founder-photo{
+  position:absolute; inset:0; z-index:1;
+  width:100%; height:100%;
+  /* La foto es casi cuadrada (422x414) y el marco es vertical (1/1.15), así que
+     `cover` la ajusta a lo ALTO y recorta ~8.6% por cada lado — justo lo que
+     saca la ventana del fondo y deja a la persona sola. No hay recorte vertical:
+     se ve completo. Sin zoom adicional a propósito: ampliar 422px restaría la
+     nitidez que se acaba de ganar. */
+  object-fit:cover; object-position:center;
+  display:block;
+}
+
+/* Velo inferior. El pie de foto va sobre la imagen, y sin esto quedaría
+   ilegible. Cubre solo el tercio bajo: lo justo para el texto, sin tapar a la
+   persona. */
+.founder-mark:has(.founder-photo)::after{
+  content:''; position:absolute; left:0; right:0; bottom:0; height:34%;
+  background:linear-gradient(to top, rgba(20,19,16,.88), rgba(20,19,16,.45) 50%, transparent);
+  pointer-events:none; z-index:1;
+}
+/* Sobre la foto el pie va en color papel, no en el gris del fondo claro. */
+.founder-mark:has(.founder-photo) .founder-tag{
+  color:rgba(246,243,236,.86);
+  border-top-color:rgba(246,243,236,.3);
+}
 .founder blockquote{ font-family:'Newsreader', serif; font-weight:400; font-style:italic; font-size:clamp(19px,2.2vw,24px); line-height:1.5; margin:18px 0 22px; }
 .founder cite{ font-family:'Space Grotesk',sans-serif; font-style:normal; font-size:13px; color:var(--muted); display:block; }
 .founder cite span{ color:var(--ink); font-weight:500; }

@@ -2,8 +2,35 @@
 
 ## `favicon.svg` ✅
 
-Listo. Punto índigo + "T" en Newsreader sobre papel, igual que el logo del nav.
-Reemplázalo si tienes una marca definitiva.
+Punto índigo + "T" en Newsreader sobre papel, igual que el logo del nav.
+
+## `moises-escobar.jpg` ✅
+
+Retrato del fundador, dentro del recuadro de la sección "Quién te escribe".
+
+Procesada desde el original `201.jpg` (que quedó de respaldo en
+`TAIROS_WEB01/201-original-moises.jpg`, fuera del repositorio):
+
+| | Antes | Después |
+|---|---|---|
+| Peso | 612.4 KB | **27.4 KB** (−95.5%) |
+| Dimensiones | 422 × 414 | 422 × 414 (sin cambios) |
+| Nitidez | — | máscara de enfoque (a = 0.30) |
+
+**Cómo queda encuadrada.** La foto es casi cuadrada (proporción 1.019) y el
+marco es vertical (1/1.15), así que `object-fit: cover` la ajusta a lo alto y
+recorta **8.6% por cada lado** — justo lo que saca la ventana del fondo. No hay
+recorte vertical: la persona se ve completa.
+
+**Límite de nitidez conocido.** En escritorio el recuadro mide unos 317 px de
+ancho, así que 422 px se reducen y se ven nítidos. En pantallas retina (2×)
+harían falta ~634 px de origen; con 422 el navegador amplía y se percibe algo
+suave. Si aparece el original en mayor resolución, reemplazar el archivo mejora
+esto sin tocar código — el CSS no depende del tamaño.
+
+**Si se reemplaza:** basta con sobrescribir `moises-escobar.jpg`. Si el archivo
+llegara a faltar, `js/main.js` retira la imagen y la tarjeta vuelve sola a las
+iniciales "M.E." sobre papel, sin ícono de imagen rota.
 
 ## `og-image.png` ⚠️ falta generarlo
 
