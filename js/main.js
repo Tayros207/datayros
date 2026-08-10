@@ -1,5 +1,5 @@
 /* ============================================================================
-   Tairos — comportamiento de la landing.
+   Datayros — comportamiento de la landing.
    Migrado sin cambios desde el <script> del HTML original, más la
    configuración de contacto centralizada.
    ========================================================================== */
@@ -15,9 +15,9 @@
 */
 export const WHATSAPP_NUMBER = "";              // ← TODO: pon tu número aquí
 export const WHATSAPP_MESSAGE =
-  "Hola Tairos, vi su sitio y quiero contarles qué proceso me quita más tiempo.";
-export const EMAIL = "hola@tairos.com";         // ← TODO: pon tu correo real
-export const EMAIL_SUBJECT = "Consulta desde el sitio de Tairos";
+  "Hola Datayros, vi su sitio y quiero contarles qué proceso me quita más tiempo.";
+export const EMAIL = "hola@datayros.com";         // ← TODO: pon tu correo real
+export const EMAIL_SUBJECT = "Consulta desde el sitio de Datayros";
 
 /** Construye el enlace de WhatsApp. Si falta el número, devuelve null. */
 export function whatsappUrl(message = WHATSAPP_MESSAGE) {

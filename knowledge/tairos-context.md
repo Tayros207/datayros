@@ -1,7 +1,7 @@
-# Contexto de Tairos
+# Contexto de Datayros
 
 > Este archivo es la memoria del asistente del sitio. Todo lo que el chatbot
-> sabe sobre Tairos sale de aquí, y solo de aquí. Para cambiar lo que responde,
+> sabe sobre Datayros sale de aquí, y solo de aquí. Para cambiar lo que responde,
 > edita este documento y vuelve a desplegar — no hace falta tocar código.
 >
 > Regla al editar: si un dato no está escrito aquí, el asistente tiene
@@ -12,13 +12,13 @@
 
 ---
 
-## Qué es Tairos
+## Qué es Datayros
 
-Tairos es un laboratorio de tecnologías emergentes. Desarrolla software con
+Datayros es un laboratorio de tecnologías emergentes. Desarrolla software con
 agentes de inteligencia artificial para que las empresas trabajen de forma más
 ágil, más eficaz y más rentable.
 
-La distinción importa: Tairos no vende tecnología, vende resultados. Lo que el
+La distinción importa: Datayros no vende tecnología, vende resultados. Lo que el
 cliente recibe no es una herramienta más, sino tiempo recuperado y decisiones
 más simples. Si un sistema no le devuelve horas o no le quita errores, no tiene
 sentido que lo pague.
@@ -40,17 +40,17 @@ resultado, no un costo aceptable.
 **2. Tu conocimiento, no el nuestro.**
 Lo que la empresa del cliente sabe queda registrado como memoria de esa empresa:
 sus clientes, sus errores costosos, sus criterios de decisión. Esa información
-no se comparte con otros clientes ni se reutiliza para entrenar nada de Tairos.
+no se comparte con otros clientes ni se reutiliza para entrenar nada de Datayros.
 
 **3. Resultado antes que licencia.**
-Tairos prefiere cobrar por resultado que por suscripción fija. Si la herramienta
+Datayros prefiere cobrar por resultado que por suscripción fija. Si la herramienta
 no ahorra tiempo ni dinero, no hay razón para seguir pagándola.
 
 ---
 
-## Cómo trabaja Tairos
+## Cómo trabaja Datayros
 
-Antes de ofrecer un sistema a un cliente, Tairos lo prueba primero en Atlantis:
+Antes de ofrecer un sistema a un cliente, Datayros lo prueba primero en Atlantis:
 su propio taller gráfico y de empaques, en operación real. No es una demo
 controlada — hay máquinas, plazos y clientes de por medio, y el dinero que se
 arriesga es propio. Si algo no sobrevive ahí, no se ofrece afuera.
@@ -64,13 +64,13 @@ El proceso tiene cuatro etapas, y el cliente puede detenerse en cualquiera:
 3. **Implementación** — El sistema se instala donde el cliente ya trabaja:
    WhatsApp, celular, computadora. No se le pide cambiar de herramientas.
 4. **Acompañamiento** — Se mide el resultado junto al cliente y se ajusta.
-   Tairos no entrega y desaparece.
+   Datayros no entrega y desaparece.
 
 No hay contratos largos ni instalaciones invasivas.
 
 ---
 
-## Qué hace Tairos
+## Qué hace Datayros
 
 - **Desarrollo de software y automatizaciones a medida** — sistemas construidos
   para el proceso específico del cliente, no plantillas genéricas que después
@@ -108,7 +108,7 @@ Quedan como memoria de la empresa del cliente. No se comparten con terceros ni
 se reutilizan para otros clientes.
 
 **"Ya invertí antes en un sistema que nadie usó."**
-Es una cautela razonable. Por eso Tairos prueba cada sistema primero en su
+Es una cautela razonable. Por eso Datayros prueba cada sistema primero en su
 propio taller, con su propio dinero en juego, antes de proponerlo.
 
 **"¿Cuánto cuesta?"**
@@ -118,7 +118,7 @@ El asistente **no da cifras**: invita a conversarlo con el equipo.
 
 **"¿Y si lo probamos y no funciona?"**
 Se empieza siempre con un problema acotado y medible. Si no da el resultado
-esperado, Tairos lo dice con honestidad en vez de presionar para continuar.
+esperado, Datayros lo dice con honestidad en vez de presionar para continuar.
 
 ---
 

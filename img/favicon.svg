@@ -5,5 +5,5 @@
   <!-- El punto índigo es el mismo .logo-mark del nav. -->
   <circle cx="16" cy="24" r="4" fill="#2B3F6B"/>
   <text x="26" y="43" font-family="Newsreader, Georgia, 'Times New Roman', serif"
-        font-style="italic" font-size="38" fill="#201F1A">T</text>
+        font-style="italic" font-size="38" fill="#201F1A">D</text>
 </svg>

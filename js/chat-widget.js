@@ -1,5 +1,5 @@
 /* ============================================================================
-   Tairos — widget de chat.
+   Datayros — widget de chat.
 
    Solo interfaz: abrir/cerrar, burbujas, "escribiendo…" y la llamada al
    endpoint propio. No sabe nada de Anthropic ni de la llave — eso vive en
@@ -15,7 +15,7 @@ const ENDPOINT = "/chat";
 const MAX_HISTORY = 12; // turnos que reenviamos (el backend topa igual)
 
 const WELCOME =
-  "Hola, soy el asistente de Tairos. Puedo contarte cómo trabajamos o " +
+  "Hola, soy el asistente de Datayros. Puedo contarte cómo trabajamos o " +
   "ayudarte a encontrar el proceso que más tiempo te quita. Si prefieres " +
   "hablar con el equipo directamente, aquí tienes el WhatsApp.";
 
@@ -24,19 +24,19 @@ if (root) mount(root);
 
 function mount(root) {
   const contactHref =
-    whatsappUrl("Hola Tairos, estaba en su sitio y quiero hacerles una consulta.") ||
+    whatsappUrl("Hola Datayros, estaba en su sitio y quiero hacerles una consulta.") ||
     emailUrl();
   const contactLabel = whatsappUrl() ? "Abrir WhatsApp" : "Escribir un correo";
 
   root.innerHTML = `
     <button class="chat-fab" type="button" data-fab aria-haspopup="dialog">
-      <span class="fab-dot" aria-hidden="true"></span> Pregúntale a Tairos
+      <span class="fab-dot" aria-hidden="true"></span> Pregúntale a Datayros
     </button>
 
-    <div class="chat-panel" data-panel role="dialog" aria-label="Asistente de Tairos" hidden>
+    <div class="chat-panel" data-panel role="dialog" aria-label="Asistente de Datayros" hidden>
       <div class="chat-head">
         <div>
-          <h3>Pregúntale a Tairos</h3>
+          <h3>Pregúntale a Datayros</h3>
           <div class="chat-sub">Asistente del sitio</div>
         </div>
         <button class="chat-close" type="button" data-close aria-label="Cerrar el chat">&times;</button>
@@ -132,7 +132,7 @@ function mount(root) {
 
     const label = document.createElement("div");
     label.className = "who";
-    label.textContent = who === "bot" ? "Tairos" : "Tú";
+    label.textContent = who === "bot" ? "Datayros" : "Tú";
 
     const body = document.createElement("div");
     body.className = "body";
@@ -152,7 +152,7 @@ function mount(root) {
     const el = document.createElement("div");
     el.className = "chat-msg chat-msg-bot";
     el.innerHTML = `
-      <div class="who">Tairos</div>
+      <div class="who">Datayros</div>
       <div class="body">
         <span class="chat-typing" role="status" aria-label="Escribiendo">
           <i></i><i></i><i></i>
