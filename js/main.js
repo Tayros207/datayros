@@ -46,15 +46,14 @@ document.querySelectorAll("[data-email]").forEach((el) => {
   el.setAttribute("href", emailUrl());
 });
 
-/* ── Respaldo del retrato del fundador ────────────────────────────────────────
-   Si la foto no existe todavía o falla al cargar, la quitamos del DOM. El CSS
-   está condicionado con :has(.founder-photo), así que al retirarla la tarjeta
-   vuelve sola a las iniciales sobre papel — sin ícono de imagen rota ni un pie
-   de foto blanco sobre fondo claro. */
-const founderPhoto = document.querySelector(".founder-photo");
-if (founderPhoto) {
-  founderPhoto.addEventListener("error", () => founderPhoto.remove(), { once: true });
-}
+/* ── Respaldo de las fotos ────────────────────────────────────────────────────
+   Si una foto no existe o falla al cargar, la quitamos del DOM. El CSS de cada
+   una está condicionado con :has(), así que al retirarla el contenedor vuelve
+   solo a su estado anterior —iniciales sobre papel en la ficha del fundador,
+   rayas diagonales en el marco de Atlantis— sin ícono de imagen rota. */
+document.querySelectorAll(".founder-photo, .showroom-photo").forEach((img) => {
+  img.addEventListener("error", () => img.remove(), { once: true });
+});
 
 /* ── Scroll reveal (original) ─────────────────────────────────────────────── */
 const revealEls = document.querySelectorAll('.reveal');

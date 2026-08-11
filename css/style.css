@@ -251,8 +251,26 @@ section{ padding:98px 0; border-bottom:1px solid var(--rule); }
 @media (max-width:900px){ .showroom{ grid-template-columns:1fr; } }
 .showroom-visual{ aspect-ratio:4/5; background:var(--card); border:1px solid var(--rule-strong); position:relative; overflow:hidden; border-radius:3px; }
 .showroom-visual::before{ content:''; position:absolute; inset:0; background:repeating-linear-gradient(135deg, transparent 0 26px, var(--rule) 26px 27px); }
+
+/* ── Foto del taller Atlantis ──────────────────────────────────────────────
+   La imagen es cuadrada y el marco es 4/5, así que `cover` la ajusta a lo
+   ALTO y recorta 12.5% por cada lado. Con encuadre centrado sobreviven los
+   tres elementos que sostienen el mensaje de la sección: la prensa a la
+   izquierda, el logo de Atlantis en la pared y los monitores del primer
+   plano. Sin recorte vertical.
+   El pie ("18 años") no necesita velo: .showroom-badge ya trae su propio
+   fondo crema al 90%, legible sobre cualquier imagen. */
+.showroom-photo{
+  position:absolute; inset:0; z-index:1;
+  width:100%; height:100%;
+  object-fit:cover; object-position:center;
+  display:block;
+}
+/* Con foto presente, las rayas diagonales sobran. Al retirarla main.js,
+   :has() deja de aplicar y el marco vuelve solo a su estado anterior. */
+.showroom-visual:has(.showroom-photo)::before{ display:none; }
 .showroom-badge{ position:absolute; bottom:20px; left:20px; right:20px; background:rgba(252,251,247,0.9); border:1px solid var(--rule-strong);
-  padding:16px 18px; font-family:'Space Grotesk',sans-serif; font-size:12.5px; backdrop-filter:blur(6px); }
+  padding:16px 18px; font-family:'Space Grotesk',sans-serif; font-size:12.5px; backdrop-filter:blur(6px); z-index:2; }
 .showroom-badge .b-num{ color:var(--accent); font-weight:600; font-size:22px; display:block; margin-bottom:4px; font-family:'Newsreader',serif; font-style:italic;}
 .showroom h2{ font-size:clamp(23px,3vw,31px); margin:16px 0 20px; line-height:1.3; font-weight:400; }
 .showroom p{ color:var(--muted); font-size:15.5px; margin-bottom:16px; }
