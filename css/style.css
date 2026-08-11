@@ -232,22 +232,20 @@ section{ padding:98px 0; border-bottom:1px solid var(--rule); }
   .stock-item{ grid-template-columns:1fr; gap:7px; padding:20px; align-items:start; }
 }
 
-/* Estado. El punto de color hace legible la madurez sin leer el texto. */
-.stock-state{
+/* Atribución del socio. Va en umber (el acento secundario, el mismo de los
+   números de los pilares) para leerse como procedencia y no como estado de
+   madurez — son productos de ForgeNova, no de Datayros, y la columna
+   izquierda debe decirlo antes que cualquier otra cosa. El rombo, en vez de
+   un punto, evita confundirlo con los indicadores "en vivo" del sitio. */
+.stock-partner{
   font-family:'Space Grotesk',sans-serif; font-size:10.5px; letter-spacing:.09em;
-  text-transform:uppercase; color:var(--muted-2); white-space:nowrap;
+  text-transform:uppercase; color:var(--umber); white-space:nowrap;
   display:inline-flex; align-items:center; gap:8px;
 }
-.stock-state::before{
-  content:''; width:6px; height:6px; border-radius:50%;
-  background:var(--muted-2); flex-shrink:0;
+.stock-partner::before{
+  content:''; width:6px; height:6px; background:var(--umber);
+  transform:rotate(45deg); flex-shrink:0;
 }
-.stock-state.is-live{ color:var(--accent); }
-/* Mismo latido que el punto de la bitácora del hero: señala "vivo ahora". */
-.stock-state.is-live::before{ background:var(--accent); animation:pulse 2s infinite; }
-.stock-state.is-pilot{ color:var(--umber); }
-.stock-state.is-pilot::before{ background:var(--umber); }
-@media (prefers-reduced-motion:reduce){ .stock-state.is-live::before{ animation:none; } }
 
 .showroom{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:60px; align-items:center; }
 @media (max-width:900px){ .showroom{ grid-template-columns:1fr; } }
