@@ -232,11 +232,23 @@ section{ padding:98px 0; border-bottom:1px solid var(--rule); }
   .stock-item{ grid-template-columns:1fr; gap:7px; padding:20px; align-items:start; }
 }
 
-/* Atribución del socio. Va en umber (el acento secundario, el mismo de los
-   números de los pilares) para leerse como procedencia y no como estado de
-   madurez — son productos de ForgeNova, no de Datayros, y la columna
-   izquierda debe decirlo antes que cualquier otra cosa. El rombo, en vez de
-   un punto, evita confundirlo con los indicadores "en vivo" del sitio. */
+/* Procedencia. La columna izquierda dice de quién es cada sistema antes que
+   cualquier otra cosa — es el dato que el comprador verifica primero.
+   Dos marcadores, deliberadamente distintos entre sí:
+     · desarrollo propio → círculo índigo (el acento principal)
+     · socio            → rombo umber   (el acento secundario)
+   Ninguno late: el punto que pulsa es el de la bitácora del hero y significa
+   "ocurriendo ahora"; usarlo aquí afirmaría una madurez que no está medida. */
+.stock-own{
+  font-family:'Space Grotesk',sans-serif; font-size:10.5px; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--accent); white-space:nowrap;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.stock-own::before{
+  content:''; width:6px; height:6px; border-radius:50%;
+  background:var(--accent); flex-shrink:0;
+}
+
 .stock-partner{
   font-family:'Space Grotesk',sans-serif; font-size:10.5px; letter-spacing:.09em;
   text-transform:uppercase; color:var(--umber); white-space:nowrap;
