@@ -219,6 +219,14 @@ section{ padding:98px 0; border-bottom:1px solid var(--rule); }
 .stock-item:hover{ background:var(--paper); }
 .stock-item h3{ font-size:17px; font-weight:450; line-height:1.3; }
 .stock-item p{ color:var(--muted); font-size:14px; }
+
+/* Términos concretos bajo el nombre. El comprador escanea buscando la palabra
+   que reconoce ("SUNAT", "POS") antes de leer la frase completa; ponerlos
+   aparte hace ese barrido más rápido sin recargar la descripción. */
+.stock-item .stock-tags{
+  font-family:'Space Grotesk',sans-serif; font-size:11px; letter-spacing:.04em;
+  color:var(--muted-2); margin-top:5px;
+}
 @media (max-width:860px){
   /* En móvil la fila se apila: estado arriba, luego nombre y descripción. */
   .stock-item{ grid-template-columns:1fr; gap:7px; padding:20px; align-items:start; }
