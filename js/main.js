@@ -15,7 +15,7 @@
 */
 export const WHATSAPP_NUMBER = "51933137048";
 export const WHATSAPP_MESSAGE =
-  "Hola Datayros, vi su sitio y quiero contarles qué proceso me quita más tiempo.";
+  "Hola Datayros, me gustaría recibir más información sobre sus productos y servicios.";
 export const EMAIL = "tairosgraph@gmail.com";
 export const EMAIL_SUBJECT = "Consulta desde el sitio de Datayros";
 
