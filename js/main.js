@@ -13,10 +13,10 @@
 
    Se usan aquí (botones del CTA y del hero) y en chat-widget.js. Un solo lugar.
 */
-export const WHATSAPP_NUMBER = "";              // ← TODO: pon tu número aquí
+export const WHATSAPP_NUMBER = "51933137048";
 export const WHATSAPP_MESSAGE =
   "Hola Datayros, vi su sitio y quiero contarles qué proceso me quita más tiempo.";
-export const EMAIL = "hola@datayros.com";         // ← TODO: pon tu correo real
+export const EMAIL = "tairosgraph@gmail.com";
 export const EMAIL_SUBJECT = "Consulta desde el sitio de Datayros";
 
 /** Construye el enlace de WhatsApp. Si falta el número, devuelve null. */

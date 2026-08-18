@@ -134,11 +134,10 @@ producto ganador.** Es la misma secuencia que defiende el documento
 
 Ninguno se puede resolver sin decisión de Moisés:
 
-1. **Número de WhatsApp** — formato internacional, solo dígitos, sin `+` ni
-   espacios. Va en `js/main.js`. Mientras esté vacío, los botones caen al correo.
+1. ~~**Número de WhatsApp**~~ — ✅ resuelto: `51933137048` en `js/main.js`.
 2. **Dominio** — ¿registrado o hay que comprarlo? Aparece en `index.html`,
    `robots.txt` y `sitemap.xml`.
-3. **Correo real** — para el segundo botón del CTA.
+3. ~~**Correo real**~~ — ✅ resuelto: `tairosgraph@gmail.com` en `js/main.js`.
 4. **Llave de API** — solo si se elige la opción B.
 
 No bloqueantes pero baratos y de alto valor, según los hallazgos de §2:
