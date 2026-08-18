@@ -2,7 +2,8 @@
   <!-- Misma paleta que el sitio: papel #F6F3EC, índigo #2B3F6B. -->
   <rect width="64" height="64" rx="3" fill="#F6F3EC"/>
   <rect x="0.5" y="0.5" width="63" height="63" rx="3" fill="none" stroke="#C7BC9E"/>
-  <!-- El punto índigo es el mismo .logo-mark del nav. -->
+  <!-- El punto índigo es el mismo acento del sitio (--accent), aunque el
+       .logo-mark del nav ahora usa el ícono a color de Datayros. -->
   <circle cx="16" cy="24" r="4" fill="#2B3F6B"/>
   <text x="26" y="43" font-family="Newsreader, Georgia, 'Times New Roman', serif"
         font-style="italic" font-size="38" fill="#201F1A">D</text>
