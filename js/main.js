@@ -195,6 +195,49 @@ if (animate) {
   });
 }
 
+/* ── Escena de la línea ───────────────────────────────────────────────────────
+   El ciclo que cuenta la historia sin palabras: la prensa imprime la hoja,
+   la hoja viaja, cruza la marca de registro y se vuelve un mensaje que llega
+   solo al teléfono. El SVG está dibujado en su cuadro final (hoja en camino,
+   mensaje entregado), así que sin GSAP o con movimiento reducido la escena
+   queda compuesta y completa — solo que quieta. */
+if (animate && document.getElementById("lineScene")) {
+  /* Maquinaria de fondo: rodillos y bobina girando, banda avanzando. */
+  gsap.to("#sceneSpokeA", { rotation: 360, svgOrigin: "112 90", repeat: -1, ease: "none", duration: 3.6 });
+  gsap.to("#sceneSpokeB", { rotation: -360, svgOrigin: "158 90", repeat: -1, ease: "none", duration: 3.6 });
+  gsap.to("#sceneSpokeRoll", { rotation: 360, svgOrigin: "44 74", repeat: -1, ease: "none", duration: 5.2 });
+  gsap.fromTo("#sceneBelt", { strokeDashoffset: 0 }, { strokeDashoffset: -12, repeat: -1, ease: "none", duration: 1.1 });
+
+  /* La estela de píxeles del logo: se desprenden de la hoja recién impresa. */
+  [["#scenePx1", 0], ["#scenePx2", 0.9], ["#scenePx3", 1.7]].forEach(([sel, delay]) => {
+    gsap.to(sel, {
+      keyframes: [
+        { opacity: 0.15, y: 0, duration: 0 },
+        { opacity: 1, y: -7, duration: 1.1, ease: "sine.out" },
+        { opacity: 0.15, y: -14, duration: 1.1, ease: "sine.in" },
+      ],
+      repeat: -1, delay,
+    });
+  });
+
+  /* El viaje: hoja → marca de registro → mensaje → entregado. */
+  const cycle = gsap.timeline({ repeat: -1, repeatDelay: 1.0, defaults: { ease: "power1.inOut" } });
+  cycle
+    .set("#sceneSheet", { x: 216, opacity: 0, scale: 1 })
+    .set("#sceneBubble", { x: 560, y: 112, opacity: 0, scale: 0.55 })
+    .set("#sceneCheck", { opacity: 0, scale: 0.4, svgOrigin: "1022 134" })
+    .to("#sceneSheet", { opacity: 1, duration: 0.35 })
+    .to("#sceneSheet", { x: 560, duration: 2.1 }, "<")
+    .to("#sceneRing", { scale: 1.13, duration: 0.22, yoyo: true, repeat: 1, svgOrigin: "560 112" }, ">-0.2")
+    .to("#sceneSheet", { opacity: 0, scale: 0.5, duration: 0.3 }, "<")
+    .to("#sceneBubble", { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.7)" }, "<0.12")
+    .to("#sceneBubble", { x: 1022, y: 96, duration: 2.0 }, ">0.1")
+    .to("#sceneBubble", { scale: 0.85, duration: 0.25 }, ">")
+    .to("#sceneCheck", { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(2)" }, ">-0.05")
+    .to({}, { duration: 1.1 })
+    .to(["#sceneBubble", "#sceneCheck"], { opacity: 0, duration: 0.5 });
+}
+
 /* ── Contador del sello de Atlantis ──────────────────────────────────────────
    Los "18 años" suben al entrar en pantalla. Es un dato, no un adorno. */
 const counter = document.querySelector("[data-count-to]");
