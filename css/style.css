@@ -1,130 +1,309 @@
 /* ============================================================================
-   Tairos — hoja de estilos
-   Dirección visual: "cuaderno de memoria".
+   Datayros — hoja de estilos
+   Dirección visual: "Pliego".
+
+   La página se comporta como un pliego de imprenta: marcas de corte que
+   encuadran el hero, marca de registro y barra de control de tinta. Sale del
+   mundo real de Atlantis — 26 años de industria gráfica — y no de una
+   plantilla. La marca de registro (círculo con cruz) rima con el círculo
+   del logo de Datayros.
+
+   Dos temas sobre el mismo esqueleto de tokens:
+     · día   (:root)                → pliego recién impreso, papel crema
+     · noche ([data-theme="night"]) → tinta cálida; el taller cerró y la
+                                      memoria sigue trabajando
+   js/main.js elige uno según la hora; el visitante puede forzar el otro.
+
+   Verdes tomados del logo real (#005418 → #78CC00). Contraste verificado:
+   #005418 da 8.3:1 sobre el papel y #78CC00 da 9.4:1 sobre la tinta.
 
    Secciones:
-     1. Tokens y base          (migrado sin cambios del HTML original)
-     2. Landing                (migrado sin cambios del HTML original)
-     3. Widget de chat         (nuevo)
-
-   Las secciones 1 y 2 son el CSS original tal cual. Si vas a retocar el
-   diseño, hazlo aquí y no en el HTML.
+     1. Tokens y base
+     2. Elementos de pliego (marcas de corte, registro, barra de tinta)
+     3. Landing
+     4. Widget de chat
    ========================================================================== */
 
 /* ── 1. Tokens y base ────────────────────────────────────────────────────── */
 :root{
-  --paper:#F6F3EC;
-  --paper-2:#EFEAdc;
-  --card:#FCFBF7;
-  --ink:#201F1A;
-  --rule:#DBD3BE;
-  --rule-strong:#C7BC9E;
-  --accent:#2B3F6B;      /* ledger indigo */
-  --accent-dim:rgba(43,63,107,0.08);
-  --umber:#9A6B3E;       /* kraft/umber, used sparingly */
+  /* Superficies */
+  --paper:#F4F1E8;
+  --paper-2:#EAE5D6;
+  --card:#FAF8F1;
+  --ink:#1A1915;
+  --rule:#D6CDB6;
+  --rule-strong:#BFB394;
+  --muted:#6A6558;
+  --muted-2:#948E7C;
+
+  /* Marca */
+  --accent:#005418;          /* verde profundo — 8.3:1 sobre papel */
+  --accent-hover:#00420F;
+  --accent-dim:rgba(0,84,24,0.08);
+  --green:#009000;           /* 3.8:1 — solo gráficos y texto grande */
+  --green-mid:#54B400;
+  --lime:#78CC00;
+  --umber:#9A6B3E;
   --umber-dim:rgba(154,107,62,0.12);
-  --muted:#6C6759;
-  --muted-2:#96907E;
+
+  /* Piezas que no pueden depender de un color plano */
+  --nav-bg:rgba(244,241,232,0.9);
+  --on-accent:#F4F1E8;               /* texto sobre el acento */
+  --on-accent-soft:rgba(244,241,232,0.75);
+  --on-accent-faint:rgba(244,241,232,0.55);
+  --on-accent-line:rgba(244,241,232,0.35);
+  --veil:linear-gradient(to top, rgba(20,19,16,.88), rgba(20,19,16,.45) 50%, transparent);
+  --veil-text:rgba(244,241,232,.86);
+  --veil-line:rgba(244,241,232,.3);
+  --badge-bg:rgba(250,248,241,0.9);
+  --shadow-card:0 20px 44px -22px rgba(26,25,21,0.22);
+  --shadow-float:0 14px 34px -14px rgba(26,25,21,0.45);
+  --shadow-panel:0 28px 60px -24px rgba(26,25,21,0.4);
+
+  --logo-day:block;
+  --logo-night:none;
+
+  --ease-out:cubic-bezier(0.23,1,0.32,1);
 }
+
+/* Noche: papel y tinta se invierten. El acento pasa al lima, que es el
+   único verde del logo que aguanta sobre fondo oscuro. */
+[data-theme="night"]{
+  --paper:#141310;
+  --paper-2:#1D1B16;
+  --card:#1D1B16;
+  --ink:#EDE8DA;
+  --rule:#2E2B23;
+  --rule-strong:#3A362C;
+  --muted:#A8A192;
+  --muted-2:#7E786A;
+
+  --accent:#78CC00;          /* 9.4:1 sobre la tinta */
+  --accent-hover:#8CE000;
+  --accent-dim:rgba(120,204,0,0.10);
+  --green:#54B400;
+  --green-mid:#54B400;
+  --lime:#78CC00;
+  --umber:#C89A63;           /* aclarado: el ocre original daba 4.0:1 */
+  --umber-dim:rgba(200,154,99,0.14);
+
+  --nav-bg:rgba(20,19,16,0.9);
+  --on-accent:#12300A;               /* sobre lima, el texto va oscuro */
+  --on-accent-soft:rgba(18,48,10,0.78);
+  --on-accent-faint:rgba(18,48,10,0.6);
+  --on-accent-line:rgba(18,48,10,0.35);
+  --veil:linear-gradient(to top, rgba(8,8,6,.92), rgba(8,8,6,.5) 50%, transparent);
+  --veil-text:rgba(237,232,218,.88);
+  --veil-line:rgba(237,232,218,.28);
+  --badge-bg:rgba(29,27,22,0.92);
+  --shadow-card:0 24px 54px -26px rgba(0,0,0,0.8);
+  --shadow-float:0 16px 38px -16px rgba(0,0,0,0.85);
+  --shadow-panel:0 30px 66px -26px rgba(0,0,0,0.85);
+
+  --logo-day:none;
+  --logo-night:block;
+}
+
 *{box-sizing:border-box; margin:0; padding:0;}
 html{scroll-behavior:smooth;}
 body{
   background:var(--paper); color:var(--ink);
   font-family:'Inter', sans-serif; line-height:1.65;
   -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  transition:background-color .3s var(--ease-out), color .3s var(--ease-out);
 }
-::selection{background:var(--accent); color:var(--paper);}
-.wrap{max-width:1140px; margin:0 auto; padding:0 32px;}
+::selection{background:var(--accent); color:var(--on-accent);}
+.wrap{max-width:1180px; margin:0 auto; padding:0 40px;}
 @media (max-width:640px){ .wrap{padding:0 20px;} }
-h1,h2,h3{ font-family:'Newsreader', serif; font-weight:450; letter-spacing:-0.01em; }
+h1,h2,h3{ font-family:'Newsreader', serif; font-weight:450; letter-spacing:-0.018em; }
 em{ font-style:italic; color:var(--accent); font-weight:450; }
+a{color:inherit;}
+img{max-width:100%;}
+
 .eyebrow{
   font-family:'Space Grotesk', sans-serif; text-transform:uppercase;
   letter-spacing:0.13em; font-size:11.5px; color:var(--accent);
   display:flex; align-items:center; gap:10px;
 }
-.eyebrow::before{ content:''; width:20px; height:1px; background:var(--accent); display:inline-block; }
+.eyebrow::before{ content:''; width:20px; height:1px; background:var(--accent); display:inline-block; flex-shrink:0; }
 .eyebrow.umber{ color:var(--umber); }
 .eyebrow.umber::before{ background:var(--umber); }
-a{color:inherit;}
+
+/* Etiqueta de pliego: numera las secciones como se numera un pliego real. */
+.folio-label{
+  font-family:'Space Grotesk',sans-serif; text-transform:uppercase;
+  letter-spacing:0.14em; font-size:11px; color:var(--muted-2); white-space:nowrap;
+}
+
 .btn{
   display:inline-flex; align-items:center; gap:10px; font-family:'Space Grotesk', sans-serif;
-  font-size:14.5px; font-weight:500; padding:13px 22px; border-radius:1px;
+  font-size:14px; font-weight:500; padding:13px 21px; border-radius:0;
   text-decoration:none; cursor:pointer; border:1px solid transparent;
-  transition:transform .15s ease, background .15s ease, border-color .15s ease;
+  transition:transform .18s var(--ease-out), background .18s var(--ease-out), border-color .18s var(--ease-out);
 }
-.btn-primary{ background:var(--accent); color:var(--paper); }
-.btn-primary:hover{ transform:translateY(-1px); background:#1e2e50; }
+.btn-primary{ background:var(--accent); color:var(--on-accent); }
 .btn-ghost{ border-color:var(--rule-strong); color:var(--ink); }
-.btn-ghost:hover{ border-color:var(--accent); color:var(--accent); }
+@media (hover:hover) and (pointer:fine){
+  .btn-primary:hover{ transform:translateY(-2px); background:var(--accent-hover); }
+  .btn-ghost:hover{ border-color:var(--accent); color:var(--accent); }
+}
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
 
-/* ── 2. Landing ──────────────────────────────────────────────────────────── */
+/* ── 2. Elementos de pliego ──────────────────────────────────────────────── */
+/* Marcas de corte. Encuadran el hero igual que en un pliego antes de guillotina. */
+.sheet{ position:relative; }
+.trim{ position:absolute; width:16px; height:16px; pointer-events:none; opacity:.6; }
+.trim::before,.trim::after{ content:''; position:absolute; background:var(--rule-strong); }
+.trim::before{ width:100%; height:1px; top:0; }
+.trim::after{ height:100%; width:1px; left:0; }
+.trim.tl{ top:-1px; left:-1px; }
+.trim.tr{ top:-1px; right:-1px; transform:scaleX(-1); }
+.trim.bl{ bottom:-1px; left:-1px; transform:scaleY(-1); }
+.trim.br{ bottom:-1px; right:-1px; transform:scale(-1); }
+
+/* Tira de control: lo que va al borde de todo pliego impreso —
+   marca de registro y barra de densidad de tinta. */
+.control-strip{
+  display:flex; align-items:center; gap:26px; flex-wrap:wrap;
+  border-top:1px solid var(--rule); margin-top:44px; padding-top:20px;
+}
+.reg{ width:46px; height:46px; flex-shrink:0; display:block; }
+.reg circle,.reg line{ stroke:var(--accent); fill:none; }
+.reg .ring{ stroke-width:1.6; }
+.reg .ring-2{ stroke:var(--green-mid); stroke-width:1.2; }
+.reg line{ stroke-width:1.4; }
+.control-note{
+  font-family:'Space Grotesk',sans-serif; font-size:12px; color:var(--muted);
+  max-width:34ch; line-height:1.55;
+}
+.inkbar{ display:flex; gap:2px; flex:1; min-width:180px; }
+/* Llena por defecto: GSAP la anima desde cero. Si el JS no corre, la barra
+   simplemente ya está impresa. */
+.inkbar i{ flex:1; height:18px; display:block; transform-origin:bottom; }
+@media (max-width:760px){
+  .control-strip{ gap:16px; }
+  .control-note{ max-width:100%; font-size:11.5px; }
+}
+
+/* Conmutador día/noche del nav */
+.theme-toggle{
+  background:none; border:1px solid var(--rule-strong); border-radius:0;
+  width:34px; height:34px; cursor:pointer; color:var(--muted);
+  display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;
+  transition:border-color .18s var(--ease-out), color .18s var(--ease-out);
+}
+.theme-toggle svg{ width:16px; height:16px; }
+.theme-toggle .i-sun{ display:var(--logo-night); }   /* de noche se ofrece el sol */
+.theme-toggle .i-moon{ display:var(--logo-day); }
+@media (hover:hover) and (pointer:fine){
+  .theme-toggle:hover{ border-color:var(--accent); color:var(--accent); }
+}
+
+/* ── 3. Landing ──────────────────────────────────────────────────────────── */
 nav{ position:fixed; top:0; left:0; right:0; z-index:50;
-  background:rgba(246,243,236,0.86); backdrop-filter:blur(8px); border-bottom:1px solid var(--rule); }
-.nav-inner{ max-width:1140px; margin:0 auto; padding:18px 32px; display:flex; align-items:center; justify-content:space-between; }
-.logo{ font-family:'Newsreader', serif; font-style:italic; font-weight:500; font-size:21px; display:flex; align-items:center; gap:9px; }
-.logo-mark{ height:28px; width:auto; display:block; }
-.nav-links{ display:flex; gap:30px; font-size:14px; color:var(--muted); font-family:'Space Grotesk',sans-serif; }
-.nav-links a{ text-decoration:none; transition:color .15s; }
-.nav-links a:hover{ color:var(--ink); }
+  background:var(--nav-bg); backdrop-filter:blur(8px); border-bottom:1px solid var(--rule); }
+.nav-inner{ max-width:1180px; margin:0 auto; padding:14px 40px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+@media (max-width:640px){ .nav-inner{ padding:12px 20px; } }
+
+/* Logo completo (símbolo + palabra). Dos archivos: el de noche aclara el
+   verde profundo de "Data", que sobre tinta quedaría ilegible. */
+.logo{ display:flex; align-items:center; flex-shrink:0; line-height:0; }
+.logo img{ height:38px; width:auto; }
+.logo .logo-day{ display:var(--logo-day); }
+.logo .logo-night{ display:var(--logo-night); }
+@media (max-width:640px){ .logo img{ height:32px; } }
+
+.nav-right{ display:flex; align-items:center; gap:16px; }
+.nav-links{ display:flex; gap:28px; font-size:13.5px; color:var(--muted); font-family:'Space Grotesk',sans-serif; }
+.nav-links a{ text-decoration:none; position:relative; padding-bottom:2px; transition:color .18s var(--ease-out); }
+.nav-links a::after{ content:''; position:absolute; left:0; bottom:0; width:100%; height:1px;
+  background:var(--accent); transform:scaleX(0); transform-origin:left; transition:transform .22s var(--ease-out); }
+@media (hover:hover) and (pointer:fine){
+  .nav-links a:hover{ color:var(--ink); }
+  .nav-links a:hover::after{ transform:scaleX(1); }
+}
 @media (max-width:920px){ .nav-links{display:none;} }
 
-.hero{ padding:164px 0 92px; border-bottom:1px solid var(--rule); }
-.hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:60px; align-items:center; }
-@media (max-width:900px){ .hero-grid{ grid-template-columns:1fr; } }
-.hero h1{ font-size:clamp(32px, 4.2vw, 49px); line-height:1.16; margin:22px 0 24px; max-width:600px; font-weight:400; }
-.hero p.lead{ font-size:17.5px; color:var(--muted); max-width:500px; margin-bottom:34px; }
-.hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:40px; }
+.hero{ padding:116px 0 0; }
+.hero-sheet{ position:relative; padding:42px 0 36px; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); }
+.hero-grid{ display:grid; grid-template-columns:1.15fr 0.85fr; gap:56px; align-items:start; }
+@media (max-width:940px){ .hero-grid{ grid-template-columns:1fr; gap:44px; } }
+.hero-meta{ display:flex; gap:24px; flex-wrap:wrap; margin-bottom:22px; }
+.hero-meta .folio-label span{ color:var(--accent); }
+/* Contenido antes que espectáculo: a 66px el titular empujaba los botones y
+   la tira de control fuera de la primera pantalla. */
+.hero h1{ font-size:clamp(31px, 3.9vw, 50px); line-height:1.09; margin-bottom:22px; font-weight:450; }
+.hero h1 .w{ display:inline-block; }
+.hero p.lead{ font-size:17.5px; color:var(--muted); max-width:52ch; margin-bottom:30px; }
+.hero-ctas{ display:flex; gap:12px; flex-wrap:wrap; margin-bottom:34px; }
 .hero-proof{ display:flex; gap:26px; flex-wrap:wrap; font-size:12.5px; color:var(--muted-2);
-  font-family:'Space Grotesk', sans-serif; border-top:1px solid var(--rule); padding-top:20px; max-width:560px; }
+  font-family:'Space Grotesk', sans-serif; border-top:1px solid var(--rule); padding-top:18px; }
 .hero-proof span{ color:var(--ink); font-weight:500; }
 
-/* ledger memory card — signature element */
-.ledger{ background:var(--card); border:1px solid var(--rule-strong); border-radius:3px;
-  box-shadow:0 20px 44px -20px rgba(32,31,26,0.18); overflow:hidden; }
-.ledger-head{ padding:16px 20px; border-bottom:1px solid var(--rule); display:flex; justify-content:space-between; align-items:center; }
-.ledger-head span{ font-family:'Space Grotesk',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted-2); }
-.ledger-dot{ width:6px; height:6px; border-radius:50%; background:var(--accent); animation:pulse 2s infinite; }
-@keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
-.ledger-body{ padding:22px 22px 26px; display:flex; flex-direction:column; gap:0; min-height:340px; }
-.ledger-entry{ display:flex; gap:14px; padding:13px 0; border-bottom:1px dashed var(--rule);
-  opacity:0; animation:entryIn .5s ease forwards; }
+/* Bitácora — el elemento que ya identificaba a la marca, aquí sobre pliego. */
+.ledger{ background:var(--card); border:1px solid var(--rule-strong); border-radius:0;
+  box-shadow:var(--shadow-card); overflow:hidden; }
+.ledger-head{ padding:14px 18px; border-bottom:1px solid var(--rule); display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.ledger-head span{ font-family:'Space Grotesk',sans-serif; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-2); }
+.ledger-dot{ width:7px; height:7px; border-radius:50%; background:var(--green); flex-shrink:0;
+  box-shadow:0 0 0 0 var(--accent-dim); animation:pulse 2.4s infinite; }
+@keyframes pulse{
+  0%{ box-shadow:0 0 0 0 rgba(84,180,0,.45); }
+  70%{ box-shadow:0 0 0 9px rgba(84,180,0,0); }
+  100%{ box-shadow:0 0 0 0 rgba(84,180,0,0); }
+}
+.ledger-body{ padding:6px 0 10px; display:flex; flex-direction:column; min-height:288px; }
+.ledger-entry{ display:grid; grid-template-columns:52px 1fr; gap:16px; align-items:baseline;
+  padding:12px 18px; border-bottom:1px dashed var(--rule); }
 .ledger-entry:last-child{ border-bottom:none; }
-.ledger-time{ font-family:'Space Grotesk',sans-serif; font-size:11px; color:var(--muted-2); white-space:nowrap; padding-top:2px; min-width:44px; }
-.ledger-text{ font-size:14px; color:var(--ink); }
-.ledger-text b{ color:var(--accent); font-weight:600; }
-@keyframes entryIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
-@media (prefers-reduced-motion:reduce){ .ledger-entry{ animation:none; opacity:1; } .ledger-dot{animation:none;} }
+.ledger-time{ font-family:'Space Grotesk',sans-serif; font-size:11px; color:var(--accent); white-space:nowrap; }
+.ledger-text{ font-size:14px; color:var(--muted); }
+.ledger-text b{ color:var(--ink); font-weight:600; }
+.caret{ display:inline-block; width:6px; height:13px; background:var(--green);
+  vertical-align:-2px; margin-left:3px; animation:blink 1.05s steps(1) infinite; }
+@keyframes blink{ 50%{ opacity:0; } }
 
-section{ padding:98px 0; border-bottom:1px solid var(--rule); }
-.section-head{ max-width:640px; margin-bottom:52px; }
-.section-head h2{ font-size:clamp(25px,3vw,35px); margin-top:16px; line-height:1.25; font-weight:400; }
-.section-head p{ color:var(--muted); font-size:16px; margin-top:16px; }
-.reveal{ opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease; }
-.reveal.in{ opacity:1; transform:translateY(0); }
+section{ padding:88px 0; border-bottom:1px solid var(--rule); }
+.section-head{ max-width:660px; margin-bottom:42px; }
+.section-head h2{ font-size:clamp(26px,3.4vw,40px); margin-top:14px; line-height:1.14; font-weight:450; }
+.section-head p{ color:var(--muted); font-size:16px; margin-top:14px; }
+
+/* Cabecera con filete: el h2 y la etiqueta de pliego comparten una línea,
+   como el encabezado de un pliego de imposición. */
+.rule-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:24px;
+  border-bottom:1px solid var(--ink); padding-bottom:12px; margin-bottom:34px; flex-wrap:wrap; }
+.rule-head .section-head{ margin-bottom:0; }
+
+/* El estado oculto solo se aplica si el JS está vivo (la clase .js la pone el
+   script del <head>). Sin JS, o si falla, todo el contenido se ve igual. */
+.reveal{ transition:opacity .6s var(--ease-out), transform .6s var(--ease-out); }
+.js .reveal{ opacity:0; transform:translateY(14px); }
+.js .reveal.in{ opacity:1; transform:translateY(0); }
 
 .mirror-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--rule); border:1px solid var(--rule); }
 @media (max-width:800px){ .mirror-grid{ grid-template-columns:1fr; } }
-.mirror-card{ background:var(--paper); padding:34px 32px; display:flex; flex-direction:column; gap:16px; }
-.mirror-quote{ font-family:'Newsreader', serif; font-style:italic; font-size:19px; line-height:1.4; color:var(--ink); }
+.mirror-card{ background:var(--paper); padding:32px 30px; display:flex; flex-direction:column; gap:16px;
+  transition:background .25s var(--ease-out); }
+@media (hover:hover) and (pointer:fine){ .mirror-card:hover{ background:var(--paper-2); } }
+.mirror-quote{ font-family:'Newsreader', serif; font-style:italic; font-size:19.5px; line-height:1.38; color:var(--ink); }
 .mirror-reply{ font-size:14px; color:var(--muted); padding-top:14px; border-top:1px solid var(--rule); }
 .mirror-reply b{ color:var(--accent); font-weight:600; font-family:'Space Grotesk',sans-serif; font-size:11px; text-transform:uppercase; letter-spacing:.06em; display:block; margin-bottom:8px; }
 
 .pillars{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--rule); border:1px solid var(--rule); }
 @media (max-width:800px){ .pillars{ grid-template-columns:1fr; } }
-.pillar{ background:var(--paper); padding:34px 30px; }
-.pillar .num{ font-family:'Newsreader',serif; font-style:italic; color:var(--umber); font-size:22px; }
-.pillar h3{ font-size:18.5px; margin:15px 0 10px; font-weight:450; }
+.pillar{ background:var(--paper); padding:32px 28px; }
+.pillar .num{ font-family:'Space Grotesk',sans-serif; font-size:11px; letter-spacing:.14em;
+  color:var(--on-accent); background:var(--accent); display:inline-block; padding:3px 9px; }
+.pillar h3{ font-size:19px; margin:15px 0 10px; font-weight:450; }
 .pillar p{ color:var(--muted); font-size:14.5px; }
 
 .founder{ display:grid; grid-template-columns:0.62fr 1.38fr; gap:52px; align-items:center; }
 @media (max-width:840px){ .founder{ grid-template-columns:1fr; } }
-.founder-mark{ aspect-ratio:1/1.15; background:var(--card); border:1px solid var(--rule-strong); border-radius:3px;
+.founder-mark{ aspect-ratio:1/1.15; background:var(--card); border:1px solid var(--rule-strong); border-radius:0;
   position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; }
 .founder-initials{ font-family:'Newsreader',serif; font-size:60px; font-style:italic; color:var(--ink); }
 .founder-tag{ position:absolute; bottom:16px; left:16px; right:16px; font-family:'Space Grotesk',sans-serif;
-  font-size:11.5px; color:var(--muted-2); border-top:1px solid var(--rule); padding-top:12px;
-  z-index:2; }
+  font-size:11.5px; color:var(--muted-2); border-top:1px solid var(--rule); padding-top:12px; z-index:2; }
 
 /* ── Retrato del fundador ──────────────────────────────────────────────────
    La foto llena el marco por encima de las iniciales. Todo lo que sigue está
@@ -134,51 +313,41 @@ section{ padding:98px 0; border-bottom:1px solid var(--rule); }
 .founder-photo{
   position:absolute; inset:0; z-index:1;
   width:100%; height:100%;
-  /* La foto es casi cuadrada (422x414) y el marco es vertical (1/1.15), así que
-     `cover` la ajusta a lo ALTO y recorta ~8.6% por cada lado — justo lo que
-     saca la ventana del fondo y deja a la persona sola. No hay recorte vertical:
-     se ve completo. Sin zoom adicional a propósito: ampliar 422px restaría la
-     nitidez que se acaba de ganar. */
   object-fit:cover; object-position:center;
   display:block;
 }
-
-/* Velo inferior. El pie de foto va sobre la imagen, y sin esto quedaría
-   ilegible. Cubre solo el tercio bajo: lo justo para el texto, sin tapar a la
-   persona. */
 .founder-mark:has(.founder-photo)::after{
   content:''; position:absolute; left:0; right:0; bottom:0; height:34%;
-  background:linear-gradient(to top, rgba(20,19,16,.88), rgba(20,19,16,.45) 50%, transparent);
-  pointer-events:none; z-index:1;
+  background:var(--veil); pointer-events:none; z-index:1;
 }
-/* Sobre la foto el pie va en color papel, no en el gris del fondo claro. */
 .founder-mark:has(.founder-photo) .founder-tag{
-  color:rgba(246,243,236,.86);
-  border-top-color:rgba(246,243,236,.3);
+  color:var(--veil-text);
+  border-top-color:var(--veil-line);
 }
-.founder blockquote{ font-family:'Newsreader', serif; font-weight:400; font-style:italic; font-size:clamp(19px,2.2vw,24px); line-height:1.5; margin:18px 0 22px; }
+.founder blockquote{ font-family:'Newsreader', serif; font-weight:400; font-style:italic; font-size:clamp(19px,2.2vw,25px); line-height:1.48; margin:18px 0 22px; }
 .founder cite{ font-family:'Space Grotesk',sans-serif; font-style:normal; font-size:13px; color:var(--muted); display:block; }
 .founder cite span{ color:var(--ink); font-weight:500; }
 
-.method-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; }
-@media (max-width:900px){ .method-row{ grid-template-columns:1fr; } }
-.method-step{ padding:0 24px 0 0; }
-.method-step:not(:last-child){ border-right:1px solid var(--rule); }
-@media (max-width:900px){
-  .method-step{ padding:26px 0; border-right:none !important; border-bottom:1px solid var(--rule); }
-  .method-step:last-child{ border-bottom:none; }
-}
-.method-step .idx{ font-family:'Newsreader',serif; font-style:italic; font-size:30px; color:var(--rule-strong); }
-.method-step h4{ font-family:'Space Grotesk',sans-serif; font-size:14.5px; font-weight:600; margin:13px 0 9px; }
-.method-step p{ color:var(--muted); font-size:13.5px; }
+/* Método como imposición: cuatro cajas de un mismo pliego. */
+.method-row{ display:grid; grid-template-columns:repeat(4,1fr); border:1px solid var(--rule); border-right:none; }
+@media (max-width:860px){ .method-row{ grid-template-columns:1fr 1fr; } }
+@media (max-width:560px){ .method-row{ grid-template-columns:1fr; border-right:1px solid var(--rule); } }
+.method-step{ border-right:1px solid var(--rule); padding:26px 22px 30px; }
+@media (max-width:860px){ .method-step{ border-bottom:1px solid var(--rule); } }
+@media (max-width:560px){ .method-step{ border-right:none; } }
+.method-step .idx{ font-family:'Space Grotesk',sans-serif; font-size:11px; letter-spacing:.14em;
+  color:var(--on-accent); background:var(--accent); display:inline-block; padding:3px 9px; }
+.method-step h4{ font-family:'Newsreader',serif; font-size:19px; font-weight:500; margin:15px 0 8px; }
+.method-step p{ color:var(--muted); font-size:14px; }
 
 .compare-toggle-input{ position:absolute; opacity:0; pointer-events:none; }
 .compare-switch{ display:inline-flex; align-items:center; gap:12px; cursor:pointer; user-select:none;
-  font-family:'Space Grotesk',sans-serif; font-size:13.5px; margin-bottom:34px; }
+  font-family:'Space Grotesk',sans-serif; font-size:13.5px; margin-bottom:30px; }
 .switch-track{ width:46px; height:24px; border-radius:20px; background:var(--paper-2); border:1px solid var(--rule-strong); position:relative; transition:border-color .2s; flex-shrink:0; }
-.switch-thumb{ width:18px; height:18px; border-radius:50%; background:var(--muted-2); position:absolute; top:2px; left:2px; transition:transform .25s ease, background .25s ease; }
+.switch-thumb{ width:18px; height:18px; border-radius:50%; background:var(--muted-2); position:absolute; top:2px; left:2px; transition:transform .25s var(--ease-out), background .25s var(--ease-out); }
 .compare-toggle-input:checked ~ .compare-switch .switch-track{ border-color:var(--accent); }
 .compare-toggle-input:checked ~ .compare-switch .switch-thumb{ transform:translateX(22px); background:var(--accent); }
+.compare-toggle-input:focus-visible ~ .compare-switch .switch-track{ outline:2px solid var(--accent); outline-offset:3px; }
 .switch-label-off{ color:var(--ink); } .switch-label-on{ color:var(--muted-2); }
 .compare-toggle-input:checked ~ .compare-switch .switch-label-off{ color:var(--muted-2); }
 .compare-toggle-input:checked ~ .compare-switch .switch-label-on{ color:var(--ink); }
@@ -186,7 +355,7 @@ section{ padding:98px 0; border-bottom:1px solid var(--rule); }
 .compare-grid{ display:flex; flex-direction:column; border:1px solid var(--rule); background:var(--card); }
 .compare-row{ display:grid; grid-template-columns:220px 1fr; gap:24px; padding:22px 26px; border-bottom:1px solid var(--rule); align-items:center; }
 .compare-row:last-child{ border-bottom:none; }
-@media (max-width:640px){ .compare-row{ grid-template-columns:1fr; gap:8px; } }
+@media (max-width:640px){ .compare-row{ grid-template-columns:1fr; gap:8px; padding:20px; } }
 .compare-row .task{ font-family:'Space Grotesk',sans-serif; font-size:13.5px; color:var(--muted); }
 .state-before{ display:block; color:var(--muted); font-size:15px; }
 .state-after{ display:none; color:var(--ink); font-size:15px; }
@@ -197,48 +366,44 @@ section{ padding:98px 0; border-bottom:1px solid var(--rule); }
 .services{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--rule); border:1px solid var(--rule); }
 @media (max-width:860px){ .services{ grid-template-columns:1fr 1fr; } }
 @media (max-width:560px){ .services{ grid-template-columns:1fr; } }
-.service{ background:var(--paper); padding:28px 26px; transition:background .15s; }
-.service:hover{ background:var(--card); }
-.service .tag{ font-family:'Space Grotesk',sans-serif; font-size:11px; color:var(--muted-2); text-transform:uppercase; letter-spacing:.08em; }
-.service h4{ font-size:16.5px; font-weight:450; margin:12px 0 8px; font-family:'Newsreader',serif; }
+.service{ background:var(--paper); padding:28px 26px; transition:background .25s var(--ease-out); }
+@media (hover:hover) and (pointer:fine){ .service:hover{ background:var(--paper-2); } }
+.service .tag{ font-family:'Space Grotesk',sans-serif; font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:.08em; }
+.service h4{ font-size:17.5px; font-weight:450; margin:12px 0 8px; font-family:'Newsreader',serif; }
 .service p{ color:var(--muted); font-size:13.5px; }
 
 /* ── Índice de productos ("sistemas en stock") ─────────────────────────────
    Filas en vez de tarjetas: ocupa menos alto, se lee de un vistazo y crece
-   sin rediseñar cuando aparezca un cuarto producto. Reglas punteadas y punto
-   de estado reutilizan el lenguaje de la ficha del hero. */
-.section-tight{ padding:64px 0; }
-.section-head.tight{ margin-bottom:34px; }
+   sin rediseñar cuando aparezca un cuarto producto. */
+.section-tight{ padding:60px 0; }
+.section-head.tight{ margin-bottom:30px; }
 
 .stock{ border:1px solid var(--rule); background:var(--card); }
 .stock-item{
   display:grid; grid-template-columns:168px 1.05fr 1.5fr; gap:26px; align-items:baseline;
-  padding:19px 26px; border-bottom:1px dashed var(--rule); transition:background .15s;
+  padding:19px 26px; border-bottom:1px dashed var(--rule); transition:background .2s var(--ease-out);
 }
 .stock-item:last-child{ border-bottom:none; }
-.stock-item:hover{ background:var(--paper); }
-.stock-item h3{ font-size:17px; font-weight:450; line-height:1.3; }
+@media (hover:hover) and (pointer:fine){ .stock-item:hover{ background:var(--paper-2); } }
+.stock-item h3{ font-size:17.5px; font-weight:450; line-height:1.3; }
 .stock-item p{ color:var(--muted); font-size:14px; }
 
 /* Términos concretos bajo el nombre. El comprador escanea buscando la palabra
-   que reconoce ("SUNAT", "POS") antes de leer la frase completa; ponerlos
-   aparte hace ese barrido más rápido sin recargar la descripción. */
+   que reconoce ("SUNAT", "POS") antes de leer la frase completa. */
 .stock-item .stock-tags{
   font-family:'Space Grotesk',sans-serif; font-size:11px; letter-spacing:.04em;
   color:var(--muted-2); margin-top:5px;
 }
 @media (max-width:860px){
-  /* En móvil la fila se apila: estado arriba, luego nombre y descripción. */
   .stock-item{ grid-template-columns:1fr; gap:7px; padding:20px; align-items:start; }
 }
 
 /* Procedencia. La columna izquierda dice de quién es cada sistema antes que
    cualquier otra cosa — es el dato que el comprador verifica primero.
-   Dos marcadores, deliberadamente distintos entre sí:
-     · desarrollo propio → círculo índigo (el acento principal)
-     · socio            → rombo umber   (el acento secundario)
-   Ninguno late: el punto que pulsa es el de la bitácora del hero y significa
-   "ocurriendo ahora"; usarlo aquí afirmaría una madurez que no está medida. */
+     · desarrollo propio → círculo verde (el acento principal)
+     · socio            → rombo ocre    (el acento secundario)
+   Ninguno late: el punto que pulsa es el de la bitácora y significa
+   "ocurriendo ahora". */
 .stock-own{
   font-family:'Space Grotesk',sans-serif; font-size:10.5px; letter-spacing:.09em;
   text-transform:uppercase; color:var(--accent); white-space:nowrap;
@@ -248,7 +413,6 @@ section{ padding:98px 0; border-bottom:1px solid var(--rule); }
   content:''; width:6px; height:6px; border-radius:50%;
   background:var(--accent); flex-shrink:0;
 }
-
 .stock-partner{
   font-family:'Space Grotesk',sans-serif; font-size:10.5px; letter-spacing:.09em;
   text-transform:uppercase; color:var(--umber); white-space:nowrap;
@@ -259,32 +423,21 @@ section{ padding:98px 0; border-bottom:1px solid var(--rule); }
   transform:rotate(45deg); flex-shrink:0;
 }
 
-.showroom{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:60px; align-items:center; }
+.showroom{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:56px; align-items:center; }
 @media (max-width:900px){ .showroom{ grid-template-columns:1fr; } }
-.showroom-visual{ aspect-ratio:4/5; background:var(--card); border:1px solid var(--rule-strong); position:relative; overflow:hidden; border-radius:3px; }
+.showroom-visual{ aspect-ratio:4/5; background:var(--card); border:1px solid var(--rule-strong); position:relative; overflow:hidden; border-radius:0; }
 .showroom-visual::before{ content:''; position:absolute; inset:0; background:repeating-linear-gradient(135deg, transparent 0 26px, var(--rule) 26px 27px); }
-
-/* ── Foto del taller Atlantis ──────────────────────────────────────────────
-   La imagen es cuadrada y el marco es 4/5, así que `cover` la ajusta a lo
-   ALTO y recorta 12.5% por cada lado. Con encuadre centrado sobreviven los
-   tres elementos que sostienen el mensaje de la sección: la prensa a la
-   izquierda, el logo de Atlantis en la pared y los monitores del primer
-   plano. Sin recorte vertical.
-   El pie ("18 años") no necesita velo: .showroom-badge ya trae su propio
-   fondo crema al 90%, legible sobre cualquier imagen. */
 .showroom-photo{
   position:absolute; inset:0; z-index:1;
   width:100%; height:100%;
   object-fit:cover; object-position:center;
   display:block;
 }
-/* Con foto presente, las rayas diagonales sobran. Al retirarla main.js,
-   :has() deja de aplicar y el marco vuelve solo a su estado anterior. */
 .showroom-visual:has(.showroom-photo)::before{ display:none; }
-.showroom-badge{ position:absolute; bottom:20px; left:20px; right:20px; background:rgba(252,251,247,0.9); border:1px solid var(--rule-strong);
-  padding:16px 18px; font-family:'Space Grotesk',sans-serif; font-size:12.5px; backdrop-filter:blur(6px); z-index:2; }
-.showroom-badge .b-num{ color:var(--accent); font-weight:600; font-size:22px; display:block; margin-bottom:4px; font-family:'Newsreader',serif; font-style:italic;}
-.showroom h2{ font-size:clamp(23px,3vw,31px); margin:16px 0 20px; line-height:1.3; font-weight:400; }
+.showroom-badge{ position:absolute; bottom:20px; left:20px; right:20px; background:var(--badge-bg); border:1px solid var(--rule-strong);
+  padding:16px 18px; font-family:'Space Grotesk',sans-serif; font-size:12.5px; backdrop-filter:blur(6px); z-index:2; color:var(--ink); }
+.showroom-badge .b-num{ color:var(--accent); font-weight:600; font-size:24px; display:block; margin-bottom:4px; font-family:'Newsreader',serif; font-style:italic; }
+.showroom h2{ font-size:clamp(24px,3.2vw,33px); margin:16px 0 20px; line-height:1.2; font-weight:450; }
 .showroom p{ color:var(--muted); font-size:15.5px; margin-bottom:16px; }
 .showroom-list{ list-style:none; margin-top:24px; display:flex; flex-direction:column; gap:13px; }
 .showroom-list li{ display:flex; gap:12px; font-size:14.5px; color:var(--ink); }
@@ -293,72 +446,82 @@ section{ padding:98px 0; border-bottom:1px solid var(--rule); }
 .faq-list{ display:flex; flex-direction:column; border-top:1px solid var(--rule); }
 .faq-item{ border-bottom:1px solid var(--rule); }
 .faq-item summary{ list-style:none; cursor:pointer; padding:24px 4px; display:flex; justify-content:space-between; align-items:center;
-  font-family:'Newsreader',serif; font-size:17px; gap:20px; font-weight:400; }
+  font-family:'Newsreader',serif; font-size:18px; gap:20px; font-weight:400; }
 .faq-item summary::-webkit-details-marker{ display:none; }
-.faq-item summary .plus{ font-family:'Space Grotesk',sans-serif; font-size:20px; color:var(--accent); flex-shrink:0; transition:transform .2s; }
+.faq-item summary .plus{ font-family:'Space Grotesk',sans-serif; font-size:20px; color:var(--accent); flex-shrink:0; transition:transform .22s var(--ease-out); }
 .faq-item[open] summary .plus{ transform:rotate(45deg); }
-.faq-item .faq-a{ padding:0 4px 26px; color:var(--muted); font-size:14.5px; max-width:640px; }
+.faq-item .faq-a{ padding:0 4px 26px; color:var(--muted); font-size:14.5px; max-width:660px; }
 
-.manifesto{ text-align:center; padding:116px 0; }
-.manifesto blockquote{ font-family:'Newsreader', serif; font-style:italic; font-weight:400; font-size:clamp(23px,3.2vw,36px);
-  line-height:1.42; max-width:800px; margin:0 auto 24px; color:var(--ink); }
+.manifesto{ text-align:center; padding:108px 0; }
+.manifesto blockquote{ font-family:'Newsreader', serif; font-style:italic; font-weight:400; font-size:clamp(23px,3.2vw,37px);
+  line-height:1.4; max-width:800px; margin:0 auto 24px; color:var(--ink); }
 .manifesto cite{ font-family:'Space Grotesk',sans-serif; font-style:normal; font-size:13px; color:var(--muted-2); letter-spacing:.05em; }
 
 .cta-final{ border-bottom:none; }
-.cta-box{ background:var(--accent); color:var(--paper); border-radius:3px; padding:60px 54px;
+.cta-box{ background:var(--accent); color:var(--on-accent); border-radius:0; padding:58px 52px;
   display:grid; grid-template-columns:1.2fr 0.8fr; gap:40px; align-items:center; }
 @media (max-width:800px){ .cta-box{ grid-template-columns:1fr; padding:42px 26px; } }
-.cta-box h2{ font-size:clamp(23px,3vw,30px); margin-bottom:14px; color:var(--paper); font-weight:400; }
-.cta-box p{ color:rgba(246,243,236,0.75); font-size:15.5px; }
-.cta-right{ display:flex; flex-direction:column; gap:12px; }
-.cta-box .btn-primary{ background:var(--paper); color:var(--accent); }
-.cta-box .btn-primary:hover{ background:#fff; }
-.cta-box .btn-ghost{ border-color:rgba(246,243,236,0.35); color:var(--paper); }
-.cta-box .btn-ghost:hover{ border-color:var(--paper); }
-.cta-note{ font-size:12.5px; color:rgba(246,243,236,0.55); font-family:'Space Grotesk',sans-serif; }
+.cta-box h2{ font-size:clamp(23px,3vw,31px); margin-bottom:14px; color:var(--on-accent); font-weight:450; }
+.cta-box p{ color:var(--on-accent-soft); font-size:15.5px; }
+.cta-right{ display:flex; flex-direction:column; gap:12px; align-items:flex-start; }
+.cta-box .btn-primary{ background:var(--on-accent); color:var(--accent); }
+.cta-box .btn-ghost{ border-color:var(--on-accent-line); color:var(--on-accent); }
+@media (hover:hover) and (pointer:fine){
+  .cta-box .btn-primary:hover{ background:var(--paper); }
+  .cta-box .btn-ghost:hover{ border-color:var(--on-accent); }
+}
+.cta-note{ font-size:12.5px; color:var(--on-accent-faint); font-family:'Space Grotesk',sans-serif; }
 
-footer{ padding:44px 0; }
-.footer-inner{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
-footer .logo{ font-size:16px; }
-footer .logo-mark{ height:21px; }
-.footer-links{ display:flex; gap:24px; font-size:13px; color:var(--muted-2); font-family:'Space Grotesk',sans-serif; }
+footer{ padding:38px 0; }
+.footer-inner{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:18px; }
+footer .logo img{ height:28px; }
+.footer-links{ display:flex; gap:22px; font-size:13px; color:var(--muted-2); font-family:'Space Grotesk',sans-serif; flex-wrap:wrap; }
 .footer-links a{ text-decoration:none; }
-.footer-links a:hover{ color:var(--ink); }
+@media (hover:hover) and (pointer:fine){ .footer-links a:hover{ color:var(--accent); } }
+
+/* Movimiento reducido: se conserva lo que ayuda a comprender y se retira
+   todo desplazamiento. Nunca deja contenido invisible. */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important; animation-iteration-count:1 !important;
+    transition-duration:.01ms !important; scroll-behavior:auto !important;
+  }
+  .reveal{ opacity:1; transform:none; }
+  .inkbar i{ transform:scaleY(1); }
+}
 
 /* ============================================================================
-   3. Widget de chat
-   Mismo lenguaje visual que la ficha "ledger" del hero: papel crema, filete
-   índigo, reglas punteadas, Newsreader en el título y Space Grotesk en labels.
+   4. Widget de chat
+   Mismo lenguaje visual que la bitácora del hero, y sigue el tema activo.
    ========================================================================== */
-
-/* Botón flotante */
 .chat-fab{
   position:fixed; right:24px; bottom:24px; z-index:80;
   display:inline-flex; align-items:center; gap:9px;
-  padding:13px 20px; border:1px solid var(--accent); border-radius:2px;
-  background:var(--accent); color:var(--paper); cursor:pointer;
+  padding:13px 20px; border:1px solid var(--accent); border-radius:0;
+  background:var(--accent); color:var(--on-accent); cursor:pointer;
   font-family:'Space Grotesk',sans-serif; font-size:13.5px; font-weight:500;
-  box-shadow:0 14px 34px -14px rgba(32,31,26,0.5);
-  transition:transform .15s ease, background .15s ease;
+  box-shadow:var(--shadow-float);
+  transition:transform .18s var(--ease-out), background .18s var(--ease-out);
 }
-.chat-fab:hover{ transform:translateY(-1px); background:#1e2e50; }
+@media (hover:hover) and (pointer:fine){
+  .chat-fab:hover{ transform:translateY(-2px); background:var(--accent-hover); }
+}
 .chat-fab[hidden]{ display:none; }
-.chat-fab .fab-dot{ width:6px; height:6px; border-radius:50%; background:var(--paper); animation:pulse 2s infinite; }
+.chat-fab .fab-dot{ width:6px; height:6px; border-radius:50%; background:var(--on-accent); animation:pulse 2.4s infinite; }
 @media (prefers-reduced-motion:reduce){ .chat-fab .fab-dot{ animation:none; } }
 @media (max-width:640px){ .chat-fab{ right:16px; bottom:16px; } }
 
-/* Panel */
 .chat-panel{
   position:fixed; right:24px; bottom:24px; z-index:90;
   display:flex; flex-direction:column;
   width:min(calc(100vw - 48px), 392px);
   height:min(calc(100vh - 48px), 588px);
-  background:var(--card); border:1px solid var(--rule-strong); border-radius:3px;
-  box-shadow:0 28px 60px -24px rgba(32,31,26,0.42); overflow:hidden;
+  background:var(--card); border:1px solid var(--rule-strong); border-radius:0;
+  box-shadow:var(--shadow-panel); overflow:hidden;
 }
 .chat-panel[hidden]{ display:none; }
 @media (max-width:640px){
-  .chat-panel{ right:0; bottom:0; width:100vw; height:100dvh; border:none; border-radius:0; }
+  .chat-panel{ right:0; bottom:0; width:100vw; height:100dvh; border:none; }
 }
 
 .chat-head{
@@ -376,7 +539,6 @@ footer .logo-mark{ height:21px; }
 }
 .chat-close:hover{ color:var(--ink); }
 
-/* Barra de WhatsApp — siempre visible, no escondida detrás del chat */
 .chat-wa{
   display:flex; align-items:center; justify-content:space-between; gap:12px;
   padding:11px 20px; border-bottom:1px solid var(--rule); background:var(--paper-2);
@@ -386,9 +548,8 @@ footer .logo-mark{ height:21px; }
   text-decoration:none; color:var(--accent); font-weight:500;
   border-bottom:1px solid var(--accent); padding-bottom:1px; white-space:nowrap;
 }
-.chat-wa a:hover{ color:#1e2e50; }
+.chat-wa a:hover{ color:var(--accent-hover); }
 
-/* Historial */
 .chat-log{ flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:16px; }
 .chat-msg{ display:flex; flex-direction:column; gap:5px; max-width:88%; }
 .chat-msg .who{
@@ -401,11 +562,11 @@ footer .logo-mark{ height:21px; }
 .chat-msg-bot{ align-self:flex-start; }
 .chat-msg-bot .body{
   background:var(--paper); border:1px solid var(--rule); border-left:2px solid var(--accent);
-  padding:12px 15px; color:var(--ink); border-radius:2px;
+  padding:12px 15px; color:var(--ink); border-radius:0;
 }
 .chat-msg-user{ align-self:flex-end; align-items:flex-end; }
 .chat-msg-user .body{
-  background:var(--accent); color:var(--paper); padding:12px 15px; border-radius:2px;
+  background:var(--accent); color:var(--on-accent); padding:12px 15px; border-radius:0;
 }
 .chat-msg-note{
   align-self:stretch; max-width:100%;
@@ -413,7 +574,6 @@ footer .logo-mark{ height:21px; }
   text-align:center; border-top:1px dashed var(--rule); padding-top:12px;
 }
 
-/* Indicador de "escribiendo…" */
 .chat-typing{ display:inline-flex; gap:5px; align-items:center; padding:4px 0; }
 .chat-typing i{
   width:5px; height:5px; border-radius:50%; background:var(--muted-2); display:block;
@@ -427,11 +587,10 @@ footer .logo-mark{ height:21px; }
 }
 @media (prefers-reduced-motion:reduce){ .chat-typing i{ animation:none; opacity:.6; } }
 
-/* Composer */
 .chat-form{ display:flex; gap:10px; padding:14px 16px; border-top:1px solid var(--rule); background:var(--card); }
 .chat-input{
   flex:1; resize:none; max-height:112px; min-height:42px;
-  padding:11px 13px; border:1px solid var(--rule-strong); border-radius:2px;
+  padding:11px 13px; border:1px solid var(--rule-strong); border-radius:0;
   background:var(--paper); color:var(--ink);
   font-family:'Inter',sans-serif; font-size:14.5px; line-height:1.5;
 }
@@ -439,10 +598,10 @@ footer .logo-mark{ height:21px; }
 .chat-input:focus{ outline:none; border-color:var(--accent); }
 .chat-send{
   flex-shrink:0; align-self:flex-end; height:42px; padding:0 18px;
-  border:1px solid var(--accent); border-radius:2px; cursor:pointer;
-  background:var(--accent); color:var(--paper);
+  border:1px solid var(--accent); border-radius:0; cursor:pointer;
+  background:var(--accent); color:var(--on-accent);
   font-family:'Space Grotesk',sans-serif; font-size:13.5px; font-weight:500;
-  transition:background .15s ease;
+  transition:background .15s var(--ease-out);
 }
-.chat-send:hover:not(:disabled){ background:#1e2e50; }
+.chat-send:hover:not(:disabled){ background:var(--accent-hover); }
 .chat-send:disabled{ opacity:.45; cursor:not-allowed; }

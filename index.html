@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Datayros — Laboratorio de tecnologías emergentes</title>
-<meta name="description" content="Software con agentes de IA para que tu empresa trabaje más ágil, con menos errores y más rentable. No vendemos tecnología: vendemos tiempo recuperado.">
-
+<meta name="description" content="Software con agentes de IA para empresas: automatizaciones y asistentes construidos sobre 26 años de experiencia industrial real, probados primero en nuestro propio taller.">
 <!-- TODO: reemplaza https://datayros.com por tu dominio real (aquí, en robots.txt y en sitemap.xml). -->
 <link rel="canonical" href="https://datayros.com/">
 
 <!-- Open Graph — así se ve el enlace al compartirlo en WhatsApp, LinkedIn o X. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Datayros">
-<meta property="og:locale" content="es_ES">
+<meta property="og:locale" content="es_PE">
 <meta property="og:title" content="Datayros — Laboratorio de tecnologías emergentes">
-<meta property="og:description" content="Software con agentes de IA para que tu empresa trabaje más ágil, con menos errores y más rentable. No vendemos tecnología: vendemos tiempo recuperado.">
+<meta property="og:description" content="Automatizaciones y asistentes de IA que trabajan contigo. 26 años de industria real detrás de cada sistema.">
 <meta property="og:url" content="https://datayros.com/">
 <meta property="og:image" content="https://datayros.com/img/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -22,10 +21,28 @@
 <meta property="og:image:alt" content="Datayros — laboratorio de tecnologías emergentes">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Datayros — Laboratorio de tecnologías emergentes">
-<meta name="twitter:description" content="Software con agentes de IA para que tu empresa trabaje más ágil, con menos errores y más rentable.">
+<meta name="twitter:description" content="Automatizaciones y asistentes de IA que trabajan contigo. 26 años de industria real detrás de cada sistema.">
 <meta name="twitter:image" content="https://datayros.com/img/og-image.png">
 
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#F4F1E8">
+
+<!-- El tema se decide ANTES de pintar para que no haya un parpadeo claro
+     al entrar de noche. De 19:00 a 06:59 la página va en tinta; el visitante
+     puede forzar el otro tema y su elección se recuerda. -->
+<script>
+(function(){
+  // Marca que el JS está vivo. El CSS solo esconde los bloques que va a
+  // revelar si existe esta clase, así que sin JS no se pierde nada.
+  document.documentElement.classList.add('js');
+  try{
+    var saved = localStorage.getItem('dy-theme');
+    var h = new Date().getHours();
+    var theme = saved || ((h >= 19 || h < 7) ? 'night' : 'day');
+    if(theme === 'night') document.documentElement.setAttribute('data-theme','night');
+  }catch(e){}
+})();
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,51 +53,91 @@
 
 <nav>
   <div class="nav-inner">
-    <div class="logo"><img src="/img/datayros-mark.png" alt="" class="logo-mark" width="825" height="333">Datayros</div>
-    <div class="nav-links">
-      <a href="#entendemos">Te entendemos</a>
-      <a href="#fundador">Quién te escribe</a>
-      <a href="#metodo">Cómo trabajamos</a>
-      <a href="#servicios">Qué hacemos</a>
-      <a href="#preguntas">Preguntas</a>
+    <a href="#" class="logo" aria-label="Datayros — inicio">
+      <img class="logo-day" src="/img/datayros-logo.png" alt="Datayros" width="484" height="229">
+      <img class="logo-night" src="/img/datayros-logo-night.png" alt="Datayros" width="484" height="229">
+    </a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#entendemos">Te entendemos</a>
+        <a href="#fundador">Quién te escribe</a>
+        <a href="#metodo">Cómo trabajamos</a>
+        <a href="#servicios">Qué hacemos</a>
+        <a href="#preguntas">Preguntas</a>
+      </div>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambiar entre tema claro y oscuro">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+      <a href="#contacto" class="btn btn-primary">Conversemos</a>
     </div>
-    <a href="#contacto" class="btn btn-primary">Conversemos</a>
   </div>
 </nav>
 
 <header class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <div class="eyebrow">LABORATORIO DE TECNOLOGÍAS EMERGENTES</div>
-      <h1>Software con agentes de <em>IA</em> para que tu empresa trabaje más ágil, con menos errores y más rentable.</h1>
-      <p class="lead">26 años de experiencia industrial real, convertidos en automatizaciones y asistentes que trabajan contigo — no en tu lugar. No vendemos tecnología: vendemos tiempo recuperado y decisiones más simples para tu negocio.</p>
-      <div class="hero-ctas">
-        <a href="#contacto" class="btn btn-primary" data-whatsapp>Habla con nosotros por WhatsApp</a>
-        <a href="#entendemos" class="btn btn-ghost">¿Por qué confiar en esto?</a>
+  <div class="wrap">
+    <div class="hero-sheet sheet">
+      <span class="trim tl"></span><span class="trim tr"></span>
+      <span class="trim bl"></span><span class="trim br"></span>
+
+      <div class="hero-grid">
+        <div>
+          <div class="hero-meta">
+            <div class="folio-label">Laboratorio de tecnologías emergentes</div>
+            <div class="folio-label"><span>26</span> años de oficio</div>
+          </div>
+          <h1 id="heroTitle">Software con agentes de <em>IA</em> para que tu empresa trabaje más ágil, con menos errores y más rentable.</h1>
+          <p class="lead">26 años de experiencia industrial real, convertidos en automatizaciones y asistentes que trabajan contigo — no en tu lugar. No vendemos tecnología: vendemos tiempo recuperado y decisiones más simples para tu negocio.</p>
+          <div class="hero-ctas">
+            <a href="#contacto" class="btn btn-primary" data-whatsapp>Habla con nosotros por WhatsApp</a>
+            <a href="#entendemos" class="btn btn-ghost">¿Por qué confiar en esto?</a>
+          </div>
+          <div class="hero-proof">
+            <div><span>26 años</span> de industria gráfica real</div>
+            <div><span>Atlantis</span> como showroom en vivo</div>
+            <div><span>Sin permanencia</span> forzosa ni licencias infladas</div>
+          </div>
+        </div>
+
+        <div class="ledger">
+          <div class="ledger-head"><span>Memoria de la organización</span><span class="ledger-dot"></span></div>
+          <div class="ledger-body" id="ledgerBody"></div>
+        </div>
       </div>
-      <div class="hero-proof">
-        <div><span>26 años</span> de industria gráfica real</div>
-        <div><span>Atlantis</span> como showroom en vivo</div>
-        <div><span>Sin permanencia</span> forzosa ni licencias infladas</div>
+
+      <!-- Tira de control: lo que lleva al borde todo pliego impreso.
+           La marca de registro entra en registro al cargar la página. -->
+      <div class="control-strip">
+        <svg class="reg" id="regMark" viewBox="0 0 120 120" aria-hidden="true">
+          <circle class="ring" cx="60" cy="60" r="34"/>
+          <circle class="ring-2" cx="60" cy="60" r="21"/>
+          <line class="ln-t" x1="60" y1="4"  x2="60" y2="38"/>
+          <line class="ln-b" x1="60" y1="82" x2="60" y2="116"/>
+          <line class="ln-l" x1="4"  y1="60" x2="38" y2="60"/>
+          <line class="ln-r" x1="82" y1="60" x2="116" y2="60"/>
+        </svg>
+        <p class="control-note">Marca de registro: cuando todo cae en su sitio, la impresión sale limpia. Lo mismo le pedimos a un sistema.</p>
+        <div class="inkbar" id="inkbar">
+          <i style="background:#005418"></i><i style="background:#007A12"></i>
+          <i style="background:#009000"></i><i style="background:#2FA400"></i>
+          <i style="background:#54B400"></i><i style="background:#78CC00"></i>
+        </div>
       </div>
-    </div>
-    <div class="ledger">
-      <div class="ledger-head"><span>Memoria de la organización</span><span class="ledger-dot"></span></div>
-      <div class="ledger-body" id="ledgerBody"></div>
     </div>
   </div>
 </header>
 
 <section id="entendemos">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div class="eyebrow umber">LO QUE ESCUCHAMOS EN ESTAS CONVERSACIONES</div>
-      <h2>Antes de hablarte de nosotros, hablemos de lo que probablemente ya pensaste.</h2>
-      <p>No queremos convencerte de nada que no hayas puesto ya en duda. Estas son las cuatro preocupaciones que más nos repiten los dueños de empresa con los que conversamos.</p>
+    <div class="rule-head reveal">
+      <div class="section-head">
+        <div class="eyebrow">LO QUE ESCUCHAMOS EN ESTAS CONVERSACIONES</div>
+        <h2>Antes de hablarte de nosotros, hablemos de lo que probablemente ya pensaste.</h2>
+        <p>No queremos convencerte de nada que no hayas puesto ya en duda. Estas son las cuatro preocupaciones que más nos repiten los dueños de empresa con los que conversamos.</p>
+      </div>
+      <span class="folio-label">Pliego 01 — Objeciones</span>
     </div>
-  </div>
-  <div class="wrap reveal">
-    <div class="mirror-grid">
+    <div class="mirror-grid reveal" data-stagger>
       <div class="mirror-card">
         <p class="mirror-quote">"Si yo dejo de estar un día en la empresa, siento que todo se detiene."</p>
         <div class="mirror-reply"><b>Por eso empezamos por ahí</b>El conocimiento que hoy vive solo en tu cabeza — clientes, errores costosos, criterios de decisión — puede quedar registrado como memoria de la empresa. No para reemplazarte, para que no dependa únicamente de que tú estés presente.</div>
@@ -103,25 +160,26 @@
 
 <section id="confianza">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div class="eyebrow">CÓMO PENSAMOS</div>
-      <h2>Tres principios que no negociamos.</h2>
+    <div class="rule-head reveal">
+      <div class="section-head">
+        <div class="eyebrow">CÓMO PENSAMOS</div>
+        <h2>Tres principios que no negociamos.</h2>
+      </div>
+      <span class="folio-label">Pliego 02 — Principios</span>
     </div>
-  </div>
-  <div class="wrap reveal">
-    <div class="pillars">
+    <div class="pillars reveal" data-stagger>
       <div class="pillar">
-        <div class="num">I.</div>
+        <div class="num">I</div>
         <h3>Asistente, no vigilante</h3>
         <p>Tus colaboradores hablan en lenguaje natural, sin comandos que aprender ni sensación de estar siendo medidos.</p>
       </div>
       <div class="pillar">
-        <div class="num">II.</div>
+        <div class="num">II</div>
         <h3>Tu conocimiento, no el nuestro</h3>
         <p>Lo que tu empresa sabe queda registrado como memoria de tu negocio — no dentro de la cabeza de una sola persona, ni dentro de nuestros modelos.</p>
       </div>
       <div class="pillar">
-        <div class="num">III.</div>
+        <div class="num">III</div>
         <h3>Resultado antes que licencia</h3>
         <p>Preferimos cobrar por resultado que por suscripción fija. Si la herramienta no te ahorra tiempo o dinero, no tiene sentido que la pagues.</p>
       </div>
@@ -150,12 +208,15 @@
 
 <section id="metodo">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div class="eyebrow">CÓMO TRABAJAMOS</div>
-      <h2>Un proceso pensado para que puedas decir que no en cualquier momento.</h2>
-      <p>No hay contratos largos ni instalaciones invasivas. Cada etapa está diseñada para que la decisión siga siendo tuya.</p>
+    <div class="rule-head reveal">
+      <div class="section-head">
+        <div class="eyebrow">CÓMO TRABAJAMOS</div>
+        <h2>Un proceso pensado para que puedas decir que no en cualquier momento.</h2>
+        <p>No hay contratos largos ni instalaciones invasivas. Cada etapa está diseñada para que la decisión siga siendo tuya.</p>
+      </div>
+      <span class="folio-label">Pliego 03 — Imposición</span>
     </div>
-    <div class="method-row reveal">
+    <div class="method-row reveal" data-stagger>
       <div class="method-step">
         <div class="idx">I</div>
         <h4>Diagnóstico</h4>
@@ -182,9 +243,12 @@
 
 <section id="cambia">
   <div class="wrap reveal" style="position:relative;">
-    <div class="section-head">
-      <div class="eyebrow">UNA SEMANA CUALQUIERA</div>
-      <h2>No te pedimos que cambies cómo trabajas. Cambiamos lo que te quita tiempo.</h2>
+    <div class="rule-head">
+      <div class="section-head">
+        <div class="eyebrow">UNA SEMANA CUALQUIERA</div>
+        <h2>No te pedimos que cambies cómo trabajas. Cambiamos lo que te quita tiempo.</h2>
+      </div>
+      <span class="folio-label">Pliego 04 — Antes / Después</span>
     </div>
     <input type="checkbox" id="compareToggle" class="compare-toggle-input">
     <label for="compareToggle" class="compare-switch">
@@ -217,14 +281,15 @@
 
 <section id="servicios">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div class="eyebrow">QUÉ HACEMOS</div>
-      <h2>Capacidades concretas, no un software genérico.</h2>
-      <p>Cada solución empieza acotada a un problema puntual. Si te sirve, crece contigo — no al revés.</p>
+    <div class="rule-head reveal">
+      <div class="section-head">
+        <div class="eyebrow">QUÉ HACEMOS</div>
+        <h2>Capacidades concretas, no un software genérico.</h2>
+        <p>Cada solución empieza acotada a un problema puntual. Si te sirve, crece contigo — no al revés.</p>
+      </div>
+      <span class="folio-label">Pliego 05 — Capacidades</span>
     </div>
-  </div>
-  <div class="wrap reveal">
-    <div class="services">
+    <div class="services reveal" data-stagger>
       <div class="service">
         <div class="tag">Desarrollo a medida</div>
         <h4>Software y automatizaciones</h4>
@@ -261,12 +326,15 @@
 
 <section id="productos" class="section-tight">
   <div class="wrap">
-    <div class="section-head tight reveal">
-      <div class="eyebrow">DESARROLLO PROPIO</div>
-      <h2>Lo que construimos nosotros.</h2>
-      <p>Nacidos de un problema concreto en Atlantis y probados ahí antes de ofrecerlos afuera.</p>
+    <div class="rule-head reveal">
+      <div class="section-head tight">
+        <div class="eyebrow">DESARROLLO PROPIO</div>
+        <h2>Lo que construimos nosotros.</h2>
+        <p>Nacidos de un problema concreto en Atlantis y probados ahí antes de ofrecerlos afuera.</p>
+      </div>
+      <span class="folio-label">Pliego 06 — Stock propio</span>
     </div>
-    <div class="stock reveal">
+    <div class="stock reveal" data-stagger>
 
       <article class="stock-item">
         <span class="stock-own">Desarrollo propio</span>
@@ -292,13 +360,16 @@
 
 <section id="alianza" class="section-tight">
   <div class="wrap">
-    <div class="section-head tight reveal">
-      <div class="eyebrow umber">ALIANZA CORPORATIVA</div>
-      <h2>Sistemas de gestión, junto a ForgeNova.</h2>
-      <!-- TODO: ajusta esta frase al reparto real de la alianza. -->
-      <p>ForgeNova desarrolla estas plataformas; nosotros las implementamos y las conectamos con el resto de tu operación. Son productos maduros — no hace falta construir desde cero lo que ya existe.</p>
+    <div class="rule-head reveal">
+      <div class="section-head tight">
+        <div class="eyebrow umber">ALIANZA CORPORATIVA</div>
+        <h2>Sistemas de gestión, junto a ForgeNova.</h2>
+        <!-- TODO: ajusta esta frase al reparto real de la alianza. -->
+        <p>ForgeNova desarrolla estas plataformas; nosotros las implementamos y las conectamos con el resto de tu operación. Son productos maduros — no hace falta construir desde cero lo que ya existe.</p>
+      </div>
+      <span class="folio-label">Pliego 07 — Socio</span>
     </div>
-    <div class="stock reveal">
+    <div class="stock reveal" data-stagger>
 
       <article class="stock-item">
         <span class="stock-partner">Socio · ForgeNova</span>
@@ -340,7 +411,7 @@
            alt="Interior del taller Atlantis: prensa Heidelberg al fondo y puestos de trabajo con diseño de troqueles y desarrollo de software"
            loading="lazy" decoding="async">
       <div class="showroom-badge">
-        <span class="b-num">18</span>
+        <span class="b-num" data-count-to="18">18</span>
         años operando de forma ininterrumpida — el mismo taller donde probamos cada sistema antes de ofrecerlo.
       </div>
     </div>
@@ -359,9 +430,12 @@
 
 <section id="preguntas">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div class="eyebrow">PREGUNTAS QUE NOS HACEN SIEMPRE</div>
-      <h2>Si tienes una duda, probablemente ya te la hayas hecho.</h2>
+    <div class="rule-head reveal">
+      <div class="section-head">
+        <div class="eyebrow">PREGUNTAS QUE NOS HACEN SIEMPRE</div>
+        <h2>Si tienes una duda, probablemente ya te la hayas hecho.</h2>
+      </div>
+      <span class="folio-label">Pliego 08 — Preguntas</span>
     </div>
     <div class="faq-list reveal">
       <details class="faq-item">
@@ -413,7 +487,10 @@
 
 <footer>
   <div class="wrap footer-inner">
-    <div class="logo"><img src="/img/datayros-mark.png" alt="" class="logo-mark" width="825" height="333">Datayros</div>
+    <a href="#" class="logo" aria-label="Datayros — inicio">
+      <img class="logo-day" src="/img/datayros-logo.png" alt="Datayros" width="484" height="229">
+      <img class="logo-night" src="/img/datayros-logo-night.png" alt="Datayros" width="484" height="229">
+    </a>
     <div class="footer-links">
       <a href="#entendemos">Te entendemos</a>
       <a href="#metodo">Cómo trabajamos</a>
@@ -427,8 +504,10 @@
 <!-- El widget de chat se monta aquí desde js/chat-widget.js -->
 <div id="chatRoot"></div>
 
+<!-- Núcleo de GSAP solamente (27.6 KB gzip). Los reveals al hacer scroll usan
+     IntersectionObserver nativo, así que ScrollTrigger no hace falta. -->
+<script src="/js/vendor/gsap.min.js" defer></script>
 <script type="module" src="/js/main.js"></script>
 <script type="module" src="/js/chat-widget.js"></script>
-
 </body>
 </html>

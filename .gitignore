@@ -23,3 +23,13 @@ Thumbs.db
 desktop.ini
 .vscode/
 .idea/
+
+# Herramientas locales. El sitio es estático y se despliega tal cual: si
+# package.json viaja al repo, Cloudflare Pages puede intentar un build que
+# no existe y romper el despliegue.
+package.json
+package-lock.json
+
+# Maquetas de trabajo y material fuente: se revisan en local, no se publican.
+/preview/
+img/Captura desde *.png
