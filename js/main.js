@@ -157,7 +157,9 @@ if (animate) {
     .from(".hero .lead", { opacity: 0, y: 14, duration: 0.5 }, "-=0.45")
     .from(".hero-ctas", { opacity: 0, y: 14, duration: 0.45 }, "-=0.42")
     .from(".hero-proof", { opacity: 0, y: 14, duration: 0.45 }, "-=0.4")
-    .from(".ledger", { opacity: 0, y: 18, duration: 0.55 }, "-=0.6")
+    .from(".ticket", { opacity: 0, y: 18, duration: 0.55 }, "-=0.6")
+    .from(".ticket-row", { opacity: 0, x: -10, duration: 0.4, stagger: 0.07 }, "-=0.3")
+    .from(".ticket-foot", { opacity: 0, duration: 0.4 }, "-=0.15")
     .from("#regMark .ring", { scale: 1.6, opacity: 0, duration: 0.6, transformOrigin: "center" }, "-=0.5")
     .from("#regMark .ring-2", { scale: 0.4, opacity: 0, duration: 0.6, transformOrigin: "center" }, "-=0.5")
     .from("#regMark .ln-t", { y: -30, opacity: 0, duration: 0.5 }, "-=0.45")
@@ -188,30 +190,6 @@ if (counter && animate) {
   io2.observe(counter);
 }
 
-/* ── Bitácora en vivo del hero ───────────────────────────────────────────────
-   La memoria de la organización se escribe sola: es la firma de la marca y
-   demuestra el argumento en vez de explicarlo. */
-const entries = [
-  { t: "09:12", text: "Nueva cotización calculada para <b>pedido #452</b>." },
-  { t: "11:30", text: "Registrado criterio de precio para clientes recurrentes." },
-  { t: "14:05", text: "Ingreso registrado por voz — sin planilla." },
-  { t: "16:48", text: "Recordatorio de cobranza enviado automáticamente." },
-  { t: "—", text: "Este conocimiento ya no depende de una sola persona." },
-];
-const body = document.getElementById("ledgerBody");
-let i = 0;
-function addEntry() {
-  if (!body) return;
-  body.querySelectorAll(".caret").forEach((c) => c.remove());
-  if (i >= entries.length) return;
-  const row = document.createElement("div");
-  row.className = "ledger-entry";
-  row.innerHTML =
-    '<div class="ledger-time">' + entries[i].t + "</div>" +
-    '<div class="ledger-text">' + entries[i].text + '<span class="caret"></span></div>';
-  body.appendChild(row);
-  if (animate) gsap.from(row, { opacity: 0, y: 8, duration: 0.32, ease: "power1.out" });
-  i++;
-  setTimeout(addEntry, reduceMotion ? 120 : 900);
-}
-setTimeout(addEntry, reduceMotion ? 0 : 700);
+/* La ficha de trabajo del hero es contenido fijo: se escribe en el HTML y no
+   necesita JavaScript para existir. Su entrada escalonada va en la línea de
+   tiempo de arriba. */
