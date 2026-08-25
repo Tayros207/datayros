@@ -12,7 +12,7 @@
    sin guiones ni paréntesis. Ejemplo para +51 987 654 321 → "51987654321".
    Si dejas el + o los espacios, wa.me devuelve un 404.
 
-   Se usan aquí (botones del CTA y del hero) y en chat-widget.js. Un solo lugar.
+   Se usan aquí (botones, formulario del hero) y en chat-widget.js. Un solo lugar.
 */
 export const WHATSAPP_NUMBER = "51933137048";
 export const WHATSAPP_MESSAGE =
@@ -63,7 +63,7 @@ function setTheme(theme) {
   if (theme === "night") root.setAttribute("data-theme", "night");
   else root.removeAttribute("data-theme");
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute("content", theme === "night" ? "#141310" : "#F4F1E8");
+  if (meta) meta.setAttribute("content", theme === "night" ? "#141310" : "#FAFAF7");
   try { localStorage.setItem("dy-theme", theme); } catch (e) {}
 }
 
@@ -73,11 +73,55 @@ if (themeToggle) {
   });
 }
 
+/* ── Formulario del hero → WhatsApp ──────────────────────────────────────────
+   Sin backend que mantener: al enviar se abre WhatsApp con el mensaje ya
+   armado con lo que la persona llenó. El campo señuelo (website) frena a los
+   bots — una persona nunca lo ve ni lo llena. */
+const contactForm = document.getElementById("contactForm");
+const formStatus = document.getElementById("formStatus");
+
+if (contactForm) {
+  contactForm.addEventListener("submit", (ev) => {
+    ev.preventDefault();
+
+    const hp = contactForm.querySelector('[name="website"]');
+    if (hp && hp.value) return; // bot: silencio y a otra cosa
+
+    const name = (document.getElementById("fullName")?.value || "").trim();
+    const company = (document.getElementById("company")?.value || "").trim();
+    const category = (document.getElementById("category")?.value || "").trim();
+    const message = (document.getElementById("message")?.value || "").trim();
+
+    if (!name) {
+      if (formStatus) {
+        formStatus.textContent = "Escribe tu nombre para empezar";
+        formStatus.classList.remove("ok");
+      }
+      document.getElementById("fullName")?.focus();
+      return;
+    }
+
+    const lines = [
+      "Hola Datayros, quiero evaluar un proceso.",
+      `*Nombre:* ${name}`,
+      company ? `*Empresa:* ${company}` : null,
+      `*Proceso:* ${category}`,
+      message ? `*Mensaje:* ${message}` : null,
+    ].filter(Boolean);
+
+    const url = whatsappUrl(lines.join("\n"));
+    if (formStatus) {
+      formStatus.textContent = "Abriendo WhatsApp con tu mensaje…";
+      formStatus.classList.add("ok");
+    }
+    window.open(url, "_blank", "noopener");
+  });
+}
+
 /* ── Respaldo de las fotos ────────────────────────────────────────────────────
    Si una foto no existe o falla al cargar, la quitamos del DOM. El CSS de cada
    una está condicionado con :has(), así que al retirarla el contenedor vuelve
-   solo a su estado anterior —iniciales sobre papel en la ficha del fundador,
-   rayas diagonales en el marco de Atlantis— sin ícono de imagen rota. */
+   solo a su estado anterior sin ícono de imagen rota. */
 document.querySelectorAll(".founder-photo, .showroom-photo").forEach((img) => {
   img.addEventListener("error", () => img.remove(), { once: true });
 });
@@ -96,7 +140,7 @@ const io = new IntersectionObserver((entries) => {
 
     if (animate && el.hasAttribute("data-stagger")) {
       gsap.from(el.children, {
-        opacity: 0, y: 10, duration: 0.4, ease: "power2.out", stagger: 0.05,
+        opacity: 0, y: 12, duration: 0.45, ease: "power2.out", stagger: 0.06,
       });
     }
   });
@@ -104,23 +148,29 @@ const io = new IntersectionObserver((entries) => {
 revealEls.forEach((el) => io.observe(el));
 
 /* ── Comportamiento al hacer scroll ───────────────────────────────────────────
-   Dos cosas en una sola lectura del scroll, dentro de requestAnimationFrame:
-   la barra se condensa y la línea de progreso avanza. Leer el scroll en cada
-   evento provoca "layout thrashing"; así solo se toca el DOM una vez por
-   fotograma y la página no se traba al deslizar. */
+   Una sola lectura del scroll por fotograma (requestAnimationFrame): la barra
+   se condensa, la línea de progreso avanza, el botón del chat entra pasado el
+   hero, y la decoración del fondo se desplaza a otro ritmo (parallax suave). */
 const nav = document.querySelector("nav");
 const navProgress = document.getElementById("navProgress");
+const bgRing = document.querySelector(".bg-ring");
+const bgDots = document.querySelector(".bg-dots");
 let ticking = false;
 
 function onScrollFrame() {
   const y = window.scrollY;
   if (nav) nav.classList.toggle("is-scrolled", y > 24);
-  // El botón del chat entra recién pasado el hero, no encima de él.
   root.classList.toggle("past-hero", y > window.innerHeight * 0.6);
-  if (navProgress && !reduceMotion) {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    const p = max > 0 ? Math.min(y / max, 1) : 0;
-    navProgress.style.transform = "scaleX(" + p.toFixed(4) + ")";
+  if (!reduceMotion) {
+    if (navProgress) {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const p = max > 0 ? Math.min(y / max, 1) : 0;
+      navProgress.style.transform = "scaleX(" + p.toFixed(4) + ")";
+    }
+    /* Parallax: el aro y los puntos pertenecen al fondo, así que se quedan
+       un poco atrás cuando la página avanza. Profundidad sin estridencia. */
+    if (bgRing) bgRing.style.transform = "translateY(" + (y * -0.12).toFixed(1) + "px)";
+    if (bgDots) bgDots.style.transform = "translateY(" + (y * -0.05).toFixed(1) + "px)";
   }
   ticking = false;
 }
@@ -131,48 +181,22 @@ window.addEventListener("scroll", () => {
 onScrollFrame();
 
 /* ── Entrada del hero ─────────────────────────────────────────────────────────
-   Un solo momento orquestado en lugar de efectos sueltos. El remate es la
-   marca de registro: las cruces llegan desde fuera y los aros cierran — que es
-   literalmente lo que hace una prensa antes de imprimir limpio. */
-/* Partimos el titular en palabras para poder escalonarlas. Tiene que ocurrir
-   ANTES de construir la línea de tiempo, porque GSAP resuelve los selectores
-   en ese momento. Solo se trocea si de verdad vamos a animar. */
-function splitHeadline() {
-  const h = document.getElementById("heroTitle");
-  if (!h) return;
-  h.innerHTML = h.innerHTML.replace(
-    /(<em>.*?<\/em>|[^\s<]+)/g,
-    (m) => '<span class="w">' + m + "</span>"
-  );
-}
-
+   El fadeUp escalonado de las landings profesionales: cada pieza del pitch
+   sube en orden de lectura y la tarjeta del formulario aterriza al final,
+   apenas después — es la protagonista y se nota sin gritarlo. */
 if (animate) {
-  splitHeadline();
-
-  gsap.timeline({ defaults: { ease: "power3.out" } })
-    .from("nav", { opacity: 0, y: -10, duration: 0.45 })
-    .from(".trim", { opacity: 0, duration: 0.4, stagger: 0.05 }, "-=0.2")
-    .from(".hero-meta", { opacity: 0, y: 10, duration: 0.45 }, "-=0.25")
-    .from(".hero h1 .w", { opacity: 0, y: 22, duration: 0.5, stagger: 0.026 }, "-=0.25")
-    .from(".hero .lead", { opacity: 0, y: 14, duration: 0.5 }, "-=0.45")
-    .from(".hero-ctas", { opacity: 0, y: 14, duration: 0.45 }, "-=0.42")
-    .from(".hero-proof", { opacity: 0, y: 14, duration: 0.45 }, "-=0.4")
-    .from(".ticket", { opacity: 0, y: 18, duration: 0.55 }, "-=0.6")
-    .from(".ticket-row", { opacity: 0, x: -10, duration: 0.4, stagger: 0.07 }, "-=0.3")
-    .from(".ticket-foot", { opacity: 0, duration: 0.4 }, "-=0.15")
-    .from("#regMark .ring", { scale: 1.6, opacity: 0, duration: 0.6, transformOrigin: "center" }, "-=0.5")
-    .from("#regMark .ring-2", { scale: 0.4, opacity: 0, duration: 0.6, transformOrigin: "center" }, "-=0.5")
-    .from("#regMark .ln-t", { y: -30, opacity: 0, duration: 0.5 }, "-=0.45")
-    .from("#regMark .ln-b", { y: 30, opacity: 0, duration: 0.5 }, "-=0.5")
-    .from("#regMark .ln-l", { x: -30, opacity: 0, duration: 0.5 }, "-=0.5")
-    .from("#regMark .ln-r", { x: 30, opacity: 0, duration: 0.5 }, "-=0.5")
-    .from(".control-note", { opacity: 0, duration: 0.4 }, "-=0.3")
-    .from("#inkbar i", { scaleY: 0, duration: 0.4, stagger: 0.04, ease: "power2.out" }, "-=0.35");
+  gsap.from("nav", { opacity: 0, y: -10, duration: 0.45, ease: "power2.out" });
+  gsap.from("[data-fade]", {
+    opacity: 0, y: 18, duration: 0.7, ease: "power3.out",
+    stagger: 0.09, delay: 0.1,
+  });
+  gsap.from("[data-fade-card]", {
+    opacity: 0, y: 26, duration: 0.8, ease: "power3.out", delay: 0.35,
+  });
 }
 
 /* ── Contador del sello de Atlantis ──────────────────────────────────────────
-   Los "18 años" suben al entrar en pantalla. Es un dato, no un adorno: el
-   número es la prueba y merece que la vista se detenga en él un instante. */
+   Los "18 años" suben al entrar en pantalla. Es un dato, no un adorno. */
 const counter = document.querySelector("[data-count-to]");
 if (counter && animate) {
   const target = Number(counter.dataset.countTo);
@@ -189,7 +213,3 @@ if (counter && animate) {
   }, { threshold: 0.6 });
   io2.observe(counter);
 }
-
-/* La ficha de trabajo del hero es contenido fijo: se escribe en el HTML y no
-   necesita JavaScript para existir. Su entrada escalonada va en la línea de
-   tiempo de arriba. */

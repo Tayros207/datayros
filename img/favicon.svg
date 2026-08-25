@@ -1,10 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <!-- Misma paleta que el sitio: papel #F6F3EC, índigo #2B3F6B. -->
-  <rect width="64" height="64" rx="3" fill="#F6F3EC"/>
-  <rect x="0.5" y="0.5" width="63" height="63" rx="3" fill="none" stroke="#C7BC9E"/>
-  <!-- El punto índigo es el mismo acento del sitio (--accent), aunque el
-       .logo-mark del nav ahora usa el ícono a color de Datayros. -->
-  <circle cx="16" cy="24" r="4" fill="#2B3F6B"/>
-  <text x="26" y="43" font-family="Newsreader, Georgia, 'Times New Roman', serif"
-        font-style="italic" font-size="38" fill="#201F1A">D</text>
+  <!-- Misma paleta que el sitio: papel #FAFAF7, verde de marca #009000. -->
+  <rect width="64" height="64" rx="6" fill="#FAFAF7"/>
+  <rect x="0.5" y="0.5" width="63" height="63" rx="6" fill="none" stroke="#D8D6CF"/>
+  <!-- El punto verde es el mismo acento del sitio (--accent). -->
+  <circle cx="17" cy="22" r="5" fill="#009000"/>
+  <text x="26" y="46" font-family="Arial, Helvetica, sans-serif" font-weight="800"
+        font-size="38" fill="#0F0F0D">D</text>
 </svg>
