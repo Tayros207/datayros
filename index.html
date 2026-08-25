@@ -368,29 +368,37 @@
       <div class="eyebrow">Una semana cualquiera</div>
       <h2>No te pedimos que cambies cómo trabajas. Cambiamos lo que te quita tiempo.</h2>
     </div>
-    <input type="checkbox" id="compareToggle" class="compare-toggle-input">
-    <label for="compareToggle" class="compare-switch">
-      <span class="switch-label-off">Cómo es hoy</span>
-      <span class="switch-track"><span class="switch-thumb"></span></span>
-      <span class="switch-label-on">Con Datayros</span>
-    </label>
+    <input type="checkbox" id="compareToggle" class="compare-toggle-input"
+           aria-label="Ver la semana con Datayros">
+    <!-- Control segmentado: los dos estados SON el botón. La píldora verde
+         se desliza al lado activo. main.js le añade una demostración
+         automática al entrar en pantalla y un brillo de invitación que se
+         apaga para siempre con el primer toque. -->
+    <div class="compare-ctrl">
+      <label for="compareToggle" class="compare-seg" id="compareSeg">
+        <span class="seg-thumb" aria-hidden="true"></span>
+        <span class="seg seg-off">Cómo es hoy</span>
+        <span class="seg seg-on">Con Datayros</span>
+      </label>
+      <span class="seg-hint mono" id="segHint" aria-hidden="true">Prueba el cambio →</span>
+    </div>
     <div class="compare-wrap">
       <div class="compare-grid">
         <div class="compare-row">
           <div class="task">Cotizar un pedido</div>
-          <div><span class="state-before">20 a 30 minutos por cliente, cálculos hechos a mano.</span><span class="state-after">Respuesta en minutos, con el margen ya calculado.</span></div>
+          <div class="state-cell"><span class="st-ico" aria-hidden="true"><svg class="ico-clock" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.2" class="sc-mid" stroke-width="1.7"/><path d="M10 6.2 V10 l2.6 1.8" class="sc-mid" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ico-check" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8.4" class="sc-dim"/><path d="M6.4 10.2 l2.4 2.4 L13.8 7.6" class="sc-acc" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="state-txt"><span class="state-before">20 a 30 minutos por cliente, cálculos hechos a mano.</span><span class="state-after">Respuesta en minutos, con el margen ya calculado.</span></div></div>
         </div>
         <div class="compare-row">
           <div class="task">Registrar ingresos y gastos</div>
-          <div><span class="state-before">Anotar todo al final del día, con riesgo de olvidar algo.</span><span class="state-after">Lo registras hablando, mientras sigues trabajando.</span></div>
+          <div class="state-cell"><span class="st-ico" aria-hidden="true"><svg class="ico-clock" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.2" class="sc-mid" stroke-width="1.7"/><path d="M10 6.2 V10 l2.6 1.8" class="sc-mid" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ico-check" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8.4" class="sc-dim"/><path d="M6.4 10.2 l2.4 2.4 L13.8 7.6" class="sc-acc" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="state-txt"><span class="state-before">Anotar todo al final del día, con riesgo de olvidar algo.</span><span class="state-after">Lo registras hablando, mientras sigues trabajando.</span></div></div>
         </div>
         <div class="compare-row">
           <div class="task">Seguimiento de cobranza</div>
-          <div><span class="state-before">Llamadas repetidas y seguimiento manual, cliente por cliente.</span><span class="state-after">Recordatorios automáticos, con intervención humana si el caso se complica.</span></div>
+          <div class="state-cell"><span class="st-ico" aria-hidden="true"><svg class="ico-clock" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.2" class="sc-mid" stroke-width="1.7"/><path d="M10 6.2 V10 l2.6 1.8" class="sc-mid" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ico-check" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8.4" class="sc-dim"/><path d="M6.4 10.2 l2.4 2.4 L13.8 7.6" class="sc-acc" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="state-txt"><span class="state-before">Llamadas repetidas y seguimiento manual, cliente por cliente.</span><span class="state-after">Recordatorios automáticos, con intervención humana si el caso se complica.</span></div></div>
         </div>
         <div class="compare-row">
           <div class="task">Conocimiento clave del negocio</div>
-          <div><span class="state-before">Vive solo en la cabeza del dueño o de una persona clave.</span><span class="state-after">Queda registrado y consultable para todo el equipo.</span></div>
+          <div class="state-cell"><span class="st-ico" aria-hidden="true"><svg class="ico-clock" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.2" class="sc-mid" stroke-width="1.7"/><path d="M10 6.2 V10 l2.6 1.8" class="sc-mid" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ico-check" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8.4" class="sc-dim"/><path d="M6.4 10.2 l2.4 2.4 L13.8 7.6" class="sc-acc" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="state-txt"><span class="state-before">Vive solo en la cabeza del dueño o de una persona clave.</span><span class="state-after">Queda registrado y consultable para todo el equipo.</span></div></div>
         </div>
       </div>
     </div>

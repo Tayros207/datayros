@@ -446,21 +446,67 @@ section + section{ border-top:1px solid var(--line); }
 .method-step p{ color:var(--muted); font-size:14px; }
 
 .compare-toggle-input{ position:absolute; opacity:0; pointer-events:none; }
-.compare-switch{ display:inline-flex; align-items:center; gap:12px; cursor:pointer; user-select:none;
-  font-size:14px; font-weight:500; margin-bottom:28px; }
-.switch-track{ width:46px; height:25px; border-radius:20px; background:var(--paper-2);
-  border:1px solid var(--line-strong); position:relative; transition:border-color .2s, background .2s; flex-shrink:0; }
-.switch-thumb{ width:19px; height:19px; border-radius:50%; background:var(--muted-2);
-  position:absolute; top:2px; left:2px; transition:transform .25s var(--ease-out), background .25s var(--ease-out); }
-.compare-toggle-input:checked ~ .compare-switch .switch-track{ border-color:var(--accent); }
-.compare-toggle-input:checked ~ .compare-switch .switch-thumb{ transform:translateX(21px); background:var(--accent); }
-.compare-toggle-input:focus-visible ~ .compare-switch .switch-track{ outline:2px solid var(--accent); outline-offset:3px; }
-.switch-label-off{ color:var(--ink); } .switch-label-on{ color:var(--muted-2); }
-.compare-toggle-input:checked ~ .compare-switch .switch-label-off{ color:var(--muted-2); }
-.compare-toggle-input:checked ~ .compare-switch .switch-label-on{ color:var(--ink); }
+
+/* Control segmentado: los dos estados son el botón. La píldora verde vive
+   debajo del lado activo y se desliza al cambiar. */
+.compare-ctrl{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:28px; }
+.compare-seg{
+  position:relative; display:inline-grid; grid-template-columns:1fr 1fr;
+  border:1px solid var(--line-strong); border-radius:999px; padding:4px;
+  background:var(--card); cursor:pointer; user-select:none;
+  transition:border-color .2s var(--ease-out);
+}
+.seg{
+  position:relative; z-index:1; padding:12px 24px; border-radius:999px;
+  font-size:14.5px; font-weight:600; line-height:1.2; white-space:nowrap;
+  text-align:center; color:var(--muted); transition:color .25s var(--ease-out);
+}
+.seg-thumb{
+  position:absolute; top:4px; bottom:4px; left:4px; width:calc(50% - 4px);
+  background:var(--accent); border-radius:999px;
+  transition:transform .3s var(--ease-out);
+}
+.compare-toggle-input:checked ~ .compare-ctrl .seg-thumb{ transform:translateX(100%); }
+.compare-toggle-input:not(:checked) ~ .compare-ctrl .seg-off{ color:var(--on-accent); }
+.compare-toggle-input:checked ~ .compare-ctrl .seg-on{ color:var(--on-accent); }
+@media (hover:hover) and (pointer:fine){
+  .compare-toggle-input:not(:checked) ~ .compare-ctrl .seg-on:hover{ color:var(--ink); }
+  .compare-toggle-input:checked ~ .compare-ctrl .seg-off:hover{ color:var(--ink); }
+}
+.compare-toggle-input:focus-visible ~ .compare-ctrl .compare-seg{ outline:2px solid var(--accent); outline-offset:3px; }
+
+/* Brillo de invitación: late hasta el primer toque y se apaga para siempre. */
+.compare-seg.seg-glow{ animation:segGlow 2.2s var(--ease-out) infinite; }
+@keyframes segGlow{
+  0%{ box-shadow:0 0 0 0 var(--accent-glow); }
+  55%{ box-shadow:0 0 0 12px rgba(0,0,0,0); }
+  100%{ box-shadow:0 0 0 0 rgba(0,0,0,0); }
+}
+.seg-hint{ color:var(--accent); transition:opacity .35s var(--ease-out); }
+.seg-hint.off{ opacity:0; }
+
+@media (max-width:430px){
+  .seg{ padding:11px 14px; font-size:13px; }
+  .compare-ctrl{ gap:10px; }
+}
 
 .compare-grid{ display:flex; flex-direction:column; border:1px solid var(--line);
-  border-radius:var(--r-card); background:var(--card); overflow:hidden; }
+  border-radius:var(--r-card); background:var(--card); overflow:hidden;
+  transition:border-color .35s var(--ease-out), box-shadow .35s var(--ease-out); }
+/* En "Con Datayros" la tarjeta entera cambia de humor: borde y halo verdes. */
+.compare-toggle-input:checked ~ .compare-wrap .compare-grid{
+  border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-dim);
+}
+
+/* Celda de estado: icono (reloj ↔ check) + texto. */
+.state-cell{ display:flex; gap:12px; align-items:flex-start; }
+.state-txt{ flex:1; min-width:0; }
+.st-ico{ flex-shrink:0; width:20px; height:20px; margin-top:3px; position:relative; }
+.st-ico svg{ position:absolute; inset:0; width:20px; height:20px;
+  transition:opacity .25s var(--ease-out), transform .25s var(--ease-out); }
+.ico-check{ opacity:0; transform:scale(.55); }
+.compare-toggle-input:checked ~ .compare-wrap .ico-clock{ opacity:0; transform:scale(.55); }
+.compare-toggle-input:checked ~ .compare-wrap .ico-check{ opacity:1; transform:scale(1); }
 .compare-row{ display:grid; grid-template-columns:220px 1fr; gap:24px; padding:21px 26px;
   border-bottom:1px solid var(--line); align-items:center; }
 .compare-row:last-child{ border-bottom:none; }

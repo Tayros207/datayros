@@ -118,6 +118,74 @@ if (contactForm) {
   });
 }
 
+/* ── Comparador "una semana cualquiera" ───────────────────────────────────────
+   El control segmentado invita de tres formas: se ve como botón, brilla
+   suave hasta el primer toque, y la sección se demuestra sola una vez al
+   entrar en pantalla — cambia a "Con Datayros" dos segundos y regresa, para
+   que el visitante vea el premio antes de tocar nada. Al cambiar, las filas
+   entran en cascada. El estado vive en el checkbox oculto: el CSS y el
+   teclado siguen funcionando aunque nada de esto corra. */
+const cmpInput = document.getElementById("compareToggle");
+const cmpSeg = document.getElementById("compareSeg");
+const segHint = document.getElementById("segHint");
+
+if (cmpInput && cmpSeg) {
+  let cmpTouched = false;
+  const segOff = cmpSeg.querySelector(".seg-off");
+  const segOn = cmpSeg.querySelector(".seg-on");
+
+  const markTouched = () => {
+    if (cmpTouched) return;
+    cmpTouched = true;
+    cmpSeg.classList.remove("seg-glow");
+    if (segHint) segHint.classList.add("off");
+  };
+
+  const swapAnim = () => {
+    if (!animate) return;
+    gsap.from(".compare-row .state-txt", {
+      opacity: 0, x: -10, duration: 0.3, ease: "power2.out",
+      stagger: 0.055, overwrite: "auto", clearProps: "opacity,x",
+    });
+    gsap.from(".compare-row .st-ico", {
+      scale: 0.5, duration: 0.35, ease: "back.out(2)",
+      stagger: 0.055, overwrite: "auto", transformOrigin: "center",
+      clearProps: "scale",
+    });
+  };
+
+  const setCompare = (on, byUser) => {
+    if (byUser) markTouched();
+    if (cmpInput.checked === on) return;
+    cmpInput.checked = on;
+    swapAnim();
+  };
+
+  /* Clic por lado: tocar el lado ya activo no des-activa nada. */
+  cmpSeg.addEventListener("click", (ev) => {
+    ev.preventDefault();
+    if (segOn.contains(ev.target)) setCompare(true, true);
+    else if (segOff.contains(ev.target)) setCompare(false, true);
+    else setCompare(!cmpInput.checked, true);
+  });
+  /* Teclado sobre el checkbox oculto: espacio sigue alternando. */
+  cmpInput.addEventListener("change", () => { markTouched(); swapAnim(); });
+
+  /* Demostración única + brillo, al entrar el control en pantalla. */
+  if (animate) {
+    const ioCmp = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        ioCmp.unobserve(e.target);
+        cmpSeg.classList.add("seg-glow");
+        setTimeout(() => { if (!cmpTouched) setCompare(true, false); }, 1100);
+        setTimeout(() => { if (!cmpTouched) setCompare(false, false); }, 3400);
+      });
+    }, { threshold: 0.8 });
+    ioCmp.observe(cmpSeg);
+  }
+}
+
 /* ── Respaldo de las fotos ────────────────────────────────────────────────────
    Si una foto no existe o falla al cargar, la quitamos del DOM. El CSS de cada
    una está condicionado con :has(), así que al retirarla el contenedor vuelve
