@@ -173,7 +173,7 @@ img{max-width:100%;}
 .reg .ring-2{ stroke:var(--green-mid); stroke-width:1.2; }
 .reg line{ stroke-width:1.4; }
 .control-note{
-  font-family:'Space Grotesk',sans-serif; font-size:12px; color:var(--muted);
+  font-family:'Space Grotesk',sans-serif; font-size:12.5px; color:var(--muted);
   max-width:34ch; line-height:1.55;
 }
 .inkbar{ display:flex; gap:2px; flex:1; min-width:180px; }
@@ -182,15 +182,19 @@ img{max-width:100%;}
 .inkbar i{ flex:1; height:18px; display:block; transform-origin:bottom; }
 @media (max-width:760px){
   .control-strip{ gap:16px; }
-  .control-note{ max-width:100%; font-size:11.5px; }
+  .control-note{ max-width:100%; font-size:12px; }
 }
 
 /* Conmutador día/noche del nav */
 .theme-toggle{
   background:none; border:1px solid var(--rule-strong); border-radius:0;
-  width:34px; height:34px; cursor:pointer; color:var(--muted);
+  width:38px; height:38px; cursor:pointer; color:var(--muted);
   display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;
   transition:border-color .18s var(--ease-out), color .18s var(--ease-out);
+}
+/* En pantallas táctiles sube al mínimo de 44×44: con el dedo, 38 se falla. */
+@media (pointer:coarse){
+  .theme-toggle{ width:44px; height:44px; }
 }
 .theme-toggle svg{ width:16px; height:16px; }
 .theme-toggle .i-sun{ display:var(--logo-night); }   /* de noche se ofrece el sol */
@@ -201,9 +205,26 @@ img{max-width:100%;}
 
 /* ── 3. Landing ──────────────────────────────────────────────────────────── */
 nav{ position:fixed; top:0; left:0; right:0; z-index:50;
-  background:var(--nav-bg); backdrop-filter:blur(8px); border-bottom:1px solid var(--rule); }
-.nav-inner{ max-width:1180px; margin:0 auto; padding:14px 40px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+  background:var(--nav-bg); backdrop-filter:blur(8px); border-bottom:1px solid var(--rule);
+  transition:box-shadow .3s var(--ease-out); }
+.nav-inner{ max-width:1180px; margin:0 auto; padding:14px 40px; display:flex; align-items:center; justify-content:space-between; gap:20px;
+  transition:padding .3s var(--ease-out); }
 @media (max-width:640px){ .nav-inner{ padding:12px 20px; } }
+
+/* Al bajar, la barra se condensa y despega del papel. Da sitio al contenido
+   y avisa de que ya no estás arriba, sin decirlo con palabras. */
+nav.is-scrolled{ box-shadow:0 6px 22px -16px rgba(0,0,0,.5); }
+nav.is-scrolled .nav-inner{ padding-top:8px; padding-bottom:8px; }
+nav.is-scrolled .logo img{ height:31px; }
+@media (max-width:640px){ nav.is-scrolled .logo img{ height:27px; } }
+
+/* Progreso de lectura sobre el propio filete del nav: cuánto queda del pliego.
+   Ocupa 2px y no pide atención hasta que la buscas. */
+.nav-progress{
+  position:absolute; left:0; bottom:-1px; height:2px; width:100%;
+  background:var(--accent); transform:scaleX(0); transform-origin:left;
+  will-change:transform; pointer-events:none;
+}
 
 /* Logo completo (símbolo + palabra). Dos archivos: el de noche aclara el
    verde profundo de "Data", que sobre tinta quedaría ilegible. */
@@ -271,8 +292,16 @@ section{ padding:88px 0; border-bottom:1px solid var(--rule); }
 /* Cabecera con filete: el h2 y la etiqueta de pliego comparten una línea,
    como el encabezado de un pliego de imposición. */
 .rule-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:24px;
-  border-bottom:1px solid var(--ink); padding-bottom:12px; margin-bottom:34px; flex-wrap:wrap; }
+  padding-bottom:12px; margin-bottom:34px; flex-wrap:wrap; position:relative; }
 .rule-head .section-head{ margin-bottom:0; }
+/* El filete se traza de izquierda a derecha al entrar la sección — el gesto
+   de una regla sobre el pliego. Sin JS aparece ya trazado. */
+.rule-head::after{
+  content:''; position:absolute; left:0; right:0; bottom:0; height:1px;
+  background:var(--ink); transform-origin:left;
+}
+.js .rule-head::after{ transform:scaleX(0); transition:transform .85s var(--ease-out) .1s; }
+.js .rule-head.in::after{ transform:scaleX(1); }
 
 /* El estado oculto solo se aplica si el JS está vivo (la clase .js la pone el
    script del <head>). Sin JS, o si falla, todo el contenido se ve igual. */
@@ -391,7 +420,7 @@ section{ padding:88px 0; border-bottom:1px solid var(--rule); }
 /* Términos concretos bajo el nombre. El comprador escanea buscando la palabra
    que reconoce ("SUNAT", "POS") antes de leer la frase completa. */
 .stock-item .stock-tags{
-  font-family:'Space Grotesk',sans-serif; font-size:11px; letter-spacing:.04em;
+  font-family:'Space Grotesk',sans-serif; font-size:12px; letter-spacing:.04em;
   color:var(--muted-2); margin-top:5px;
 }
 @media (max-width:860px){
@@ -479,6 +508,14 @@ footer .logo img{ height:28px; }
 .footer-links a{ text-decoration:none; }
 @media (hover:hover) and (pointer:fine){ .footer-links a:hover{ color:var(--accent); } }
 
+/* Las fotos entran con un acercamiento mínimo (1.05 → 1). Es lo que hace que
+   una imagen "aterrice" en vez de aparecer de golpe; a este tamaño se siente
+   antes de verse. */
+.js .founder-photo,
+.js .showroom-photo{ transform:scale(1.05); transition:transform 1.2s var(--ease-out); }
+.js .reveal.in .founder-photo,
+.js .reveal.in .showroom-photo{ transform:scale(1); }
+
 /* Movimiento reducido: se conserva lo que ayuda a comprender y se retira
    todo desplazamiento. Nunca deja contenido invisible. */
 @media (prefers-reduced-motion:reduce){
@@ -488,6 +525,9 @@ footer .logo img{ height:28px; }
   }
   .reveal{ opacity:1; transform:none; }
   .inkbar i{ transform:scaleY(1); }
+  .js .rule-head::after{ transform:scaleX(1); }
+  .js .founder-photo, .js .showroom-photo{ transform:none; }
+  .nav-progress{ display:none; }
 }
 
 /* ============================================================================
@@ -507,6 +547,14 @@ footer .logo img{ height:28px; }
   .chat-fab:hover{ transform:translateY(-2px); background:var(--accent-hover); }
 }
 .chat-fab[hidden]{ display:none; }
+/* No aparece hasta que pasas el hero. Dos motivos: en móvil se montaba justo
+   encima del botón de WhatsApp del hero, y el propio documento de decisiones
+   descarta invitar al chat sin una señal de interés real. */
+.js .chat-fab{
+  opacity:0; transform:translateY(8px); pointer-events:none;
+  transition:opacity .3s var(--ease-out), transform .3s var(--ease-out);
+}
+.js.past-hero .chat-fab{ opacity:1; transform:none; pointer-events:auto; }
 .chat-fab .fab-dot{ width:6px; height:6px; border-radius:50%; background:var(--on-accent); animation:pulse 2.4s infinite; }
 @media (prefers-reduced-motion:reduce){ .chat-fab .fab-dot{ animation:none; } }
 @media (max-width:640px){ .chat-fab{ right:16px; bottom:16px; } }

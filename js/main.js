@@ -103,6 +103,33 @@ const io = new IntersectionObserver((entries) => {
 }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
 revealEls.forEach((el) => io.observe(el));
 
+/* ── Comportamiento al hacer scroll ───────────────────────────────────────────
+   Dos cosas en una sola lectura del scroll, dentro de requestAnimationFrame:
+   la barra se condensa y la línea de progreso avanza. Leer el scroll en cada
+   evento provoca "layout thrashing"; así solo se toca el DOM una vez por
+   fotograma y la página no se traba al deslizar. */
+const nav = document.querySelector("nav");
+const navProgress = document.getElementById("navProgress");
+let ticking = false;
+
+function onScrollFrame() {
+  const y = window.scrollY;
+  if (nav) nav.classList.toggle("is-scrolled", y > 24);
+  // El botón del chat entra recién pasado el hero, no encima de él.
+  root.classList.toggle("past-hero", y > window.innerHeight * 0.6);
+  if (navProgress && !reduceMotion) {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const p = max > 0 ? Math.min(y / max, 1) : 0;
+    navProgress.style.transform = "scaleX(" + p.toFixed(4) + ")";
+  }
+  ticking = false;
+}
+
+window.addEventListener("scroll", () => {
+  if (!ticking) { ticking = true; requestAnimationFrame(onScrollFrame); }
+}, { passive: true });
+onScrollFrame();
+
 /* ── Entrada del hero ─────────────────────────────────────────────────────────
    Un solo momento orquestado en lugar de efectos sueltos. El remate es la
    marca de registro: las cruces llegan desde fuera y los aros cierran — que es
