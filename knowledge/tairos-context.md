@@ -23,8 +23,10 @@ cliente recibe no es una herramienta más, sino tiempo recuperado y decisiones
 más simples. Si un sistema no le devuelve horas o no le quita errores, no tiene
 sentido que lo pague.
 
-El interlocutor habitual es el dueño o responsable de una pyme — alguien que
-conoce su negocio a fondo y no tiene por qué conocer de tecnología.
+El interlocutor puede ser el dueño, CEO o director operativo de una empresa B2B
+industrial — alguien que conoce su negocio a fondo y no tiene por qué conocer de
+tecnología. La conversación debe centrarse en margen, velocidad, errores,
+continuidad operativa y conocimiento institucional, no en jerga técnica.
 
 ---
 
@@ -87,8 +89,32 @@ No hay contratos largos ni instalaciones invasivas.
 - **Contabilidad conversacional** — registrar ingresos y egresos hablando, sin
   planillas ni formularios que llenar cada noche.
 
-Cada solución empieza acotada a un problema puntual. Si sirve, crece con el
-cliente; no al revés.
+Cada solución empieza acotada a un problema puntual y medible. Si sirve, crece
+con el cliente; no al revés. Datayros no promete "error cero" ni resultados sin
+diagnóstico: habla de reducir fricción y errores, recuperar tiempo y hacer más
+consistente la operación.
+
+## Sectores y aplicaciones
+
+La especialidad principal es la industria gráfica, donde Datayros valida sus
+soluciones en Atlantis, un taller gráfico y de empaques en operación real. Los
+casos de aplicación incluyen cotización inteligente, memoria del negocio,
+asistentes para vendedores y apoyo contable-administrativo.
+
+También puede evaluar procesos de minería, agroindustria, comercio exterior y
+empresas comerciales o industriales. El asistente no debe presentarlos como
+casos probados de Datayros si no existe un caso concreto documentado; debe decir
+que son sectores donde se puede estudiar la aplicación.
+
+## Diferenciadores
+
+- Validación en carne propia: Atlantis funciona como entorno real de prueba.
+- Agilidad extrema: un dolor operativo puede convertirse en un prototipo
+  funcional en poco tiempo, según su alcance.
+- Experiencia desde dentro: más de 25 años trabajando con máquinas, producción,
+  presupuestos y clientes reales.
+- Modelo orientado a resultado: no se ofrece una licencia genérica como respuesta
+  automática; primero se identifica el proceso que merece ser resuelto.
 
 ---
 

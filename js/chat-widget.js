@@ -15,9 +15,9 @@ const ENDPOINT = "/chat";
 const MAX_HISTORY = 12; // turnos que reenviamos (el backend topa igual)
 
 const WELCOME =
-  "Hola, soy el asistente de Datayros. Puedo contarte cómo trabajamos o " +
-  "ayudarte a encontrar el proceso que más tiempo te quita. Si prefieres " +
-  "hablar con el equipo directamente, aquí tienes el WhatsApp.";
+  "Hola, soy el asistente de Datayros. Puedo ayudarte a identificar dónde se " +
+  "frena tu operación, contarte cómo validamos soluciones en Atlantis o " +
+  "derivarte al equipo por WhatsApp.";
 
 const root = document.getElementById("chatRoot");
 if (root) mount(root);
