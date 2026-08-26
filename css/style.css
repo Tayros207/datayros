@@ -238,7 +238,13 @@ nav.is-scrolled .logo img{ height:25px; }
   background:linear-gradient(90deg, #D91023 0 33%, #fff 33% 66%, #D91023 66% 100%);
   box-shadow:inset 0 0 0 1px rgba(0,0,0,0.08); flex-shrink:0;
 }
-.hero-eyebrow .country{ display:inline-flex; align-items:center; gap:7px; }
+.flag-peru{ background:linear-gradient(90deg, #D91023 0 33%, #fff 33% 66%, #D91023 66% 100%); }
+.flag-chile{ position:relative; background:linear-gradient(to bottom, #fff 0 50%, #D52B1E 50% 100%); }
+.flag-chile::before{ content:''; position:absolute; inset:0 auto auto 0; width:8px; height:6.5px; background:#0039A6; }
+.flag-ecuador{ background:linear-gradient(to bottom, #F9D616 0 50%, #2455A4 50% 75%, #D62828 75% 100%); }
+.flag-bolivia{ background:linear-gradient(to bottom, #D52B1E 0 33%, #F9D616 33% 66%, #2E8B57 66% 100%); }
+.country-list{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+.hero-eyebrow .country{ display:inline-flex; align-items:center; gap:7px; color:var(--muted); }
 
 /* Píldoras de servicio sobre el titular */
 .service-badges{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:26px; }
