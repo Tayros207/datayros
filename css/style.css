@@ -35,7 +35,7 @@
   --line:#E5E3DC;
   --line-strong:#D8D6CF;
   --muted:#6B6B66;
-  --muted-2:#9C9A93;
+  --muted-2:#75736E;        /* 4.7:1 sobre blanco — antes #9C9A93 fallaba AA */
 
   /* Marca */
   --accent:#005418;            /* verde profundo — 8.6:1 sobre papel */
@@ -87,7 +87,7 @@
   --line:#2E2B24;
   --line-strong:#3A362C;
   --muted:#A8A192;
-  --muted-2:#7E786A;
+  --muted-2:#8C8577;        /* 5.1:1 sobre tinta — antes #7E786A fallaba AA */
 
   --accent:#78CC00;
   --accent-hover:#8CE000;
@@ -126,13 +126,13 @@
 
 *{box-sizing:border-box; margin:0; padding:0;}
 html{scroll-behavior:smooth;}
+::selection{ background:var(--accent); color:var(--on-accent); }
 body{
   background:var(--paper); color:var(--ink);
   font-family:'Inter', sans-serif; line-height:1.65; font-size:16px;
   -webkit-font-smoothing:antialiased; overflow-x:hidden;
   transition:background-color .3s var(--ease-out), color .3s var(--ease-out);
 }
-::selection{background:var(--accent); color:var(--on-accent);}
 .wrap{max-width:1220px; margin:0 auto; padding:0 40px;}
 @media (max-width:640px){ .wrap{padding:0 20px;} }
 h1,h2,h3,h4{ font-family:'Bricolage Grotesque', sans-serif; letter-spacing:-0.02em; }
@@ -456,7 +456,7 @@ section + section{ border-top:1px solid var(--line); }
   color:var(--accent); background:var(--accent-dim); display:inline-block;
   padding:4px 10px; border-radius:999px;
 }
-.method-step h4{ font-size:18px; font-weight:700; margin:15px 0 8px; }
+.method-step h3{ font-size:18px; font-weight:700; margin:15px 0 8px; }
 .method-step p{ color:var(--muted); font-size:14px; }
 
 .compare-toggle-input{ position:absolute; opacity:0; pointer-events:none; }
@@ -632,32 +632,50 @@ section + section{ border-top:1px solid var(--line); }
 
 /* ── 6. Footer ───────────────────────────────────────────────────────────── */
 /* Banda de tinta en ambos temas, como cierre editorial. */
-footer{ background:#141310; color:#EDE8DA; padding:34px 0; }
+footer{ background:#141310; color:#EDE8DA; padding:44px 0 0; }
 [data-theme="night"] footer{ border-top:1px solid var(--line); }
-.footer-inner{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:18px 28px; }
-footer .logo img{ height:24px; }
-.footer-mid{ display:flex; align-items:center; gap:12px; flex-wrap:wrap;
-  font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.12em;
-  text-transform:uppercase; color:#7E786A; }
-.footer-mid .dot{ width:3px; height:3px; border-radius:50%; background:#4A463C; }
-.footer-links{ display:flex; gap:22px; font-family:'JetBrains Mono',monospace; font-size:11px;
-  letter-spacing:.1em; text-transform:uppercase; color:#7E786A; flex-wrap:wrap; }
+
+.footer-grid{ display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:28px 48px;
+  padding-bottom:34px; }
+footer .logo img{ height:24px; width:auto; }
+.footer-tag{ margin-top:14px; max-width:34ch; font-size:13.5px; line-height:1.6; color:#A8A192; }
+
+.footer-label{ font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+  color:#78CC00; margin-bottom:14px; }
+.footer-line{ display:inline-flex; align-items:center; gap:7px; font-size:13.5px;
+  color:#A8A192; text-decoration:none; padding:2px 0; margin-bottom:9px;
+  position:relative; transition:color .22s var(--ease-out); }
+.footer-line.is-text{ margin-bottom:0; }
+.footer-col .footer-line{ display:flex; width:fit-content; }
+
+/* Rutas: columna, con la flecha de marca siempre visible como marcador. */
+.footer-links{ display:flex; flex-direction:column; align-items:flex-start; gap:9px;
+  font-family:'JetBrains Mono',monospace; font-size:11px;
+  letter-spacing:.1em; text-transform:uppercase; color:#A8A192; }
 .footer-links a{ position:relative; display:inline-flex; align-items:center; gap:7px;
   text-decoration:none; padding:2px 0; transition:color .22s var(--ease-out); }
-/* La flecha va siempre visible, tenue: el marcador de que esto es una ruta.
-   Al pasar el cursor se enciende y avanza — el gesto de todo el sitio. */
-.footer-links .fl-arr{ color:#78CC00; opacity:.55;
+.fl-arr{ color:#78CC00; opacity:.55;
   transition:transform .22s var(--ease-out), opacity .22s var(--ease-out); }
-/* Subrayado que se dibuja de izquierda a derecha, como los títulos de la franja. */
-.footer-links a::after{ content:''; position:absolute; left:0; right:0; bottom:-3px;
-  height:1px; background:#78CC00; transform:scaleX(0); transform-origin:left;
-  transition:transform .28s var(--ease-out); }
+.footer-links a::after, .footer-line[href]::after{ content:''; position:absolute;
+  left:0; right:0; bottom:-2px; height:1px; background:#78CC00;
+  transform:scaleX(0); transform-origin:left; transition:transform .28s var(--ease-out); }
 @media (hover:hover) and (pointer:fine){
-  .footer-links a:hover{ color:#EDE8DA; }
-  .footer-links a:hover .fl-arr{ opacity:1; transform:translateX(4px); }
-  .footer-links a:hover::after{ transform:scaleX(1); }
+  .footer-links a:hover, .footer-line[href]:hover{ color:#EDE8DA; }
+  .footer-links a:hover .fl-arr, .footer-line[href]:hover .fl-arr{ opacity:1; transform:translateX(4px); }
+  .footer-links a:hover::after, .footer-line[href]:hover::after{ transform:scaleX(1); }
 }
-.footer-links a:focus-visible{ outline:2px solid #78CC00; outline-offset:4px; border-radius:4px; }
+.footer-links a:focus-visible, .footer-line[href]:focus-visible{
+  outline:2px solid #78CC00; outline-offset:4px; border-radius:4px; }
+
+.footer-bottom{ display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  border-top:1px solid #2E2B24; padding:16px 0 18px;
+  font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.08em;
+  text-transform:uppercase; color:#A8A192; }
+.footer-bottom .dot{ width:3px; height:3px; border-radius:50%; background:#4A463C; }
+
+@media (max-width:760px){
+  .footer-grid{ grid-template-columns:1fr; gap:26px; }
+}
 
 /* Movimiento reducido: se conserva lo que ayuda a comprender y se retira
    todo desplazamiento. Nunca deja contenido invisible. */
@@ -799,6 +817,12 @@ footer .logo img{ height:24px; }
 }
 .chat-send:hover:not(:disabled){ background:var(--accent-hover); }
 .chat-send:disabled{ opacity:.45; cursor:not-allowed; }
+
+/* Enlace de salto: invisible hasta que el teclado lo enfoca. */
+.skip-link{ position:fixed; top:-48px; left:16px; z-index:200; background:var(--accent);
+  color:var(--on-accent); font-weight:700; font-size:14px; padding:10px 16px;
+  border-radius:0 0 10px 10px; text-decoration:none; transition:top .2s var(--ease-out); }
+.skip-link:focus-visible{ top:0; outline:2px solid var(--lime); outline-offset:2px; }
 
 /* ── La franja de oficios (#hacemos) ──────────────────────────────────────────
    Único bloque de la página con la piel CONTRARIA a la del tema activo: de día

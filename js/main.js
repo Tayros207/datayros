@@ -95,14 +95,17 @@ if (contactForm) {
     const category = (document.getElementById("category")?.value || "").trim();
     const message = (document.getElementById("message")?.value || "").trim();
 
+    const nameField = document.getElementById("fullName");
     if (!name) {
       if (formStatus) {
         formStatus.textContent = "Escribe tu nombre para empezar";
         formStatus.classList.remove("ok");
       }
-      document.getElementById("fullName")?.focus();
+      nameField?.setAttribute("aria-invalid", "true");
+      nameField?.focus();
       return;
     }
+    nameField?.removeAttribute("aria-invalid");
 
     const lines = [
       "Hola Datayros, quiero evaluar un proceso.",

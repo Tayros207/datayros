@@ -1,12 +1,10 @@
 User-agent: *
 Allow: /
 
-# El endpoint del chat no es contenido indexable.
-Disallow: /chat
-
-# El contexto del asistente se sirve como archivo estático para que la función
-# pueda leerlo. No es secreto, pero tampoco tiene por qué aparecer en Google.
+# Documentos de trabajo y borradores: no son contenido indexable.
+Disallow: /docs/
+Disallow: /preview/
 Disallow: /knowledge/
+Disallow: /api/
 
-# TODO: reemplaza el dominio por el real.
-Sitemap: https://tairos.com/sitemap.xml
+Sitemap: https://www.datayros.com/sitemap.xml

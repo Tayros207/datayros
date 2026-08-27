@@ -1,0 +1,13 @@
+{
+  "name": "Datayros",
+  "short_name": "Datayros",
+  "description": "Asistentes digitales que hacen la parte repetitiva del trabajo.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#141310",
+  "theme_color": "#141310",
+  "icons": [
+    { "src": "/img/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/img/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

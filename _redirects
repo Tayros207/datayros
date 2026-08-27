@@ -1,6 +1,0 @@
-# Reglas de redirección de Cloudflare Pages. Formato: origen destino [código]
-
-# docs/ son documentos internos de trabajo. Viven en el repo pero no deben ser
-# legibles en el dominio público. Cloudflare Pages no ofrece forma de excluir
-# archivos en despliegues desde git, así que se bloquean por redirección.
-/docs/* / 301

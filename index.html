@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Datayros — Asistentes digitales y chatbots de WhatsApp</title>
 <meta name="description" content="Automatizamos procesos: construimos asistentes digitales que hacen la parte repetitiva del trabajo. Atienden el WhatsApp, cotizan con tu margen y hacen el seguimiento de cobranza.">
-<!-- TODO: reemplaza https://datayros.com por tu dominio real (aquí, en robots.txt y en sitemap.xml). -->
-<link rel="canonical" href="https://datayros.com/">
+<link rel="canonical" href="https://www.datayros.com/">
 
 <!-- Open Graph — así se ve el enlace al compartirlo en WhatsApp, LinkedIn o X. -->
 <meta property="og:type" content="website">
@@ -14,17 +13,20 @@
 <meta property="og:locale" content="es_PE">
 <meta property="og:title" content="Datayros — Asistentes digitales y chatbots de WhatsApp">
 <meta property="og:description" content="La parte repetitiva del trabajo la hace un asistente digital. Tu gente hace el resto.">
-<meta property="og:url" content="https://datayros.com/">
-<meta property="og:image" content="https://datayros.com/img/og-image.png">
+<meta property="og:url" content="https://www.datayros.com/">
+<meta property="og:image" content="https://www.datayros.com/img/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Datayros — asistentes digitales y chatbots de WhatsApp">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Datayros — Asistentes digitales y chatbots de WhatsApp">
 <meta name="twitter:description" content="La parte repetitiva del trabajo la hace un asistente digital. Tu gente hace el resto.">
-<meta name="twitter:image" content="https://datayros.com/img/og-image.png">
+<meta name="twitter:image" content="https://www.datayros.com/img/og-image.png">
 
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="192x192" href="/img/icon-192.png">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#FAFAF7">
 
 <!-- El tema se decide ANTES de pintar para que no haya un parpadeo claro
@@ -39,7 +41,11 @@
     var saved = localStorage.getItem('dy-theme');
     var h = new Date().getHours();
     var theme = saved || ((h >= 19 || h < 7) ? 'night' : 'day');
-    if(theme === 'night') document.documentElement.setAttribute('data-theme','night');
+    if(theme === 'night'){
+      document.documentElement.setAttribute('data-theme','night');
+      var m=document.querySelector('meta[name="theme-color"]');
+      if(m) m.setAttribute('content','#141310');
+    }
   }catch(e){}
 })();
 </script>
@@ -48,8 +54,84 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
+
+<!-- Datos estructurados: ficha de empresa y FAQ para los buscadores. -->
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Organization",
+ "name": "Datayros",
+ "url": "https://www.datayros.com/",
+ "logo": "https://www.datayros.com/img/datayros-logo-h.png",
+ "description": "Asistentes digitales que hacen la parte repetitiva del trabajo: atención por WhatsApp, cotización y seguimiento de cobranza.",
+ "founder": {
+  "@type": "Person",
+  "name": "Moisés Escobar"
+ },
+ "address": {
+  "@type": "PostalAddress",
+  "addressLocality": "Huancayo",
+  "addressCountry": "PE"
+ },
+ "contactPoint": {
+  "@type": "ContactPoint",
+  "contactType": "sales",
+  "telephone": "+51-933-137-048",
+  "availableLanguage": "es"
+ }
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "¿Voy a necesitar saber de tecnología para usar esto?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "No. Todo funciona por WhatsApp o conversación normal. Si tu equipo sabe escribir un mensaje, sabe usar el sistema."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "¿Esto va a reemplazar a mi gente?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "No es el objetivo ni la forma en que lo construimos. Cada sistema está pensado para quitar tareas repetitivas, no personas — y lo probamos primero con nuestro propio equipo en Atlantis, antes de llevarlo a otro lado."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "¿Qué pasa con mis datos y la información de mis clientes?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "La información queda como memoria de tu empresa. No se comparte ni se reutiliza para otros clientes."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "¿Cuánto cuesta y cómo se paga?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Preferimos cobrar por resultado antes que por una licencia mensual fija. Lo conversamos según el proceso puntual que resolvamos — no vendemos un paquete genérico único para todos."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "¿Y si lo probamos y no funciona para mi negocio?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Empezamos siempre con un problema acotado y medible. Si no genera el resultado esperado, te lo decimos con la misma honestidad con la que te lo prometimos — sin presionarte a continuar."
+   }
+  }
+ ]
+}
+</script>
 </head>
 <body>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
 
 <nav>
   <div class="nav-inner">
@@ -74,6 +156,8 @@
   </div>
   <div class="nav-progress" id="navProgress"></div>
 </nav>
+
+<main id="contenido">
 
 <header class="hero" id="conversemos">
   <div class="bg-dots" aria-hidden="true"></div>
@@ -166,7 +250,7 @@
         </div>
 
         <div class="form-footer">
-          <span class="form-status" id="formStatus">Se abrirá WhatsApp con tu mensaje listo</span>
+          <span class="form-status" id="formStatus" role="status" aria-live="polite">Se abrirá WhatsApp con tu mensaje listo</span>
           <button type="submit" class="submit-btn" id="submitBtn">Enviar por WhatsApp <span class="arr">→</span></button>
         </div>
       </form>
@@ -254,19 +338,19 @@
     </div>
     <div class="mirror-grid reveal" data-stagger>
       <div class="mirror-card">
-        <p class="mirror-quote">"Mis procesos dependen demasiado de personas indispensables."</p>
+        <p class="mirror-quote">“Mis procesos dependen demasiado de personas indispensables.”</p>
         <div class="mirror-reply"><b>Memoria organizacional</b>Registramos criterios, excepciones y conocimiento clave como un activo de la empresa, para que la operación no se detenga cuando alguien no está.</div>
       </div>
       <div class="mirror-card">
-        <p class="mirror-quote">"Los proveedores tradicionales tardan meses en entregar o resolver."</p>
+        <p class="mirror-quote">“Los proveedores tradicionales tardan meses en entregar o resolver.”</p>
         <div class="mirror-reply"><b>Agilidad extrema</b>Escuchamos un dolor operativo, acotamos el problema y construimos un prototipo funcional antes de convertirlo en un proyecto interminable.</div>
       </div>
       <div class="mirror-card">
-        <p class="mirror-quote">"No quiero comprar otra herramienta que el equipo abandone."</p>
+        <p class="mirror-quote">“No quiero comprar otra herramienta que el equipo abandone.”</p>
         <div class="mirror-reply"><b>Adopción en la operación real</b>Diseñamos para el taller, producción, ventas y administración, usando los canales que el equipo ya entiende.</div>
       </div>
       <div class="mirror-card">
-        <p class="mirror-quote">"Necesito resultados, no una demostración futurista."</p>
+        <p class="mirror-quote">“Necesito resultados, no una demostración futurista.”</p>
         <div class="mirror-reply"><b>Resultados primero</b>Validamos cada solución con procesos reales, máquinas, plazos y presupuesto en juego antes de recomendarla.</div>
       </div>
     </div>
@@ -286,7 +370,7 @@
     </div>
     <div>
       <div class="eyebrow umber">Una carta, no un discurso de ventas</div>
-      <blockquote>"Llevo 26 años dirigiendo un taller gráfico. Empecé operando máquinas, no dando charlas sobre tecnología. Conozco el miedo de invertir en algo que promete mucho y no sirve para nada en la práctica — porque a mí también me pasó. Por eso, antes de ofrecerte cualquier sistema, lo probamos primero en mi propia empresa. Si funciona ahí, con mi propio dinero y mi propio equipo en juego, recién te lo mostramos a ti."</blockquote>
+      <blockquote>“Llevo 26 años dirigiendo un taller gráfico. Empecé operando máquinas, no dando charlas sobre tecnología. Conozco el miedo de invertir en algo que promete mucho y no sirve para nada en la práctica — porque a mí también me pasó. Por eso, antes de ofrecerte cualquier sistema, lo probamos primero en mi propia empresa. Si funciona ahí, con mi propio dinero y mi propio equipo en juego, recién te lo mostramos a ti.”</blockquote>
       <cite><span>Moisés Escobar</span> — fundador de Datayros, director de Atlantis</cite>
     </div>
   </div>
@@ -302,22 +386,22 @@
     <div class="method-row reveal" data-stagger>
       <div class="method-step">
         <div class="idx">I</div>
-        <h4>Diagnóstico</h4>
+        <h3>Diagnóstico</h3>
         <p>Conversamos sobre qué proceso te quita más tiempo o te genera más errores cada semana. Sin jerga técnica.</p>
       </div>
       <div class="method-step">
         <div class="idx">II</div>
-        <h4>Piloto en Atlantis</h4>
+        <h3>Piloto en Atlantis</h3>
         <p>Cuando aplica, validamos primero el enfoque en nuestro propio taller antes de llevarlo a tu operación.</p>
       </div>
       <div class="method-step">
         <div class="idx">III</div>
-        <h4>Implementación</h4>
+        <h3>Implementación</h3>
         <p>Instalamos el sistema donde ya trabajas — WhatsApp, celular, computadora — sin pedirte cambiar de herramientas.</p>
       </div>
       <div class="method-step">
         <div class="idx">IV</div>
-        <h4>Acompañamiento</h4>
+        <h3>Acompañamiento</h3>
         <p>Medimos el resultado contigo y ajustamos. Seguimos cerca, no entregamos y desaparecemos.</p>
       </div>
     </div>
@@ -512,23 +596,38 @@
   </div>
 </section>
 
+</main>
+
 <footer>
-  <div class="wrap footer-inner">
-    <a href="#" class="logo" aria-label="Datayros — inicio">
-      <!-- La banda del pie es tinta en ambos temas: siempre el logo nocturno. -->
-      <img src="/img/datayros-logo-h-night.png" alt="Datayros" width="711" height="109">
-    </a>
-    <div class="footer-mid">
-      <span>Huancayo</span><span class="dot"></span><span>Perú</span><span class="dot"></span><span>© 2026 Datayros</span>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo" aria-label="Datayros — inicio">
+          <!-- La banda del pie es tinta en ambos temas: siempre el logo nocturno. -->
+          <img src="/img/datayros-logo-h-night.png" alt="Datayros" width="711" height="109">
+        </a>
+        <p class="footer-tag">Asistentes digitales que hacen la parte repetitiva del trabajo. Probados primero en Atlantis, nuestro propio taller.</p>
+      </div>
+      <div class="footer-col">
+        <p class="footer-label mono">Contacto</p>
+        <a class="footer-line" href="#" data-whatsapp><span class="fl-arr" aria-hidden="true">→</span>+51 933 137 048</a>
+        <a class="footer-line" href="#" data-email><span class="fl-arr" aria-hidden="true">→</span>Escríbenos por correo</a>
+        <p class="footer-line is-text">Huancayo, Perú</p>
+      </div>
+      <div class="footer-col">
+        <p class="footer-label mono">Rutas</p>
+        <div class="footer-links reveal" data-stagger role="navigation" aria-label="Rutas de la página">
+          <a href="#hacemos"><span class="fl-arr" aria-hidden="true">→</span>Qué hacemos</a>
+          <a href="#entendemos"><span class="fl-arr" aria-hidden="true">→</span>El problema</a>
+          <a href="#atlantis"><span class="fl-arr" aria-hidden="true">→</span>Atlantis</a>
+          <a href="#contacto"><span class="fl-arr" aria-hidden="true">→</span>Contacto</a>
+        </div>
+      </div>
     </div>
-    <!-- Rutas del pie: cada una lleva su flecha de marca para leerse como
-         camino, no como texto suelto. Entran en cascada (reveal + stagger)
-         y al pasar el cursor la flecha avanza y el subrayado se dibuja. -->
-    <div class="footer-links reveal" data-stagger role="navigation" aria-label="Rutas de la página">
-      <a href="#hacemos"><span class="fl-arr" aria-hidden="true">→</span>Qué hacemos</a>
-      <a href="#entendemos"><span class="fl-arr" aria-hidden="true">→</span>El problema</a>
-      <a href="#atlantis"><span class="fl-arr" aria-hidden="true">→</span>Atlantis</a>
-      <a href="#contacto"><span class="fl-arr" aria-hidden="true">→</span>Contacto</a>
+    <div class="footer-bottom">
+      <span>© 2026 Datayros</span><span class="dot" aria-hidden="true"></span>
+      <span>Hecho en Huancayo</span><span class="dot" aria-hidden="true"></span>
+      <span>Probado en Atlantis</span>
     </div>
   </div>
 </footer>

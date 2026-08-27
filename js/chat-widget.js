@@ -8,9 +8,8 @@
 
 import { whatsappUrl, emailUrl } from "./main.js";
 
-/* En Cloudflare Pages, functions/chat.js se publica en /chat.
-   Si mueves la función a functions/api/chat.js, cambia esto por "/api/chat". */
-const ENDPOINT = "/chat";
+/* En Vercel, api/chat.js se publica en /api/chat. */
+const ENDPOINT = "/api/chat";
 
 const MAX_HISTORY = 12; // turnos que reenviamos (el backend topa igual)
 

@@ -1,9 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <!-- Misma paleta que el sitio: papel #FAFAF7, verde de marca #009000. -->
-  <rect width="64" height="64" rx="6" fill="#FAFAF7"/>
-  <rect x="0.5" y="0.5" width="63" height="63" rx="6" fill="none" stroke="#D8D6CF"/>
-  <!-- El punto verde es el mismo acento del sitio (--accent). -->
-  <circle cx="17" cy="22" r="5" fill="#009000"/>
-  <text x="26" y="46" font-family="Arial, Helvetica, sans-serif" font-weight="800"
-        font-size="38" fill="#0F0F0D">D</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- La estela de píxeles del logo de Datayros: tres verdes de marca
+       subiendo en escalera, sobre tinta. Legible a 16px. -->
+  <rect width="64" height="64" rx="14" fill="#141310"/>
+  <rect x="12" y="37" width="13" height="13" rx="2.5" fill="#009000"/>
+  <rect x="26" y="26" width="13" height="13" rx="2.5" fill="#54B400"/>
+  <rect x="40" y="15" width="13" height="13" rx="2.5" fill="#78CC00"/>
 </svg>

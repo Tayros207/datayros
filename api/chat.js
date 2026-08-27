@@ -1,27 +1,29 @@
 /**
- * Datayros — backend del chat (Cloudflare Pages Function).
+ * Datayros — backend del chat (Vercel Serverless Function, runtime Node).
  *
  * Es el único punto del proyecto que habla con la API de Anthropic, y por lo
  * tanto el único que ve la llave. El navegador nunca la toca.
  *
- * Ruta pública: POST /chat
- *   En Cloudflare Pages, `functions/chat.js` se publica en `/chat`. El
- *   directorio `functions/` es convención de build, no parte de la URL.
- *   Si quieres `/api/chat`, mueve este archivo a `functions/api/chat.js` y
- *   actualiza ENDPOINT en js/chat-widget.js.
+ * Ruta pública: POST /api/chat
+ *   En Vercel, cada archivo .js dentro de api/ se publica como función en
+ *   /api/<nombre>. El contexto vive al lado, en api/_context.md — el guion
+ *   bajo evita que Vercel intente tratarlo como función, y leerlo con
+ *   __dirname hace que el empaquetador lo incluya en el despliegue.
  *
  * Entrada:  { message: string, history?: [{ role: "user"|"assistant", content: string }] }
  * Salida:   { reply: string }
  *
- * Requiere la variable de entorno ANTHROPIC_API_KEY (ver README).
+ * Requiere la variable de entorno ANTHROPIC_API_KEY
+ * (Vercel → Settings → Environment Variables → Production).
  */
+
+const fs = require("node:fs");
+const path = require("node:path");
 
 const MODEL = "claude-sonnet-4-6";
 const MAX_TOKENS = 500;
 const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
 const ANTHROPIC_VERSION = "2023-06-01";
-
-const CONTEXT_PATH = "/knowledge/tairos-context.md";
 
 // Topes de entrada. El endpoint es público: sin ellos, cualquiera puede gastar
 // la cuota mandando conversaciones enormes.
@@ -55,28 +57,16 @@ Cuando cerrar hacia el equipo humano:
 A continuación, el contexto de la empresa. Es tu única fuente de verdad:`;
 
 /**
- * El .md se sirve como asset estático del sitio, así que lo leemos por
- * env.ASSETS y lo cacheamos en el módulo: es idéntico en cada petición y
- * releerlo sería desperdicio. Se refresca en cada despliegue.
+ * El contexto es idéntico en cada petición: se lee una vez por instancia y se
+ * cachea en el módulo. Se refresca en cada despliegue.
  */
 let cachedContext = null;
 
-async function loadContext(env, requestUrl) {
-  if (cachedContext !== null) return cachedContext;
-
-  const res = await env.ASSETS.fetch(new URL(CONTEXT_PATH, requestUrl));
-  if (!res.ok) {
-    throw new Error(`No se pudo leer ${CONTEXT_PATH} (HTTP ${res.status})`);
+function loadContext() {
+  if (cachedContext === null) {
+    cachedContext = fs.readFileSync(path.join(__dirname, "_context.md"), "utf8");
   }
-  cachedContext = await res.text();
   return cachedContext;
-}
-
-function json(body, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { "Content-Type": "application/json; charset=utf-8" },
-  });
 }
 
 /**
@@ -114,30 +104,38 @@ function buildMessages(payload) {
   return { messages };
 }
 
-export async function onRequestPost({ request, env }) {
-  if (!env.ANTHROPIC_API_KEY) {
-    console.error("Falta ANTHROPIC_API_KEY en las variables de entorno.");
-    return json({ reply: FALLBACK_REPLY });
+module.exports = async (req, res) => {
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
+    return res.status(405).json({ reply: FALLBACK_REPLY });
   }
 
-  let payload;
-  try {
-    payload = await request.json();
-  } catch {
-    return json({ reply: "No entendí ese mensaje. ¿Lo escribes de nuevo?" }, 400);
+  if (!process.env.ANTHROPIC_API_KEY) {
+    console.error("Falta ANTHROPIC_API_KEY en las variables de entorno de Vercel.");
+    return res.status(200).json({ reply: FALLBACK_REPLY });
+  }
+
+  // Vercel ya parsea el body JSON; si llega como texto, lo intentamos nosotros.
+  let payload = req.body;
+  if (typeof payload === "string") {
+    try { payload = JSON.parse(payload); }
+    catch { return res.status(400).json({ reply: "No entendí ese mensaje. ¿Lo escribes de nuevo?" }); }
+  }
+  if (!payload || typeof payload !== "object") {
+    return res.status(400).json({ reply: "No entendí ese mensaje. ¿Lo escribes de nuevo?" });
   }
 
   const { messages, error } = buildMessages(payload);
-  if (error) return json({ reply: error }, 400);
+  if (error) return res.status(400).json({ reply: error });
 
   try {
-    const context = await loadContext(env, request.url);
+    const context = loadContext();
 
-    const res = await fetch(ANTHROPIC_URL, {
+    const apiRes = await fetch(ANTHROPIC_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": env.ANTHROPIC_API_KEY,
+        "x-api-key": process.env.ANTHROPIC_API_KEY,
         "anthropic-version": ANTHROPIC_VERSION,
       },
       body: JSON.stringify({
@@ -157,20 +155,20 @@ export async function onRequestPost({ request, env }) {
       }),
     });
 
-    if (!res.ok) {
+    if (!apiRes.ok) {
       // Cuota agotada, llave inválida, sobrecarga… El visitante no necesita
       // el detalle, pero nosotros sí lo queremos en los logs.
-      const detail = await res.text().catch(() => "");
-      console.error(`Anthropic respondió ${res.status}:`, detail.slice(0, 500));
-      return json({ reply: FALLBACK_REPLY });
+      const detail = await apiRes.text().catch(() => "");
+      console.error(`Anthropic respondió ${apiRes.status}:`, detail.slice(0, 500));
+      return res.status(200).json({ reply: FALLBACK_REPLY });
     }
 
-    const data = await res.json();
+    const data = await apiRes.json();
 
     // Claude puede declinar una petición: llega HTTP 200 con stop_reason
     // "refusal" y content vacío. Hay que mirar stop_reason antes que content.
     if (data.stop_reason === "refusal") {
-      return json({
+      return res.status(200).json({
         reply:
           "Prefiero no responder a eso. ¿Te cuento cómo trabajamos o qué " +
           "procesos solemos resolver?",
@@ -183,9 +181,9 @@ export async function onRequestPost({ request, env }) {
       .join("")
       .trim();
 
-    return json({ reply: reply || FALLBACK_REPLY });
+    return res.status(200).json({ reply: reply || FALLBACK_REPLY });
   } catch (err) {
     console.error("Error llamando a la API de Anthropic:", err);
-    return json({ reply: FALLBACK_REPLY });
+    return res.status(200).json({ reply: FALLBACK_REPLY });
   }
-}
+};
