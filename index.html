@@ -521,11 +521,14 @@
     <div class="footer-mid">
       <span>Huancayo</span><span class="dot"></span><span>Perú</span><span class="dot"></span><span>© 2026 Datayros</span>
     </div>
-    <div class="footer-links">
-      <a href="#entendemos">El problema</a>
-      <a href="#hacemos">Qué hacemos</a>
-      <a href="#atlantis">Atlantis</a>
-      <a href="#contacto">Contacto</a>
+    <!-- Rutas del pie: cada una lleva su flecha de marca para leerse como
+         camino, no como texto suelto. Entran en cascada (reveal + stagger)
+         y al pasar el cursor la flecha avanza y el subrayado se dibuja. -->
+    <div class="footer-links reveal" data-stagger role="navigation" aria-label="Rutas de la página">
+      <a href="#hacemos"><span class="fl-arr" aria-hidden="true">→</span>Qué hacemos</a>
+      <a href="#entendemos"><span class="fl-arr" aria-hidden="true">→</span>El problema</a>
+      <a href="#atlantis"><span class="fl-arr" aria-hidden="true">→</span>Atlantis</a>
+      <a href="#contacto"><span class="fl-arr" aria-hidden="true">→</span>Contacto</a>
     </div>
   </div>
 </footer>

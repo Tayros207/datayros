@@ -642,8 +642,22 @@ footer .logo img{ height:24px; }
 .footer-mid .dot{ width:3px; height:3px; border-radius:50%; background:#4A463C; }
 .footer-links{ display:flex; gap:22px; font-family:'JetBrains Mono',monospace; font-size:11px;
   letter-spacing:.1em; text-transform:uppercase; color:#7E786A; flex-wrap:wrap; }
-.footer-links a{ text-decoration:none; transition:color .2s var(--ease-out); }
-@media (hover:hover) and (pointer:fine){ .footer-links a:hover{ color:#78CC00; } }
+.footer-links a{ position:relative; display:inline-flex; align-items:center; gap:7px;
+  text-decoration:none; padding:2px 0; transition:color .22s var(--ease-out); }
+/* La flecha va siempre visible, tenue: el marcador de que esto es una ruta.
+   Al pasar el cursor se enciende y avanza — el gesto de todo el sitio. */
+.footer-links .fl-arr{ color:#78CC00; opacity:.55;
+  transition:transform .22s var(--ease-out), opacity .22s var(--ease-out); }
+/* Subrayado que se dibuja de izquierda a derecha, como los títulos de la franja. */
+.footer-links a::after{ content:''; position:absolute; left:0; right:0; bottom:-3px;
+  height:1px; background:#78CC00; transform:scaleX(0); transform-origin:left;
+  transition:transform .28s var(--ease-out); }
+@media (hover:hover) and (pointer:fine){
+  .footer-links a:hover{ color:#EDE8DA; }
+  .footer-links a:hover .fl-arr{ opacity:1; transform:translateX(4px); }
+  .footer-links a:hover::after{ transform:scaleX(1); }
+}
+.footer-links a:focus-visible{ outline:2px solid #78CC00; outline-offset:4px; border-radius:4px; }
 
 /* Movimiento reducido: se conserva lo que ayuda a comprender y se retira
    todo desplazamiento. Nunca deja contenido invisible. */
