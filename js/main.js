@@ -36,8 +36,11 @@ export function emailUrl() {
 const waHref = whatsappUrl();
 
 document.querySelectorAll("[data-whatsapp]").forEach((el) => {
-  el.setAttribute("href", waHref || emailUrl());
-  if (waHref) {
+  /* data-wa-msg deja que cada fila de la franja llegue ya etiquetada: sabes
+     por qué puerta entró la persona antes de contestarle. */
+  const href = el.dataset.waMsg ? whatsappUrl(el.dataset.waMsg) : waHref;
+  el.setAttribute("href", href || emailUrl());
+  if (href) {
     el.setAttribute("target", "_blank");
     el.setAttribute("rel", "noopener");
   }
@@ -263,47 +266,28 @@ if (animate) {
   });
 }
 
-/* ── Escena de la línea ───────────────────────────────────────────────────────
-   El ciclo que cuenta la historia sin palabras: la prensa imprime la hoja,
-   la hoja viaja, cruza la marca de registro y se vuelve un mensaje que llega
-   solo al teléfono. El SVG está dibujado en su cuadro final (hoja en camino,
-   mensaje entregado), así que sin GSAP o con movimiento reducido la escena
-   queda compuesta y completa — solo que quieta. */
-if (animate && document.getElementById("lineScene")) {
-  /* Maquinaria de fondo: rodillos y bobina girando, banda avanzando. */
-  gsap.to("#sceneSpokeA", { rotation: 360, svgOrigin: "112 90", repeat: -1, ease: "none", duration: 3.6 });
-  gsap.to("#sceneSpokeB", { rotation: -360, svgOrigin: "158 90", repeat: -1, ease: "none", duration: 3.6 });
-  gsap.to("#sceneSpokeRoll", { rotation: 360, svgOrigin: "44 74", repeat: -1, ease: "none", duration: 5.2 });
-  gsap.fromTo("#sceneBelt", { strokeDashoffset: 0 }, { strokeDashoffset: -12, repeat: -1, ease: "none", duration: 1.1 });
-
-  /* La estela de píxeles del logo: se desprenden de la hoja recién impresa. */
-  [["#scenePx1", 0], ["#scenePx2", 0.9], ["#scenePx3", 1.7]].forEach(([sel, delay]) => {
-    gsap.to(sel, {
-      keyframes: [
-        { opacity: 0.15, y: 0, duration: 0 },
-        { opacity: 1, y: -7, duration: 1.1, ease: "sine.out" },
-        { opacity: 0.15, y: -14, duration: 1.1, ease: "sine.in" },
-      ],
-      repeat: -1, delay,
+/* ── La franja de oficios ─────────────────────────────────────────────────────
+   Los tres nombres se imprimen de izquierda a derecha, uno tras otro: es el
+   mismo gesto de la prensa que dibujaba la escena anterior, ahora hecho con
+   las palabras que había que leer. Corre UNA vez, sin bucles. Al ser
+   gsap.from, si el observador nunca dispara la franja se ve completa. */
+const capRows = document.querySelector("[data-cap-rows]");
+if (capRows && animate) {
+  const io3 = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      io3.unobserve(e.target);
+      gsap.from(capRows.querySelectorAll(".cap-title"), {
+        clipPath: "inset(0 100% 0 0)", duration: 0.62, ease: "power3.out",
+        stagger: 0.09, clearProps: "clipPath",
+      });
+      gsap.from(capRows.querySelectorAll(".cap-n, .cap-tag, .cap-sub, .cap-go"), {
+        opacity: 0, y: 10, duration: 0.5, ease: "power2.out",
+        stagger: 0.03, delay: 0.12,
+      });
     });
-  });
-
-  /* El viaje: hoja → marca de registro → mensaje → entregado. */
-  const cycle = gsap.timeline({ repeat: -1, repeatDelay: 1.0, defaults: { ease: "power1.inOut" } });
-  cycle
-    .set("#sceneSheet", { x: 216, opacity: 0, scale: 1 })
-    .set("#sceneBubble", { x: 560, y: 112, opacity: 0, scale: 0.55 })
-    .set("#sceneCheck", { opacity: 0, scale: 0.4, svgOrigin: "1022 134" })
-    .to("#sceneSheet", { opacity: 1, duration: 0.35 })
-    .to("#sceneSheet", { x: 560, duration: 2.1 }, "<")
-    .to("#sceneRing", { scale: 1.13, duration: 0.22, yoyo: true, repeat: 1, svgOrigin: "560 112" }, ">-0.2")
-    .to("#sceneSheet", { opacity: 0, scale: 0.5, duration: 0.3 }, "<")
-    .to("#sceneBubble", { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.7)" }, "<0.12")
-    .to("#sceneBubble", { x: 1022, y: 96, duration: 2.0 }, ">0.1")
-    .to("#sceneBubble", { scale: 0.85, duration: 0.25 }, ">")
-    .to("#sceneCheck", { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(2)" }, ">-0.05")
-    .to({}, { duration: 1.1 })
-    .to(["#sceneBubble", "#sceneCheck"], { opacity: 0, duration: 0.5 });
+  }, { threshold: 0.2 });
+  io3.observe(capRows);
 }
 
 /* ── Contador del sello de Atlantis ──────────────────────────────────────────
