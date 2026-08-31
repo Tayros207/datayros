@@ -36,7 +36,7 @@ function mount(root) {
       <div class="chat-head">
         <div>
           <h3>Pregúntale a Datayros</h3>
-          <div class="chat-sub">Asistente del sitio</div>
+          <div class="chat-sub">Demo en vivo · construido por Datayros</div>
         </div>
         <button class="chat-close" type="button" data-close aria-label="Cerrar el chat">&times;</button>
       </div>
@@ -71,23 +71,57 @@ function mount(root) {
 
   /* ── Abrir / cerrar ─────────────────────────────────────────────────────── */
 
+  /* Limpieza del cierre en curso: si el visitante reabre antes de que la
+     transición termine, el respaldo pendiente no debe esconder el panel
+     recién abierto. */
+  let cancelClose = null;
+
   function open() {
+    if (cancelClose) cancelClose();
     panel.hidden = false;
+    /* Doble rAF: el navegador tiene que pintar el estado encogido antes de
+       recibir la clase, o la transición no corre y el panel aparece de golpe. */
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => panel.classList.add("is-open"));
+    });
     fab.hidden = true;
+    hideHint();
     if (!opened) {
       addMessage("bot", WELCOME);
+      addChips();
       opened = true;
     }
     input.focus();
   }
 
   function close() {
-    panel.hidden = true;
+    if (cancelClose) cancelClose(); // un cierre anterior aún pendiente
+    panel.classList.add("is-closing");
+    panel.classList.remove("is-open");
+    const cleanup = () => {
+      cancelClose = null;
+      panel.classList.remove("is-closing");
+      panel.removeEventListener("transitionend", onEnd);
+      clearTimeout(timer);
+    };
+    /* El hidden real llega tras la transición: mantiene el panel fuera del
+       árbol de accesibilidad al cerrarse sin cortar la animación de salida. */
+    const onEnd = () => {
+      cleanup();
+      panel.hidden = true;
+    };
+    panel.addEventListener("transitionend", onEnd);
+    /* Respaldo si transitionend no dispara (reduced-motion). */
+    const timer = setTimeout(onEnd, 300);
+    cancelClose = cleanup;
     fab.hidden = false;
     fab.focus();
   }
 
   fab.addEventListener("click", open);
+  /* La sección #demo invita a probar el chat con un clic real del visitante:
+     main.js solo despacha el evento, abrir el panel es asunto de este widget. */
+  document.addEventListener("dy:open-chat", open);
   root.querySelector("[data-close]").addEventListener("click", close);
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && !panel.hidden) close();
@@ -128,6 +162,9 @@ function mount(root) {
   function addMessage(who, text) {
     const el = document.createElement("div");
     el.className = `chat-msg chat-msg-${who}`;
+    /* La entrada es una animación CSS de una pasada (.msg-in): no depende
+       de GSAP y el nuke de reduced-motion la cubre. */
+    el.classList.add("msg-in");
 
     const label = document.createElement("div");
     label.className = "who";
@@ -150,6 +187,7 @@ function mount(root) {
   function addTyping() {
     const el = document.createElement("div");
     el.className = "chat-msg chat-msg-bot";
+    el.classList.add("msg-in");
     el.innerHTML = `
       <div class="who">Datayros</div>
       <div class="body">
@@ -160,6 +198,33 @@ function mount(root) {
     log.appendChild(el);
     scrollDown();
     return el;
+  }
+
+  /* Chips de arranque: tres preguntas que encauzan la primera interacción
+     hacia respuestas que el contexto del bot ya tiene blindadas (el precio
+     sin cifras, el cotizador, la honestidad de no ser humano) — mitiga el
+     riesgo de captura del §8 de decisiones-web.md. Se retiran al primer uso. */
+  function addChips() {
+    const wrap = document.createElement("div");
+    wrap.className = "chat-chips";
+    const questions = [
+      "¿Cuánto cuesta?",
+      "¿Cómo funciona el asistente que cotiza?",
+      "¿Eres humano?",
+    ];
+    for (const q of questions) {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "chat-chip";
+      chip.textContent = q;
+      chip.addEventListener("click", () => {
+        wrap.remove();
+        send(q);
+      });
+      wrap.appendChild(chip);
+    }
+    log.appendChild(wrap);
+    scrollDown();
   }
 
   function scrollDown() {
@@ -217,5 +282,48 @@ function mount(root) {
     } finally {
       setBusy(false);
     }
+  }
+
+  /* ── Invitación por intención real ──────────────────────────────────────────
+     Opción B documentada en decisiones-web.md §4: nada de popups al entrar.
+     La burbuja junto al fab solo aparece cuando la persona llegó a las FAQ —
+     señal de que le quedó una duda — una vez por sesión, y JAMÁS abre el
+     panel sola. El × la apaga para siempre; abrir el chat también la oculta.
+     Los storages van en try/catch: bloqueados, la página sigue entera. */
+  const hint = document.createElement("div");
+  hint.className = "fab-hint";
+  hint.hidden = true;
+  hint.innerHTML = `
+    <span>¿Te quedó una duda? Pregúntame</span>
+    <button type="button" class="fab-hint-x" aria-label="Cerrar sugerencia">&times;</button>`;
+  root.appendChild(hint);
+
+  function hideHint() {
+    hint.hidden = true;
+  }
+
+  hint.querySelector(".fab-hint-x").addEventListener("click", () => {
+    try { localStorage.setItem("dy-hint-off", "1"); } catch (e) {}
+    hideHint();
+  });
+
+  const faqSection = document.querySelector("#preguntas");
+  if (faqSection) {
+    const ioHint = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        /* Se des-observa pase lo que pase: aunque el storage esté bloqueado,
+           la invitación nunca sale más de una vez por carga. */
+        ioHint.unobserve(e.target);
+        let shown = false;
+        let off = false;
+        try { shown = !!sessionStorage.getItem("dy-hint-shown"); } catch (err) {}
+        try { off = !!localStorage.getItem("dy-hint-off"); } catch (err) {}
+        if (shown || off || !panel.hidden) return;
+        hint.hidden = false;
+        try { sessionStorage.setItem("dy-hint-shown", "1"); } catch (err) {}
+      });
+    }, { threshold: 0.2 });
+    ioHint.observe(faqSection);
   }
 }

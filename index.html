@@ -160,24 +160,22 @@
 <main id="contenido">
 
 <header class="hero" id="conversemos">
-  <div class="bg-dots" aria-hidden="true"></div>
-  <div class="bg-ring" aria-hidden="true"></div>
+  <!-- Cruces de registro de imprenta: la marca con la que el taller alinea
+       las tintas. Quietas siempre — decoran sin pedir movimiento. -->
+  <svg class="reg-mark reg-a" viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M12 1.5v21M1.5 12h21" stroke="currentColor" stroke-width="1.2"/></svg>
+  <svg class="reg-mark reg-b" viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M12 1.5v21M1.5 12h21" stroke="currentColor" stroke-width="1.2"/></svg>
   <div class="wrap hero-grid">
 
     <div class="hero-left">
       <div class="hero-eyebrow" data-fade>
-        <span class="eyebrow">Más de 25 años de oficio</span>
+        <!-- TODO(Moisés): confirmar 26 (oficio de Moisés) y 18 (Atlantis) antes de publicar -->
+        <span class="eyebrow">26 años de oficio gráfico</span>
         <div class="country-list" aria-label="Países donde trabajamos">
           <span class="country mono"><span class="flag flag-peru" aria-hidden="true"></span>Perú</span>
           <span class="country mono"><span class="flag flag-chile" aria-hidden="true"></span>Chile</span>
           <span class="country mono"><span class="flag flag-ecuador" aria-hidden="true"></span>Ecuador</span>
           <span class="country mono"><span class="flag flag-bolivia" aria-hidden="true"></span>Bolivia</span>
         </div>
-      </div>
-
-      <div class="service-badges" data-fade>
-        <span class="service-badge"><i></i>Asistentes digitales <span class="muted">· hacen la parte repetitiva</span></span>
-        <span class="service-badge"><i></i>Chatbots de WhatsApp <span class="muted">· atienden y venden</span></span>
       </div>
 
       <h1 data-fade>La parte repetitiva del trabajo la hace un <span class="accent">asistente digital.</span> Tu gente hace el resto.</h1>
@@ -189,16 +187,14 @@
         <a href="#entendemos" class="btn btn-ghost">Ver dónde se fuga valor</a>
       </div>
 
-      <div class="partner-pills" data-fade>
-        <span class="partner-pill"><span class="pp-mark" aria-hidden="true"></span>Atlantis <span class="muted">· Taller showroom</span></span>
-        <span class="partner-pill"><span class="pp-mark" aria-hidden="true"></span>ForgeNova <span class="muted">· Socio corporativo</span></span>
-      </div>
+      <a class="hero-demo-link" href="#demo">Mira al asistente atendiendo un pedido ↓</a>
 
       <div data-fade>
         <div class="trust-label mono">Lo que respalda esto</div>
         <div class="trust-row">
-          <span>+25 AÑOS DE INDUSTRIA</span>
-          <span>TALLER PROPIO</span>
+          <span>26 AÑOS DE OFICIO</span>
+          <span>ATLANTIS · TALLER PROPIO</span>
+          <span>FORGENOVA · SOCIO</span>
           <span>SIN PERMANENCIA</span>
           <span>COBRO POR RESULTADO</span>
         </div>
@@ -283,7 +279,7 @@
         <span class="cap-body">
           <span class="cap-tag mono">Por WhatsApp o web</span>
           <span class="cap-title">El que contesta el <em class="lit">WhatsApp</em></span>
-          <span class="cap-sub">Atiende, responde y hace seguimiento en el chat donde tus clientes ya te escriben. También a las once de la noche, también el sábado.</span>
+          <span class="cap-sub">Atiende, responde y hace seguimiento en el chat donde tus clientes ya te escriben. También a las once de la noche, también el sábado. El chat de esta misma página usa la misma base.</span>
         </span>
         <span class="cap-go mono">Escríbenos y lo vemos <span class="arr">→</span></span>
       </a>
@@ -329,6 +325,39 @@
   </div>
 </section>
 
+<!-- ── La prueba (#demo) ────────────────────────────────────────────────────
+     Un pedido de sábado a las 11 p.m. compuesto como ticket, con las mismas
+     burbujas del chat vivo — tokens, ni un color nuevo. El hilo completo
+     vive aquí en el HTML: sin GSAP o con reduced-motion se lee entero y
+     quieto. El precio lleva SIEMPRE el rótulo "(dato de ejemplo)" y la
+     cabecera dice "Simulación": el bot real tiene prohibido sostener cifras
+     y esta demo no debe contradecirlo. -->
+<section id="demo">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">La prueba</div>
+      <h2>Míralo atender un pedido de sábado a las 11 p.m.</h2>
+    </div>
+    <div class="ticket" data-demo>
+      <div class="ticket-head mono"><span>Simulación · datos de ejemplo</span><span>Sáb 11:03 p.m.</span></div>
+      <div class="ticket-log">
+        <div class="chat-msg chat-msg-user"><div class="who">Cliente</div><div class="body"><p>¿Hacen cajas para 500 tazas? Las necesito el viernes.</p></div></div>
+        <div class="chat-msg chat-msg-bot"><div class="who">Asistente</div><div class="body"><p>Sí. ¿Qué medida tiene la taza y la impresión va a todo color?</p></div></div>
+        <div class="chat-msg chat-msg-user"><div class="who">Cliente</div><div class="body"><p>11 oz, todo color.</p></div></div>
+        <div class="chat-msg chat-msg-note">→ calculó con tu tarifa y tu margen</div>
+        <div class="chat-msg chat-msg-bot"><div class="who">Asistente</div><div class="body"><p>500 cajas a todo color para el viernes: S/ 890 (dato de ejemplo), troquel incluido. ¿Te lo reservo con el 50% de adelanto?</p></div></div>
+        <div class="chat-msg chat-msg-user"><div class="who">Cliente</div><div class="body"><p>Dale.</p></div></div>
+        <div class="chat-msg chat-msg-note">→ registró el pedido y programó el recordatorio de cobranza</div>
+      </div>
+      <div class="ticket-foot mono">Sábado, 11:07 p.m. — nadie del equipo estaba despierto.</div>
+    </div>
+    <div class="demo-actions reveal">
+      <a href="#" class="btn btn-primary" data-whatsapp data-wa-msg="Hola Datayros, vi la demo del asistente que cotiza y quiero uno para mi negocio.">Quiero uno para mi negocio <span class="arr">→</span></a>
+      <a href="#" class="demo-open-chat">¿Quieres probar uno tú mismo? Abre el chat de esta página</a>
+    </div>
+  </div>
+</section>
+
 <section id="entendemos">
   <div class="wrap">
     <div class="section-head reveal">
@@ -336,21 +365,24 @@
       <h2>¿Tu empresa se mueve tan rápido como tú?</h2>
       <p>Cuando la operación crece, el cuello de botella rara vez es la falta de esfuerzo. Suele ser la información atrapada en sistemas rígidos o en la memoria de unas pocas personas.</p>
     </div>
+    <!-- Recortes editoriales, no tarjetas: la comilla de apertura la pone el
+         CSS (::before colgante) — si también estuviera escrita en el copy,
+         habría comillas dobles. -->
     <div class="mirror-grid reveal" data-stagger>
       <div class="mirror-card">
-        <p class="mirror-quote">“Mis procesos dependen demasiado de personas indispensables.”</p>
+        <p class="mirror-quote">Mis procesos dependen demasiado de personas indispensables.</p>
         <div class="mirror-reply"><b>Memoria organizacional</b>Registramos criterios, excepciones y conocimiento clave como un activo de la empresa, para que la operación no se detenga cuando alguien no está.</div>
       </div>
       <div class="mirror-card">
-        <p class="mirror-quote">“Los proveedores tradicionales tardan meses en entregar o resolver.”</p>
+        <p class="mirror-quote">Los proveedores tradicionales tardan meses en entregar o resolver.</p>
         <div class="mirror-reply"><b>Agilidad extrema</b>Escuchamos un dolor operativo, acotamos el problema y construimos un prototipo funcional antes de convertirlo en un proyecto interminable.</div>
       </div>
       <div class="mirror-card">
-        <p class="mirror-quote">“No quiero comprar otra herramienta que el equipo abandone.”</p>
+        <p class="mirror-quote">No quiero comprar otra herramienta que el equipo abandone.</p>
         <div class="mirror-reply"><b>Adopción en la operación real</b>Diseñamos para el taller, producción, ventas y administración, usando los canales que el equipo ya entiende.</div>
       </div>
       <div class="mirror-card">
-        <p class="mirror-quote">“Necesito resultados, no una demostración futurista.”</p>
+        <p class="mirror-quote">Necesito resultados, no una demostración futurista.</p>
         <div class="mirror-reply"><b>Resultados primero</b>Validamos cada solución con procesos reales, máquinas, plazos y presupuesto en juego antes de recomendarla.</div>
       </div>
     </div>
@@ -370,8 +402,15 @@
     </div>
     <div>
       <div class="eyebrow umber">Una carta, no un discurso de ventas</div>
-      <blockquote>“Llevo 26 años dirigiendo un taller gráfico. Empecé operando máquinas, no dando charlas sobre tecnología. Conozco el miedo de invertir en algo que promete mucho y no sirve para nada en la práctica — porque a mí también me pasó. Por eso, antes de ofrecerte cualquier sistema, lo probamos primero en mi propia empresa. Si funciona ahí, con mi propio dinero y mi propio equipo en juego, recién te lo mostramos a ti.”</blockquote>
-      <cite><span>Moisés Escobar</span> — fundador de Datayros, director de Atlantis</cite>
+      <!-- La comilla de apertura la pone el CSS (::before, colgante en ámbar):
+           si también estuviera escrita aquí, habría comillas dobles. -->
+      <blockquote>Llevo 26 años dirigiendo un taller gráfico. Empecé operando máquinas, no dando charlas sobre tecnología. Conozco el miedo de invertir en algo que promete mucho y no sirve para nada en la práctica — porque a mí también me pasó. Por eso, antes de ofrecerte cualquier sistema, lo probamos primero en mi propia empresa. Si funciona ahí, con mi propio dinero y mi propio equipo en juego, recién te lo mostramos a ti.</blockquote>
+      <!-- ADVERTENCIA: este trazo es una firma ESTILIZADA, no la firma legal de
+           Moisés. Idealmente reemplazarlo por su trazo real digitalizado, con
+           su aprobación. -->
+      <svg class="founder-sign" viewBox="0 0 200 64" width="180" height="58" fill="none" aria-hidden="true"><path class="sign-path" d="M8 50 C14 22 22 14 26 22 C30 30 26 46 22 52 C30 40 40 30 46 34 C52 38 46 50 42 50 C48 46 58 36 64 40 C70 44 64 52 60 50 C68 44 76 34 84 38 C90 41 86 50 82 50 C90 46 100 34 108 38 C114 41 110 50 106 50 C112 46 122 38 130 40 C140 43 132 54 126 52 C136 50 152 40 168 44 C180 47 188 42 192 38" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <cite><a data-linkedin href="#"><span>Moisés Escobar</span></a> — fundador de Datayros, director de Atlantis</cite>
+      <a class="founder-cta" href="#" data-whatsapp data-wa-msg="Hola Moisés, leí tu carta en la página y quiero conversar sobre un proceso de mi empresa.">Escríbenos por WhatsApp <span class="arr">→</span></a>
     </div>
   </div>
 </section>
@@ -383,7 +422,11 @@
       <h2>Un proceso pensado para que puedas decir que no en cualquier momento.</h2>
       <p>No hay contratos largos ni instalaciones invasivas. Cada etapa está diseñada para que la decisión siga siendo tuya.</p>
     </div>
-    <div class="method-row reveal" data-stagger>
+    <!-- La regla continua es la línea de producción de la que cuelgan los
+         cuatro pasos; main.js la tiende al entrar en pantalla. Sin data-stagger:
+         la animación propia del bloque sustituye al escalonado genérico. -->
+    <div class="method-row reveal">
+      <div class="method-rule" aria-hidden="true"></div>
       <div class="method-step">
         <div class="idx">I</div>
         <h3>Diagnóstico</h3>
@@ -429,24 +472,34 @@
       <span class="seg-hint mono" id="segHint" aria-hidden="true">Prueba el cambio →</span>
     </div>
     <div class="compare-wrap">
+      <!-- Los chips .mag salen ESTRICTAMENTE del copy ya publicado en cada
+           fila — nada inventado. TODO(Moisés): cuando confirmes cifras
+           medidas en Atlantis, se sustituyen por las reales. -->
       <div class="compare-grid">
         <div class="compare-row">
-          <div class="task">Cotizar un pedido</div>
-          <div class="state-cell"><span class="st-ico" aria-hidden="true"><svg class="ico-clock" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.2" class="sc-mid" stroke-width="1.7"/><path d="M10 6.2 V10 l2.6 1.8" class="sc-mid" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ico-check" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8.4" class="sc-dim"/><path d="M6.4 10.2 l2.4 2.4 L13.8 7.6" class="sc-acc" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="state-txt"><span class="state-before">20 a 30 minutos por cliente, cálculos hechos a mano.</span><span class="state-after">Respuesta en minutos, con el margen ya calculado.</span></div></div>
+          <div class="task">Cotizar un pedido<span class="mag mono">20–30 MIN → MINUTOS</span></div>
+          <div class="state-cell"><span class="st-ico" aria-hidden="true"><svg class="ico-clock" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.2" class="sc-mid" stroke-width="1.7"/><path d="M10 6.2 V10 l2.6 1.8" class="sc-mid" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ico-check" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8.4" class="sc-dim"/><path d="M6.4 10.2 l2.4 2.4 L13.8 7.6" class="sc-acc" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="state-txt"><span class="state-before">20 a 30 minutos por cliente, cálculos hechos a mano.</span><span class="state-after">Respuesta en minutos, con el margen ya calculado. <a class="see-demo" href="#demo">mira la conversación →</a></span></div></div>
         </div>
         <div class="compare-row">
-          <div class="task">Registrar ingresos y gastos</div>
+          <div class="task">Registrar ingresos y gastos<span class="mag mono">CADA NOCHE → MIENTRAS TRABAJAS</span></div>
           <div class="state-cell"><span class="st-ico" aria-hidden="true"><svg class="ico-clock" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.2" class="sc-mid" stroke-width="1.7"/><path d="M10 6.2 V10 l2.6 1.8" class="sc-mid" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ico-check" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8.4" class="sc-dim"/><path d="M6.4 10.2 l2.4 2.4 L13.8 7.6" class="sc-acc" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="state-txt"><span class="state-before">Anotar todo al final del día, con riesgo de olvidar algo.</span><span class="state-after">Lo registras hablando, mientras sigues trabajando.</span></div></div>
         </div>
         <div class="compare-row">
-          <div class="task">Seguimiento de cobranza</div>
+          <div class="task">Seguimiento de cobranza<span class="mag mono">UNO POR UNO → EN AUTOMÁTICO</span></div>
           <div class="state-cell"><span class="st-ico" aria-hidden="true"><svg class="ico-clock" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.2" class="sc-mid" stroke-width="1.7"/><path d="M10 6.2 V10 l2.6 1.8" class="sc-mid" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ico-check" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8.4" class="sc-dim"/><path d="M6.4 10.2 l2.4 2.4 L13.8 7.6" class="sc-acc" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="state-txt"><span class="state-before">Llamadas repetidas y seguimiento manual, cliente por cliente.</span><span class="state-after">Recordatorios automáticos, con intervención humana si el caso se complica.</span></div></div>
         </div>
         <div class="compare-row">
-          <div class="task">Conocimiento clave del negocio</div>
+          <div class="task">Conocimiento clave del negocio<span class="mag mono">UNA CABEZA → TODO EL EQUIPO</span></div>
           <div class="state-cell"><span class="st-ico" aria-hidden="true"><svg class="ico-clock" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.2" class="sc-mid" stroke-width="1.7"/><path d="M10 6.2 V10 l2.6 1.8" class="sc-mid" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ico-check" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8.4" class="sc-dim"/><path d="M6.4 10.2 l2.4 2.4 L13.8 7.6" class="sc-acc" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="state-txt"><span class="state-before">Vive solo en la cabeza del dueño o de una persona clave.</span><span class="state-after">Queda registrado y consultable para todo el equipo.</span></div></div>
         </div>
       </div>
+    </div>
+    <!-- Salida del clímax: el MISMO botón y la misma acción del resto de la
+         página — el data-wa-msg distinto solo etiqueta por qué puerta entró
+         el contacto, como ya hace la franja. -->
+    <div class="compare-cta">
+      <p>¿Quieres que tu semana se vea así?</p>
+      <a href="#" class="btn btn-primary" data-whatsapp data-wa-msg="Hola Datayros, vi la semana antes y después y quiero eso para mi empresa.">Escríbenos por WhatsApp <span class="arr">→</span></a>
     </div>
   </div>
 </section>
@@ -487,7 +540,9 @@
     <div class="section-head tight reveal">
       <div class="eyebrow umber">Alianza corporativa</div>
       <h2>De la industria gráfica a otras operaciones complejas.</h2>
-      <!-- TODO: ajusta esta frase al reparto real de la alianza. -->
+      <!-- TODO: ajusta esta frase al reparto real de la alianza. Sobre ForgeNova:
+           si tiene web, se enlaza desde el trust-row del hero; si no, se mantiene
+           mencionado sin afirmación enlazable. -->
       <p>En la industria gráfica validamos soluciones en Atlantis. Para otros sectores, estudiamos dónde la automatización de la información puede eliminar cuellos de botella, conectando también plataformas maduras cuando ya existe una solución adecuada.</p>
     </div>
     <div class="stock reveal" data-stagger>
@@ -527,13 +582,21 @@
   <div class="wrap showroom reveal">
     <div class="showroom-visual">
       <!-- Si la foto falta o falla, main.js la retira y vuelven las rayas
-           diagonales que ocupaban este marco antes. -->
+           diagonales que ocupaban este marco antes. El srcset lleva UN solo
+           candidato porque el original mide 1150px (no 1800): no existe una
+           versión más pesada que valga la pena — la -1200 es el mismo
+           encuadre recomprimido a calidad 70; el src queda de respaldo. -->
       <img class="showroom-photo" src="/img/atlantis-taller.jpg"
+           srcset="/img/atlantis-taller-1200.jpg 1150w"
+           sizes="(max-width:900px) 100vw, 45vw"
            alt="Interior del taller Atlantis: prensa Heidelberg al fondo y puestos de trabajo con diseño de troqueles y desarrollo de software"
            loading="lazy" decoding="async">
+      <span class="showroom-stamp mono" aria-hidden="true">Probado aquí</span>
       <div class="showroom-badge">
+        <span class="badge-kicker mono">Medido en el taller</span>
         <span class="b-num" data-count-to="18">18</span>
-        años operando de forma ininterrumpida — el mismo taller donde probamos cada sistema antes de ofrecerlo.
+        años de Atlantis operando sin parar — el taller donde cada sistema trabaja con máquinas, plazos y clientes reales antes de ofrecerse.
+        <!-- TODO(Moisés): publicar solo con números medidos reales. Estructura lista: <div class="badge-metrics"><span><b>25→2</b> min por cotización</span><span><b>0</b> llamadas de cobranza manuales</span></div> -->
       </div>
     </div>
     <div>
@@ -545,6 +608,10 @@
         <li>Equipo propio de troquelado y matricería, lo que nos da agilidad para iterar rápido.</li>
         <li>Un entorno físico y ruidoso — el lugar exacto donde la mayoría de la tecnología falla en la práctica.</li>
       </ul>
+      <!-- Fecha viva: este string se actualiza A MANO cada mes o dos con lo
+           que de verdad esté en prueba en el taller — es la señal de que la
+           sección respira, no un dato automático. -->
+      <p class="showroom-date mono">AGO 2026 · EN PRUEBA EN EL TALLER: ASISTENTE DE COBRANZA</p>
     </div>
   </div>
 </section>
@@ -582,6 +649,9 @@
 
 <section class="cta-final" id="contacto">
   <div class="wrap reveal">
+    <!-- La misma cruz de registro del hero: el pliego se cierra con la marca
+         con la que se abrió. Decorativa y quieta, como las de arriba. -->
+    <svg class="reg-mark cta-reg" viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="6.5" stroke="currentColor" stroke-width="1.2"/><path d="M12 1.5v21M1.5 12h21" stroke="currentColor" stroke-width="1.2"/></svg>
     <div class="cta-box">
       <div>
         <h2>Hablemos de dónde puedes ganar más eficiencia.</h2>
@@ -590,6 +660,7 @@
       <div class="cta-right">
         <a href="#" class="btn btn-primary" data-whatsapp>Escríbenos por WhatsApp <span class="arr">→</span></a>
         <a href="#" class="btn btn-ghost" data-email>Escríbenos un correo</a>
+        <span class="cta-note">Cobramos por resultado, no licencia mensual fija. Sin permanencia.</span>
         <span class="cta-note">Respondemos nosotros mismos, en horario laboral.</span>
       </div>
     </div>
@@ -612,6 +683,7 @@
         <p class="footer-label mono">Contacto</p>
         <a class="footer-line" href="#" data-whatsapp><span class="fl-arr" aria-hidden="true">→</span>+51 933 137 048</a>
         <a class="footer-line" href="#" data-email><span class="fl-arr" aria-hidden="true">→</span>Escríbenos por correo</a>
+        <a class="footer-line" data-linkedin href="#"><span class="fl-arr" aria-hidden="true">→</span>LinkedIn de Moisés</a>
         <p class="footer-line is-text">Huancayo, Perú</p>
       </div>
       <div class="footer-col">

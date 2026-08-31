@@ -75,6 +75,11 @@
   --band-mute:rgba(250,250,247,.62);   /* 5.9:1 sobre --band-bg */
   --band-lit:#78CC00;                  /* 7.2:1 sobre --band-bg */
   --band-tab:rgba(120,204,0,.12);
+
+  /* Grano de papel: multiplicar oscurece apenas el papel de día. A esta
+     opacidad el contraste AA del texto no se toca. */
+  --grain-opacity:.03;
+  --grain-blend:multiply;
 }
 
 /* Noche: papel y tinta se invierten; el acento pasa al lima del logo,
@@ -122,6 +127,11 @@
 
   --logo-day:none;
   --logo-night:block;
+
+  /* De noche multiplicar no se vería sobre tinta: el grano pasa a aclarar
+     (screen). Si ensucia el texto, bajar a .035. */
+  --grain-opacity:.045;
+  --grain-blend:screen;
 }
 
 *{box-sizing:border-box; margin:0; padding:0;}
@@ -132,6 +142,14 @@ body{
   font-family:'Inter', sans-serif; line-height:1.65; font-size:16px;
   -webkit-font-smoothing:antialiased; overflow-x:hidden;
   transition:background-color .3s var(--ease-out), color .3s var(--ease-out);
+}
+/* Grano de papel global: un SVG de ruido embebido — cero peticiones, cero LCP.
+   z-index 60: sobre la página y la nav (50) pero BAJO el chat (80/90) y el
+   skip-link (200), así el producto vivo se lee limpio. */
+body::before{
+  content:''; position:fixed; inset:0; z-index:60; pointer-events:none;
+  opacity:var(--grain-opacity); mix-blend-mode:var(--grain-blend);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='140' height='140' filter='url(%23g)'/></svg>");
 }
 .wrap{max-width:1220px; margin:0 auto; padding:0 40px;}
 @media (max-width:640px){ .wrap{padding:0 20px;} }
@@ -172,7 +190,16 @@ img{max-width:100%;}
   .btn-primary:hover{ transform:translateY(-2px); background:var(--accent-hover); box-shadow:var(--shadow-hover); }
   .btn-primary:hover .arr{ transform:translateX(3px); }
   .btn-ghost:hover{ border-color:var(--accent); color:var(--accent); }
+  /* Con puntero fino el hover ya eleva el botón: el clic lo asienta apenas,
+     para no pelear con el translateY(-2px) del hover. */
+  .btn-primary:hover:active, .submit-btn:hover:active{ transform:translateY(-1px) scale(.98); }
 }
+
+/* Presión: más de la mitad del tráfico es móvil, donde el hover no existe —
+   el botón debe hundirse bajo el dedo. El transform vuelve solo al soltar.
+   El fab lleva su propia regla en la sección 7: aquí no pesaría lo
+   suficiente contra el transform:none de .js.past-hero .chat-fab. */
+.btn:active, .submit-btn:active, .chat-send:active, .chat-chip:active{ transform:scale(.97); }
 
 /* ── 3. Header / nav ─────────────────────────────────────────────────────── */
 nav{ position:fixed; top:0; left:0; right:0; z-index:50;
@@ -211,14 +238,22 @@ nav.is-scrolled .logo img{ height:25px; }
 @media (max-width:980px){ .nav-links{display:none;} }
 
 .theme-toggle{
-  background:none; border:1px solid var(--line-strong); border-radius:999px;
+  position:relative; background:none; border:1px solid var(--line-strong); border-radius:999px;
   width:38px; height:38px; cursor:pointer; color:var(--muted);
   display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;
   transition:border-color .2s var(--ease-out), color .2s var(--ease-out);
 }
-.theme-toggle svg{ width:16px; height:16px; }
-.theme-toggle .i-sun{ display:var(--logo-night); }
-.theme-toggle .i-moon{ display:var(--logo-day); }
+/* Cruce luna/sol: los dos iconos viven superpuestos al centro (margen de
+   -8px = mitad de sus 16px) y el tema decide cuál rota hacia adentro y
+   cuál hacia afuera. Solo CSS condicionado a [data-theme]; el nuke de
+   reduced-motion lo vuelve un cambio instantáneo. */
+.theme-toggle svg{ position:absolute; top:50%; left:50%; margin:-8px 0 0 -8px;
+  width:16px; height:16px;
+  transition:transform .35s var(--ease-out), opacity .2s var(--ease-out); }
+.theme-toggle .i-moon{ opacity:1; transform:none; }
+.theme-toggle .i-sun{ opacity:0; transform:rotate(-90deg) scale(.6); }
+[data-theme="night"] .theme-toggle .i-moon{ opacity:0; transform:rotate(90deg) scale(.6); }
+[data-theme="night"] .theme-toggle .i-sun{ opacity:1; transform:none; }
 @media (hover:hover) and (pointer:fine){
   .theme-toggle:hover{ border-color:var(--accent); color:var(--accent); }
 }
@@ -234,18 +269,14 @@ nav.is-scrolled .logo img{ height:25px; }
 .hero{ position:relative; padding:150px 0 76px; overflow:hidden; }
 @media (max-width:980px){ .hero{ padding:126px 0 56px; } }
 
-/* Decoración de fondo: retícula de puntos y un aro fino que rima con el
-   círculo del logo. Ninguna interfiere con el texto. */
-.bg-dots{
-  position:absolute; top:120px; left:52%; width:220px; height:170px;
-  background-image:radial-gradient(circle, var(--line-strong) 1.4px, transparent 1.5px);
-  background-size:19px 19px; opacity:.7; pointer-events:none;
-}
-.bg-ring{
-  position:absolute; right:-190px; bottom:-260px; width:560px; height:560px;
-  border:1.5px solid var(--line); border-radius:50%; pointer-events:none;
-}
-@media (max-width:980px){ .bg-dots{ display:none; } }
+/* Cruces de registro de imprenta en lugar de la retícula genérica: la marca
+   del oficio. El token --line-strong conmuta solo de tema; quietas siempre —
+   nada que gatear. */
+.hero .reg-mark{ position:absolute; color:var(--line-strong); pointer-events:none; }
+.reg-a{ top:110px; right:46px; }
+.reg-b{ bottom:40px; left:46px; }
+@media (max-width:980px){ .reg-b{ display:none; } }
+@media (max-width:640px){ .hero .reg-mark{ display:none; } }
 
 .hero-grid{ display:grid; grid-template-columns:1.06fr 0.94fr; gap:64px; align-items:center; position:relative; }
 @media (max-width:980px){ .hero-grid{ grid-template-columns:1fr; gap:48px; } }
@@ -264,16 +295,6 @@ nav.is-scrolled .logo img{ height:25px; }
 .country-list{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
 .hero-eyebrow .country{ display:inline-flex; align-items:center; gap:7px; color:var(--muted); }
 
-/* Píldoras de servicio sobre el titular */
-.service-badges{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:26px; }
-.service-badge{
-  display:inline-flex; align-items:center; gap:8px;
-  background:var(--card); border:1px solid var(--line); border-radius:999px;
-  padding:8px 15px; font-size:13px; font-weight:600; color:var(--ink);
-}
-.service-badge i{ width:7px; height:7px; border-radius:50%; background:var(--accent); flex-shrink:0; }
-.service-badge .muted{ color:var(--muted-2); font-weight:500; }
-
 .hero h1{
   font-size:clamp(38px, 4.9vw, 62px); font-weight:800; line-height:1.02;
   letter-spacing:-0.03em; margin-bottom:24px; max-width:13ch;
@@ -282,18 +303,21 @@ nav.is-scrolled .logo img{ height:25px; }
 .hero .lede b{ color:var(--ink); font-weight:600; }
 .hero-ctas{ display:flex; gap:12px; flex-wrap:wrap; margin:26px 0 30px; }
 
-/* Píldoras de respaldo bajo el texto */
-.partner-pills{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:34px; }
-.partner-pill{
-  display:inline-flex; align-items:center; gap:9px;
-  background:var(--card); border:1px solid var(--line); border-radius:999px;
-  padding:9px 16px; font-size:13.5px; font-weight:600;
+/* Puerta a la demo: enlace de texto, NO un tercer botón — el CTA dominante
+   sigue siendo uno solo. */
+.hero-demo-link{
+  display:inline-block; margin-top:-16px; margin-bottom:26px;
+  font-size:14px; font-weight:500; color:var(--accent); text-decoration:none;
 }
-.partner-pill .muted{ color:var(--muted-2); font-weight:500; }
-.pp-mark{
-  width:14px; height:14px; border-radius:4px; flex-shrink:0;
-  background:conic-gradient(from 0deg, #005418 0 25%, #009000 0 50%, #54B400 0 75%, #78CC00 0 100%);
+
+/* Subrayado del acento del H1. La regla base nace ya dibujada: sin JS no
+   falta nada; con JS vivo se dibuja tras la entrada del hero. */
+.hero h1 .accent{
+  background-image:linear-gradient(var(--accent-display),var(--accent-display));
+  background-repeat:no-repeat; background-position:0 94%; background-size:100% 2px;
 }
+.js .hero h1 .accent{ background-size:0% 2px; transition:background-size .5s var(--ease-out); }
+.js .hero h1 .accent.drawn{ background-size:100% 2px; }
 
 /* Muro de confianza: aún sin logos de clientes, la prueba son los datos
    duros de la casa, compuestos como marcas. */
@@ -400,18 +424,29 @@ section + section{ border-top:1px solid var(--line); }
 .js .reveal{ opacity:0; transform:translateY(14px); }
 .js .reveal.in{ opacity:1; transform:translateY(0); }
 
-.mirror-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-@media (max-width:800px){ .mirror-grid{ grid-template-columns:1fr; } }
+/* Columna editorial de recortes: las citas viven directamente sobre el papel
+   con grano, separadas por línea discontinua — nada de tarjetas idénticas de
+   plantilla, y por eso tampoco levitan al hover. Los anchos alternados
+   (60ch/44ch a la derecha) marcan el ritmo de lectura. La comilla colgante
+   la pone el ::before — el copy va sin comillas para no duplicarlas. */
+.mirror-grid{ display:flex; flex-direction:column; gap:0; }
 .mirror-card{
-  background:var(--card); border:1px solid var(--line); border-radius:var(--r-card);
-  padding:30px 28px; display:flex; flex-direction:column; gap:16px;
-  transition:transform .2s var(--ease-out), box-shadow .2s var(--ease-out);
+  background:transparent; border:none; border-radius:0; padding:36px 0 34px;
+  border-bottom:1px dashed var(--line); display:flex; flex-direction:column;
+  gap:16px; max-width:60ch;
 }
-@media (hover:hover) and (pointer:fine){
-  .mirror-card:hover{ transform:translateY(-3px); box-shadow:var(--shadow-hover); }
+.mirror-card:last-child{ border-bottom:none; }
+.mirror-card:nth-child(even){ margin-left:auto; max-width:44ch; }
+.mirror-quote{ font-family:'Bricolage Grotesque',sans-serif; font-weight:600; font-style:italic;
+  font-size:clamp(22px,2.6vw,28px); line-height:1.3; letter-spacing:-0.015em;
+  position:relative; padding-left:2px; }
+.mirror-quote::before{ content:'“'; position:absolute; left:-0.55ch; top:-2px;
+  color:var(--accent-display); font-style:normal; }
+.mirror-reply{ font-size:14px; color:var(--muted); padding-top:14px; border-top:1px solid var(--line); max-width:52ch; }
+/* Móvil: columna única a ancho completo, medida uniforme. */
+@media (max-width:800px){
+  .mirror-card, .mirror-card:nth-child(even){ max-width:100%; margin-left:0; }
 }
-.mirror-quote{ font-family:'Bricolage Grotesque',sans-serif; font-weight:600; font-size:18.5px; line-height:1.32; letter-spacing:-0.015em; }
-.mirror-reply{ font-size:14px; color:var(--muted); padding-top:14px; border-top:1px solid var(--line); }
 .mirror-reply b{ color:var(--accent); font-weight:600; font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.08em; display:block; margin-bottom:8px; }
 
 .pillars{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
@@ -441,16 +476,56 @@ section + section{ border-top:1px solid var(--line); }
   background:var(--veil); pointer-events:none; z-index:1;
 }
 .founder-mark:has(.founder-photo) .founder-tag{ color:var(--veil-text); border-top-color:var(--veil-line); }
+/* La carta compuesta como carta: escala de lectura pausada y la comilla de
+   apertura colgante en ámbar — la pone el CSS, no el copy. */
 .founder blockquote{ font-family:'Bricolage Grotesque',sans-serif; font-weight:500;
-  font-size:clamp(19px,2.2vw,25px); line-height:1.36; letter-spacing:-0.02em; margin:18px 0 22px; }
+  font-size:clamp(22px,3vw,32px); line-height:1.32; letter-spacing:-0.02em; margin:18px 0 22px;
+  max-width:58ch; position:relative; padding-top:8px; }
+.founder blockquote::before{
+  content:'“'; position:absolute; top:-38px; left:-6px;
+  font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:96px;
+  line-height:1; color:var(--umber); pointer-events:none;
+}
+@media (max-width:840px){ .founder blockquote::before{ font-size:64px; top:-26px; } }
+/* Firma de un solo trazo: currentColor la resuelve en ambos temas. El dash
+   de la animación solo se aplica con GSAP vivo — sin él, nace completa. */
+.founder-sign{ display:block; margin:6px 0 14px; color:var(--ink); }
+@media (max-width:840px){ .founder-sign{ width:150px; } }
 .founder cite{ font-family:'JetBrains Mono',monospace; font-style:normal; font-size:12px;
   letter-spacing:.03em; color:var(--muted); display:block; }
 .founder cite span{ color:var(--ink); font-weight:500; }
+/* Perfil verificable: el subrayado ámbar señala que el nombre es un enlace.
+   El outline global de :focus-visible ya lo cubre. */
+.founder cite a{ color:inherit; text-decoration:none; border-bottom:1px solid var(--umber); padding-bottom:1px; }
+/* Invitación: enlace de texto, mismo canal — el CTA dominante sigue siendo uno. */
+.founder-cta{
+  display:inline-flex; align-items:center; gap:7px; margin-top:20px;
+  font-size:14.5px; font-weight:600; color:var(--accent); text-decoration:none;
+}
+.founder-cta .arr{ transition:transform .2s var(--ease-out); }
+@media (hover:hover) and (pointer:fine){
+  .founder-cta:hover .arr{ transform:translateX(3px); }
+}
 
-.method-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
-@media (max-width:860px){ .method-row{ grid-template-columns:1fr 1fr; } }
-@media (max-width:520px){ .method-row{ grid-template-columns:1fr; } }
-.method-step{ background:var(--card); border:1px solid var(--line); border-radius:var(--r-card); padding:26px 22px; }
+/* El método como línea de producción: los cuatro pasos cuelgan de una regla
+   continua, como el papel cruzando la prensa. La regla y los nodos nacen ya
+   puestos en CSS — main.js solo los tiende (gsap.from) si hay GSAP y no se
+   pidió menos movimiento. */
+.method-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px 28px; position:relative; padding-top:36px; }
+.method-rule{ position:absolute; top:0; left:0; width:100%; height:2px;
+  background:var(--line-strong); transform-origin:left; }
+.method-step{ background:transparent; border:none; border-radius:0; padding:0; position:relative; }
+/* El nodo posa sobre la regla: papel con borde de acento — de noche,
+   papel-tinta con borde lima. Los tokens resuelven ambos temas. */
+.method-step::before{ content:''; position:absolute; top:-42px; left:2px;
+  width:10px; height:10px; border-radius:50%; background:var(--paper);
+  border:2px solid var(--accent); box-sizing:border-box; }
+/* Móvil: la línea pasa a vertical y los pasos cuelgan de ella. */
+@media (max-width:860px){
+  .method-row{ grid-template-columns:1fr; gap:30px; padding-top:0; padding-left:30px; }
+  .method-rule{ top:0; bottom:0; left:0; width:2px; height:100%; transform-origin:top; }
+  .method-step::before{ top:2px; left:-35px; }
+}
 .method-step .idx{
   font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.12em;
   color:var(--accent); background:var(--accent-dim); display:inline-block;
@@ -532,6 +607,31 @@ section + section{ border-top:1px solid var(--line); }
 .compare-toggle-input:checked ~ .compare-wrap .state-after{ display:block; }
 .state-after::before{ content:'→ '; color:var(--accent); }
 
+/* Chip de magnitud: el tamaño del cambio, pegado a cada tarea. Se enciende
+   con el mismo mecanismo hermano del comparador — 100% CSS, funciona sin JS;
+   --accent sobre --accent-dim ya es AA en ambos temas, nada nuevo que vigilar.
+   Con reduced-motion el nuke global vuelve la transición instantánea. */
+.task .mag{ display:block; width:fit-content; margin-top:7px; font-size:10px;
+  letter-spacing:.06em; padding:3px 8px; border-radius:6px;
+  border:1px solid var(--line-strong); color:var(--muted-2);
+  transition:color .35s var(--ease-out), background .35s var(--ease-out),
+             border-color .35s var(--ease-out); }
+.compare-toggle-input:checked ~ .compare-wrap .mag{
+  color:var(--accent); background:var(--accent-dim); border-color:transparent;
+}
+/* Nota 320px: ni .mono ni .mag imponen nowrap, así que "MIENTRAS TRABAJAS"
+   puede partirse en dos líneas y el chip nunca fuerza scroll horizontal. */
+
+/* Puente al ticket: cierra el circuito franja → comparador → demo. */
+.see-demo{ color:var(--accent); font-size:13.5px; font-weight:500;
+  white-space:nowrap; margin-left:6px; }
+
+/* Salida del clímax: primer CTA tras siete secciones sin puerta. Es el mismo
+   botón dominante de siempre — solo cambia la frase que lo presenta. */
+.compare-cta{ display:flex; align-items:center; gap:20px; flex-wrap:wrap; margin-top:30px; }
+.compare-cta p{ font-family:'Bricolage Grotesque',sans-serif; font-weight:600;
+  font-size:18px; letter-spacing:-0.01em; }
+
 .services{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
 @media (max-width:860px){ .services{ grid-template-columns:1fr 1fr; } }
 @media (max-width:560px){ .services{ grid-template-columns:1fr; } }
@@ -582,18 +682,45 @@ section + section{ border-top:1px solid var(--line); }
 .showroom-visual::before{ content:''; position:absolute; inset:0;
   background:repeating-linear-gradient(135deg, transparent 0 26px, var(--line) 26px 27px); }
 .showroom-photo{ position:absolute; inset:0; z-index:1; width:100%; height:100%;
-  object-fit:cover; object-position:center; display:block; }
+  object-fit:cover; object-position:center; display:block;
+  filter:grayscale(1) contrast(1.06); }
 .showroom-visual:has(.showroom-photo)::before{ display:none; }
+/* Duotono de imprenta sin tocar el archivo: la foto en gris y encima el
+   color de la banda en blend `color` — NO multiply, que sobre #00330E la
+   aplastaría a negro. De día tiñe verde tinta conservando la luminosidad;
+   de noche --band-bg es el crema y la foto vira a sepia de papel: ambos
+   temas resueltos por el token. Condicionado con :has() igual que el
+   ::before: si la foto falla y main.js la retira, las rayas no se tiñen. */
+.showroom-visual:has(.showroom-photo)::after{ content:''; position:absolute; inset:0; z-index:1;
+  background:var(--band-bg); mix-blend-mode:color; pointer-events:none; }
+/* De noche la foto baja un punto de luz para asentarse sobre la tinta. */
+[data-theme="night"] .showroom-photo{ filter:grayscale(1) contrast(1.06) brightness(.92); }
+/* Cuño de taller: decorativo (aria-hidden), no necesita AA sobre la foto.
+   .mono ya pone JetBrains Mono y mayúsculas; --badge-bg es semiopaco y
+   consciente del tema. */
+.showroom-stamp{ position:absolute; top:18px; right:16px; z-index:2; transform:rotate(-8deg);
+  font-size:10px; letter-spacing:.14em; color:var(--accent); background:var(--badge-bg);
+  border:1.5px solid currentColor; border-radius:4px; padding:6px 10px; }
+@media (max-width:640px){ .showroom-stamp{ font-size:9px; top:14px; right:12px; } }
 .showroom-badge{ position:absolute; bottom:16px; left:16px; right:16px; background:var(--badge-bg);
   border:1px solid var(--line); border-radius:14px; padding:16px 18px;
   font-size:12.5px; backdrop-filter:blur(6px); z-index:2; color:var(--ink); }
 .showroom-badge .b-num{ color:var(--accent); font-weight:800; font-size:26px; display:block;
   margin-bottom:4px; font-family:'Bricolage Grotesque',sans-serif; letter-spacing:-0.02em; }
+/* Cabecera del sello: etiqueta el referente de la cifra — "medido", no
+   decorado. Va con .mono, que ya pone la fuente y las mayúsculas. */
+.badge-kicker{ display:block; font-size:10px; letter-spacing:.12em; color:var(--muted-2); margin-bottom:6px; }
 .showroom h2{ font-size:clamp(24px,3vw,33px); font-weight:800; letter-spacing:-0.025em; margin:16px 0 18px; line-height:1.12; }
 .showroom p{ color:var(--muted); font-size:15.5px; margin-bottom:14px; }
 .showroom-list{ list-style:none; margin-top:22px; display:flex; flex-direction:column; gap:12px; }
 .showroom-list li{ display:flex; gap:12px; font-size:14.5px; color:var(--ink); }
 .showroom-list li::before{ content:'—'; color:var(--umber); flex-shrink:0; }
+/* Fecha viva: un string que se actualiza a mano (ver comentario en el HTML).
+   El punto de acento delante la marca como señal encendida. */
+.showroom-date{ margin-top:22px; font-size:10.5px; color:var(--muted-2);
+  display:flex; align-items:center; gap:8px; }
+.showroom-date::before{ content:''; width:7px; height:7px; border-radius:50%;
+  background:var(--accent); flex-shrink:0; }
 
 .faq-list{ display:flex; flex-direction:column; border:1px solid var(--line);
   border-radius:var(--r-card); background:var(--card); overflow:hidden; }
@@ -607,6 +734,20 @@ section + section{ border-top:1px solid var(--line); }
   flex-shrink:0; transition:transform .22s var(--ease-out); }
 .faq-item[open] summary .plus{ transform:rotate(45deg); }
 .faq-item .faq-a{ padding:0 24px 24px; color:var(--muted); font-size:14.5px; max-width:680px; }
+/* La respuesta ya no salta a existir de golpe: cae desde arriba una vez.
+   El nuke de reduced-motion la vuelve instantánea. */
+@keyframes faqIn{ from{ opacity:0; transform:translateY(-4px); } }
+.faq-item[open] .faq-a{ animation:faqIn .28s var(--ease-out); }
+/* Y donde el navegador ya interpola height:auto, el panel además se
+   despliega. Mejora progresiva: sin soporte queda solo el fade de arriba. */
+@supports (interpolate-size:allow-keywords){
+  :root{ interpolate-size:allow-keywords; }
+  .faq-item::details-content{
+    transition:height .3s var(--ease-out), content-visibility .3s allow-discrete;
+    height:0; overflow:clip;
+  }
+  .faq-item[open]::details-content{ height:auto; }
+}
 
 .manifesto{ text-align:center; padding:100px 0; }
 .manifesto blockquote{ font-family:'Bricolage Grotesque',sans-serif; font-weight:700;
@@ -615,20 +756,41 @@ section + section{ border-top:1px solid var(--line); }
 .manifesto cite{ font-family:'JetBrains Mono',monospace; font-style:normal; font-size:12px;
   color:var(--muted-2); letter-spacing:.06em; text-transform:uppercase; }
 
-.cta-final{ padding-bottom:96px; }
-.cta-box{ background:var(--accent); color:var(--on-accent); border-radius:26px; padding:56px 52px;
+/* Cierre a sangre: la segunda tinta plana. El CTA final repite el corte de
+   superficie del capband — simetría apertura/cierre del pliego — en vez de
+   flotar como caja redondeada. Los tokens --band-* están definidos en AMBOS
+   temas: de día tinta verde sobre el papel, de noche hoja crema sobre la
+   tinta; la inversión es automática al conmutar, igual que en #hacemos.
+   Debajo queda pegado el footer (tinta en ambos temas): de día se leen dos
+   tintas apiladas, intencional como el pie de un pliego. */
+.cta-final{ background:var(--band-bg); color:var(--band-ink); padding:88px 0; border-top:none; }
+.cta-final .wrap{ position:relative; }
+.cta-reg{ position:absolute; top:-44px; right:44px; color:var(--band-line); }
+.cta-box{ background:transparent; border-radius:0; padding:0;
   display:grid; grid-template-columns:1.2fr 0.8fr; gap:40px; align-items:center; }
-@media (max-width:800px){ .cta-box{ grid-template-columns:1fr; padding:40px 26px; } }
-.cta-box h2{ font-size:clamp(23px,3vw,32px); font-weight:800; letter-spacing:-0.025em; margin-bottom:14px; color:var(--on-accent); line-height:1.1; }
-.cta-box p{ color:var(--on-accent-soft); font-size:15.5px; }
+.cta-box h2{ font-size:clamp(28px,4vw,44px); font-weight:800; letter-spacing:-0.03em;
+  line-height:1.08; margin-bottom:14px; color:var(--band-ink); }
+.cta-box p{ color:var(--band-mute); font-size:15.5px; }
 .cta-right{ display:flex; flex-direction:column; gap:12px; align-items:flex-start; }
-.cta-box .btn-primary{ background:var(--on-accent); color:var(--accent); }
-.cta-box .btn-ghost{ border-color:var(--on-accent-line); color:var(--on-accent); }
+/* Contrastes verificados: día lima #78CC00 con texto #00330E ≈7.0:1; noche
+   verde #005418 con texto crema #E2DCCB ≈8.8:1. Sin tokens nuevos. */
+.cta-final .btn-primary{ background:var(--band-lit); color:var(--band-bg); }
 @media (hover:hover) and (pointer:fine){
-  .cta-box .btn-primary:hover{ background:var(--paper); }
-  .cta-box .btn-ghost:hover{ border-color:var(--on-accent); }
+  .cta-final .btn-primary:hover{ transform:translateY(-2px); filter:brightness(1.05); box-shadow:none; }
 }
-.cta-note{ font-size:12.5px; color:var(--on-accent-faint); font-family:'JetBrains Mono',monospace; letter-spacing:.02em; }
+.cta-final .btn-ghost{ border-color:var(--band-line); color:var(--band-ink); }
+@media (hover:hover) and (pointer:fine){
+  .cta-final .btn-ghost:hover{ border-color:var(--band-ink); color:var(--band-ink); }
+}
+.cta-note{ font-size:12.5px; color:var(--band-mute); font-family:'JetBrains Mono',monospace; letter-spacing:.02em; }
+@media (max-width:800px){
+  .cta-box{ grid-template-columns:1fr; gap:28px; }
+  .cta-final{ padding:64px 0; }
+  .cta-reg{ display:none; }
+}
+/* El :focus-visible global usa var(--accent), ilegible de día sobre la banda
+   verde: aquí el foco pasa al lima de la banda. */
+.cta-final :focus-visible{ outline:2px solid var(--band-lit); }
 
 /* ── 6. Footer ───────────────────────────────────────────────────────────── */
 /* Banda de tinta en ambos temas, como cierre editorial. */
@@ -647,6 +809,9 @@ footer .logo img{ height:24px; width:auto; }
   position:relative; transition:color .22s var(--ease-out); }
 .footer-line.is-text{ margin-bottom:0; }
 .footer-col .footer-line{ display:flex; width:fit-content; }
+/* El display de arriba pisaría al [hidden] del navegador: se repone aquí.
+   main.js oculta así la línea de LinkedIn mientras no haya URL real. */
+.footer-line[hidden]{ display:none; }
 
 /* Rutas: columna, con la flecha de marca siempre visible como marcador. */
 .footer-links{ display:flex; flex-direction:column; align-items:flex-start; gap:9px;
@@ -716,12 +881,32 @@ footer .logo img{ height:24px; width:auto; }
   transition:opacity .3s var(--ease-out), transform .3s var(--ease-out);
 }
 .js.past-hero .chat-fab{ opacity:1; transform:none; pointer-events:auto; }
+/* Presión del fab: necesita más especificidad que el transform:none de la
+   regla de arriba, o el hundimiento jamás se vería. El fab solo existe con
+   JS vivo, así que la regla corta .chat-fab:active no haría falta. */
+.js.past-hero .chat-fab:active{ transform:scale(.97); }
 
 @keyframes pulse{
   0%{ box-shadow:0 0 0 0 rgba(84,180,0,.45); }
   70%{ box-shadow:0 0 0 9px rgba(84,180,0,0); }
   100%{ box-shadow:0 0 0 0 rgba(84,180,0,0); }
 }
+
+/* Invitación por intención real (decisiones-web.md §4, opción B): la burbuja
+   solo aparece cuando la persona llegó a las FAQ — señal de que le quedó una
+   duda — una vez por sesión, y jamás abre el panel sola. z-index 79: justo
+   bajo el fab (80), al que acompaña. */
+.fab-hint{
+  position:fixed; right:24px; bottom:78px; z-index:79;
+  display:flex; align-items:center; gap:10px;
+  background:var(--card); border:1px solid var(--line-strong); border-radius:14px;
+  padding:10px 14px; font-size:13px; color:var(--ink);
+  box-shadow:var(--shadow-float);
+}
+/* El display:flex de arriba pisaría al [hidden] del navegador. */
+.fab-hint[hidden]{ display:none; }
+.fab-hint-x{ background:none; border:none; color:var(--muted-2); font-size:16px; cursor:pointer; padding:2px; }
+@media (max-width:640px){ .fab-hint{ right:16px; bottom:70px; } }
 
 .chat-panel{
   position:fixed; right:24px; bottom:24px; z-index:90;
@@ -730,10 +915,21 @@ footer .logo img{ height:24px; width:auto; }
   height:min(calc(100vh - 48px), 588px);
   background:var(--card); border:1px solid var(--line); border-radius:20px;
   box-shadow:var(--shadow-panel); overflow:hidden;
+  /* Nace del botón, no se teletransporta: oculto y encogido hacia la esquina
+     donde vive el fab. La clase is-open lo despliega; el hidden real llega
+     tras la transición (chat-widget.js) para sacarlo del árbol de
+     accesibilidad al cerrarse. Reduced-motion: el nuke lo hace instantáneo. */
+  opacity:0; transform:translateY(12px) scale(.96); transform-origin:bottom right;
+  transition:transform .26s var(--ease-out), opacity .22s var(--ease-out);
+  pointer-events:none;
 }
+.chat-panel.is-open{ opacity:1; transform:none; pointer-events:auto; }
+.chat-panel.is-closing{ transition-duration:.18s; }
 .chat-panel[hidden]{ display:none; }
 @media (max-width:640px){
-  .chat-panel{ right:0; bottom:0; width:100vw; height:100dvh; border:none; border-radius:0; }
+  /* Fullscreen en el teléfono: el scale no aplica, solo sube desde abajo. */
+  .chat-panel{ right:0; bottom:0; width:100vw; height:100dvh; border:none; border-radius:0;
+    transform:translateY(24px); }
 }
 
 .chat-head{
@@ -785,6 +981,24 @@ footer .logo img{ height:24px; width:auto; }
   font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--muted-2);
   text-align:center; border-top:1px dashed var(--line); padding-top:12px;
 }
+
+/* Cada burbuja entra con una pasada corta al insertarse — CSS puro, sin
+   depender de GSAP; el nuke de reduced-motion la vuelve instantánea. */
+@keyframes msgIn{ from{ opacity:0; transform:translateY(8px); } }
+.msg-in{ animation:msgIn .25s var(--ease-out); }
+
+/* Chips de arranque: tres preguntas frecuentes que encauzan la primera
+   interacción hacia respuestas que el bot ya tiene blindadas en su contexto
+   (precio sin cifras, el cotizador, honestidad sobre no ser humano). Los
+   tokens resuelven ambos temas; el foco lo cubre el outline global. */
+.chat-chips{ display:flex; flex-wrap:wrap; gap:8px; align-self:flex-start; }
+.chat-chip{
+  font-family:'Inter',sans-serif; font-size:13px; font-weight:500;
+  color:var(--accent); background:transparent; border:1px solid var(--line-strong);
+  border-radius:999px; padding:8px 14px; cursor:pointer;
+  transition:border-color .2s var(--ease-out);
+}
+.chat-chip:hover{ border-color:var(--accent); }
 
 .chat-typing{ display:inline-flex; gap:5px; align-items:center; padding:4px 0; }
 .chat-typing i{
@@ -896,3 +1110,21 @@ footer .logo img{ height:24px; width:auto; }
 
 /* El H1 cede el primer puesto tipográfico a la franja, a propósito. */
 .hero h1{ font-size:clamp(34px,4.3vw,52px); max-width:24ch; }
+
+/* ── La prueba (#demo): el ticket ─────────────────────────────────────────────
+   Un pedido de sábado a las 11 p.m. compuesto como ticket de venta: borde
+   discontinuo de papel térmico y adentro las mismas burbujas del chat vivo
+   (.chat-msg-*, sección 7) — resuelven ambos temas por tokens, aquí no se
+   escribe ni un color. La tarjeta ya cabe en .wrap en el teléfono y
+   .chat-msg conserva su max-width:88%: sin scroll horizontal. */
+.ticket{ max-width:560px; margin:0 auto; background:var(--card);
+  border:1px dashed var(--line-strong); border-radius:var(--r-card); }
+.ticket-head{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  padding:13px 18px; color:var(--muted-2); border-bottom:1px dashed var(--line-strong); }
+.ticket-log{ display:flex; flex-direction:column; gap:14px; padding:20px 18px; }
+.ticket-foot{ text-align:center; color:var(--muted-2); font-size:11px;
+  letter-spacing:.08em; border-top:1px dashed var(--line-strong);
+  padding:14px 18px; text-transform:uppercase; }
+.demo-actions{ display:flex; align-items:center; justify-content:center;
+  gap:22px; flex-wrap:wrap; margin-top:26px; }
+.demo-open-chat{ color:var(--accent); font-size:14px; font-weight:500; }
