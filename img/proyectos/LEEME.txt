@@ -1,1 +1,4 @@
-Capturas de los proyectos (opcional). Nombres: registro-b02.jpg, cobranza.jpg, capaz-erp.jpg, levi-ai.jpg, cotizin.jpg, datairos-studio.jpg. 1600x1000 aprox, JPG/WebP liviano.
+Capturas de los proyectos para la vitrina (#productos). Opcional: sin archivo se ve la maqueta.
+Nombres: registro-b02.jpg, cobranza.jpg, capaz-erp.jpg, levi-ai.jpg, cotizin.jpg, datairos-studio.jpg
+Formato: 1600x1000 (16:10), JPG/WebP liviano. NO usar capturas de pantallas de login que muestren
+credenciales ni datos reales de clientes.
