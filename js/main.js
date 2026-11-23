@@ -17,16 +17,19 @@
 export const WHATSAPP_NUMBER = "51933137048";
 export const WHATSAPP_MESSAGE =
   "Hola Datayros, me gustaría recibir más información sobre sus productos y servicios.";
-export const EMAIL = "tairosgraph@gmail.com";
+export const EMAIL = "datayros@gmail.com";
 export const EMAIL_SUBJECT = "Consulta desde el sitio de Datayros";
 export const LINKEDIN_URL = ""; // TODO(Moisés): URL real del perfil.
 
 /* TODO(Moisés) — fuera del alcance de este código, pero pendiente:
    · Crear contacto@datayros.com sobre el dominio propio y reemplazar EMAIL
-     (hoy tairosgraph@gmail.com — un Gmail con la marca antigua resta seriedad
+     (hoy datayros@gmail.com — un Gmail resta seriedad
      B2B, pero no se cambia hasta que el buzón exista).
    · Instalar Vercel Web Analytics (un script, cero LCP) para que todos estos
      cambios sean medibles. */
+
+/** El mismo número, legible: "+51 933 137 048". */
+export const WHATSAPP_DISPLAY = "+" + WHATSAPP_NUMBER.replace(/^(\d{2})(\d{3})(\d{3})(\d{3})$/, "$1 $2 $3 $4");
 
 /** Construye el enlace de WhatsApp. Si falta el número, devuelve null. */
 export function whatsappUrl(message = WHATSAPP_MESSAGE) {
@@ -154,6 +157,7 @@ if (contactForm) {
         { scale: 1, duration: 0.35, ease: "back.out(1.7)" });
     }
     window.open(url, "_blank", "noopener");
+    contactForm.dispatchEvent(new Event("wa-sent"));
   });
 }
 
@@ -265,6 +269,73 @@ document.querySelectorAll("[data-pj-list] .pj").forEach((row) => {
     if (host) host.textContent = "próximamente";
   }
 });
+
+/* ── Aviso con el número al ir a WhatsApp ─────────────────────────────────────
+   Cada vez que alguien toca un enlace a WhatsApp (botones, formulario, chat),
+   aparece el número escrito, seleccionable y con botón Copiar: si el enlace
+   se pierde, el navegador lo bloquea o WhatsApp no está instalado, la persona
+   igual puede escribir. Un solo escucha delegado: cubre también los enlaces
+   que crea el chat después de cargar la página. */
+let waToast = null;
+let waToastTimer = 0;
+
+function ensureWaToast() {
+  if (waToast) return waToast;
+  waToast = document.createElement("div");
+  waToast.className = "wa-toast";
+  waToast.setAttribute("role", "status");
+  waToast.setAttribute("aria-live", "polite");
+  waToast.innerHTML = `
+    <p class="wa-toast-t">Abriendo WhatsApp…</p>
+    <p class="wa-toast-s">¿No se abrió? Escríbenos a este número:</p>
+    <div class="wa-toast-row">
+      <a class="wa-toast-num mono" href="tel:+${WHATSAPP_NUMBER}">${WHATSAPP_DISPLAY}</a>
+      <button class="wa-toast-copy" type="button">Copiar</button>
+    </div>
+    <button class="wa-toast-x" type="button" aria-label="Cerrar aviso">&times;</button>`;
+  document.body.appendChild(waToast);
+
+  const copyBtn = waToast.querySelector(".wa-toast-copy");
+  copyBtn.addEventListener("click", async () => {
+    let ok = false;
+    try { await navigator.clipboard.writeText(WHATSAPP_DISPLAY); ok = true; } catch (_) {
+      /* Sin permiso de portapapeles: seleccionamos el número para Ctrl+C. */
+      const r = document.createRange();
+      r.selectNodeContents(waToast.querySelector(".wa-toast-num"));
+      const sel = window.getSelection();
+      sel.removeAllRanges(); sel.addRange(r);
+    }
+    copyBtn.textContent = ok ? "¡Copiado!" : "Selecciónalo";
+    setTimeout(() => { copyBtn.textContent = "Copiar"; }, 2200);
+  });
+  waToast.querySelector(".wa-toast-x").addEventListener("click", hideWaToast);
+  return waToast;
+}
+
+function hideWaToast() {
+  clearTimeout(waToastTimer);
+  waToast?.classList.remove("show");
+}
+
+function showWaToast() {
+  const t = ensureWaToast();
+  /* Dos cuadros: se fuerza el estado oculto antes de mostrar, para que la
+     transición corra también si el aviso ya estaba visible. */
+  t.classList.remove("show");
+  void t.offsetWidth;
+  t.classList.add("show");
+  clearTimeout(waToastTimer);
+  waToastTimer = setTimeout(hideWaToast, 20000);
+}
+
+if (WHATSAPP_NUMBER) {
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest?.('a[href^="https://wa.me/"]');
+    if (a) showWaToast();
+  });
+  /* El formulario abre WhatsApp con window.open, sin pasar por un enlace. */
+  document.getElementById("contactForm")?.addEventListener("wa-sent", showWaToast);
+}
 
 /* ── Foco de luz bajo el puntero ──────────────────────────────────────────────
    Solo escribe dos variables CSS (--mx/--my) en la tarjeta que se está

@@ -1315,3 +1315,32 @@ nav{ -webkit-backdrop-filter:saturate(1.5) blur(14px); backdrop-filter:saturate(
   .hero::before{ animation:ambient 26s ease-in-out infinite alternate; will-change:transform; }
   @keyframes ambient{ from{ transform:translate3d(0,0,0) scale(1); } to{ transform:translate3d(-4%,6%,0) scale(1.08); } }
 }
+
+
+/* ── Aviso con el número de WhatsApp ──────────────────────────────────────────
+   Aparece al tocar cualquier enlace a WhatsApp. Verde fuerte con el número en
+   lima; por encima del chat (90) y por debajo del skip-link (200). */
+.wa-toast{ position:fixed; left:50%; bottom:24px; z-index:95; width:min(92vw,400px);
+  padding:16px 44px 16px 18px; border-radius:18px; color:#F6F8EE;
+  background:linear-gradient(165deg, #0A4A1C 0%, #00330E 70%);
+  border:1px solid rgba(120,204,0,.35); box-shadow:0 24px 50px -18px rgba(0,30,10,.65);
+  opacity:0; visibility:hidden; transform:translate(-50%,14px);
+  transition:opacity .35s var(--ease-out), transform .35s var(--ease-out), visibility 0s .35s; }
+.wa-toast.show{ opacity:1; visibility:visible; transform:translate(-50%,0);
+  transition:opacity .35s var(--ease-out), transform .35s var(--ease-out); }
+.wa-toast p{ margin:0; }
+.wa-toast-t{ font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:16px; }
+.wa-toast-s{ margin-top:3px !important; font-size:13px; color:rgba(246,248,238,.72); }
+.wa-toast-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px; }
+.wa-toast-num{ font-size:19px; letter-spacing:.04em; text-transform:none; color:#78CC00;
+  text-decoration:none; user-select:all; -webkit-user-select:all; }
+.wa-toast-copy{ flex-shrink:0; border:none; cursor:pointer; padding:8px 16px; border-radius:999px;
+  background:#78CC00; color:#00330E; font:600 13px 'Inter',sans-serif;
+  transition:transform .2s var(--ease-out), background .2s var(--ease-out); }
+@media (hover:hover) and (pointer:fine){ .wa-toast-copy:hover{ transform:translateY(-1px); background:#8BE000; } }
+.wa-toast-x{ position:absolute; top:8px; right:10px; width:28px; height:28px; border:none; cursor:pointer;
+  background:none; color:rgba(246,248,238,.7); font-size:20px; line-height:1; border-radius:50%; }
+.wa-toast-x:hover{ color:#F6F8EE; }
+.wa-toast :focus-visible{ outline:2px solid #78CC00; outline-offset:2px; }
+@media (max-width:640px){ .wa-toast{ bottom:88px; } }
+@media (prefers-reduced-motion:reduce){ .wa-toast, .wa-toast.show{ transition:none; } }
