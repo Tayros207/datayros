@@ -56,8 +56,8 @@
   --veil-text:rgba(250,250,247,.88);
   --veil-line:rgba(250,250,247,.3);
   --badge-bg:rgba(255,255,255,0.9);
-  --shadow-card:0 24px 60px -28px rgba(15,15,13,0.22), 0 2px 8px rgba(15,15,13,0.05);
-  --shadow-hover:0 14px 34px -18px rgba(15,15,13,0.28);
+  --shadow-card:0 28px 64px -32px rgba(0,60,20,0.26), 0 2px 10px rgba(0,60,20,0.05);
+  --shadow-hover:0 16px 38px -20px rgba(0,60,20,0.30);
   --shadow-float:0 14px 34px -14px rgba(15,15,13,0.4);
   --shadow-panel:0 28px 60px -24px rgba(15,15,13,0.38);
 
@@ -75,17 +75,19 @@
   --band-mute:rgba(250,250,247,.62);   /* 5.9:1 sobre --band-bg */
   --band-lit:#78CC00;                  /* 7.2:1 sobre --band-bg */
   --band-tab:rgba(120,204,0,.12);
-  /* Vitrina de proyectos (#productos): coral sobre tinta cálida. Único
-     acento no verde de la página: reservado a lo que se puede abrir y probar. */
-  --pj-bg:#1B1411;
-  --pj-ink:#FBF4EE;
-  --pj-mute:rgba(251,244,238,.66);     /* 6.9:1 sobre --pj-bg */
-  --pj-line:rgba(251,244,238,.14);
-  --pj-accent:#FF7A59;                 /* 7.3:1 sobre --pj-bg */
-  --pj-accent-soft:rgba(255,122,89,.28);
-  --pj-glow:rgba(255,122,89,.20);
-  --pj-mock-bg:#251B17;
-  --pj-mock-line:#33261F;
+  /* Vitrina de proyectos (#productos): los tres verdes de la marca — verde
+     fuerte de fondo, verde suave para brillos y lima para lo que se puede abrir. */
+  --pj-bg:#00240B;
+  --pj-bg-2:#003A12;
+  --pj-ink:#F6F8EE;
+  --pj-mute:rgba(246,248,238,.70);     /* 7.9:1 sobre --pj-bg */
+  --pj-line:rgba(246,248,238,.14);
+  --pj-accent:#78CC00;                 /* 9.4:1 sobre --pj-bg */
+  --pj-soft:#4FB26A;                   /* verde suave */
+  --pj-accent-soft:rgba(120,204,0,.22);
+  --pj-glow:rgba(79,178,106,.34);
+  --pj-mock-bg:#05300F;
+  --pj-mock-line:#0B4318;
 
   /* Grano de papel: multiplicar oscurece apenas el papel de día. A esta
      opacidad el contraste AA del texto no se toca. */
@@ -131,11 +133,12 @@
   --band-mute:rgba(20,19,16,.62);      /* 4.7:1 sobre --band-bg */
   --band-lit:#005418;                  /* 8.1:1 sobre --band-bg */
   --band-tab:rgba(0,132,20,.10);
-  --pj-bg:#2A1812;
-  --pj-line:rgba(251,244,238,.16);
-  --pj-glow:rgba(255,122,89,.26);
-  --pj-mock-bg:#33201A;
-  --pj-mock-line:#43291F;
+  --pj-bg:#06260E;
+  --pj-bg-2:#0A3417;
+  --pj-line:rgba(246,248,238,.16);
+  --pj-glow:rgba(79,178,106,.30);
+  --pj-mock-bg:#0A3216;
+  --pj-mock-line:#10451F;
   --shadow-card:0 26px 60px -30px rgba(0,0,0,0.85);
   --shadow-hover:0 16px 36px -20px rgba(0,0,0,0.8);
   --shadow-float:0 16px 38px -16px rgba(0,0,0,0.85);
@@ -1193,7 +1196,7 @@ footer .logo img{ height:24px; width:auto; }
 .pj-tags{ display:block; margin-top:16px; color:var(--pj-mute); font-size:11.5px; letter-spacing:.04em; }
 .pj-sub{ display:block; margin-top:14px; max-width:50ch; font-size:16px; line-height:1.6; color:var(--pj-mute); }
 .pj-go{ display:inline-flex; align-items:center; gap:10px; margin-top:26px; padding:12px 20px;
-  border-radius:999px; background:var(--pj-accent); color:#1B1411; font-size:11.5px;
+  border-radius:999px; background:var(--pj-accent); color:var(--pj-bg); font-size:11.5px;
   letter-spacing:.08em; font-weight:600;
   transition:transform .2s var(--ease-out), box-shadow .2s var(--ease-out); }
 .pj-go .arr{ display:inline-block; font-size:14px; transition:transform .2s var(--ease-out); }
@@ -1245,4 +1248,70 @@ a.pj:focus-visible{ outline:2px solid var(--pj-accent); outline-offset:8px; bord
 }
 @media (prefers-reduced-motion:reduce){
   .pj-shot, .pj-title, .pj-go, .pj-go .arr{ transition:none; }
+}
+
+
+/* ── Acabado general (sin mover nada) ─────────────────────────────────────────
+   Capa de pulido: no cambia medidas, posiciones ni textos. Solo profundidad,
+   brillo y respuesta al puntero, con los mismos verdes de la marca. */
+
+/* Líneas entre secciones: mismo 1px, pero se desvanecen hacia los bordes. */
+section + section{ border-top:1px solid transparent;
+  border-image:linear-gradient(90deg, transparent, var(--line) 14%, var(--line) 86%, transparent) 1; }
+.capband + section, .pjband{ border-image:none; }
+
+/* Barra superior más fina y con más cristal. */
+nav{ -webkit-backdrop-filter:saturate(1.5) blur(14px); backdrop-filter:saturate(1.5) blur(14px); }
+
+/* Botón principal: degradado verde fuerte → verde suave, con luz en el borde
+   superior y sombra del mismo color. Funciona en día y noche (usa --accent). */
+.btn-primary, .submit-btn{
+  background-image:linear-gradient(180deg, color-mix(in srgb, var(--accent) 84%, #fff) 0%, var(--accent) 70%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 0 10px 22px -12px color-mix(in srgb, var(--accent) 75%, transparent); }
+.cta-final .btn-primary{ background-image:none; box-shadow:none; }
+
+/* Tarjeta del formulario: luz verde suave que respira. */
+.form-card{ background-image:linear-gradient(180deg, color-mix(in srgb, var(--accent) 3%, var(--card)) 0%, var(--card) 38%); }
+
+/* Franjas verdes con profundidad: dos tonos del mismo verde, sin cambiar el fondo base. */
+.capband{ background:linear-gradient(165deg, color-mix(in srgb, var(--band-bg) 78%, #3E9A3E) 0%, var(--band-bg) 58%); }
+.cta-final{ background:linear-gradient(165deg, color-mix(in srgb, var(--band-bg) 82%, #3E9A3E) 0%, var(--band-bg) 60%); }
+.pjband{ background:linear-gradient(170deg, var(--pj-bg-2) 0%, var(--pj-bg) 55%); }
+.pjband::before{ background:radial-gradient(circle, var(--pj-glow) 0%, transparent 66%); }
+
+/* Palabra destacada de la vitrina: lima → verde suave. */
+.pj-lead em, .pj-title em{ background:linear-gradient(100deg, #9BE02E 0%, #78CC00 45%, var(--pj-soft) 100%);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:var(--pj-accent); }
+.pj-kicker::before{ background:linear-gradient(90deg, var(--pj-accent), var(--pj-soft)); }
+.pj-tag{ background:linear-gradient(180deg, var(--pj-accent-soft), transparent); }
+.pj-go{ background-image:linear-gradient(180deg, #9BE02E, var(--pj-accent));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 12px 26px -14px var(--pj-accent); }
+.pj-shot{ box-shadow:0 30px 60px -28px rgba(0,0,0,.65), 0 0 0 1px rgba(246,248,238,.04) inset; }
+
+/* Foco de luz que sigue al puntero sobre las tarjetas y las ventanas. */
+.cap::before, .pj-shot::after{ content:''; position:absolute; inset:0; border-radius:inherit;
+  pointer-events:none; opacity:0; transition:opacity .35s var(--ease-out); }
+.cap::before{ z-index:0;
+  background:radial-gradient(280px circle at var(--mx,50%) var(--my,0%), color-mix(in srgb, var(--band-lit) 22%, transparent), transparent 70%); }
+.pj-shot{ position:relative; }
+.pj-shot::after{ z-index:2;
+  background:radial-gradient(320px circle at var(--mx,50%) var(--my,0%), rgba(155,224,46,.16), transparent 70%); }
+.cap-body, .cap-go{ position:relative; z-index:1; }
+.cap-n{ z-index:1; }
+@media (hover:hover) and (pointer:fine){
+  .cap:hover::before, a.pj:not(.pj-soon):hover .pj-shot::after{ opacity:1; }
+}
+
+/* Entrada de bloques algo más lenta y suave. */
+.reveal{ transition:opacity .8s var(--ease-out), transform .8s var(--ease-out); }
+
+/* Brillo ambiental del hero: un halo verde que deriva muy despacio. */
+.hero::before{ content:''; position:absolute; top:-18%; right:-12%; width:min(62vw,860px); aspect-ratio:1;
+  background:radial-gradient(closest-side at 38% 38%, rgba(120,204,0,.12), transparent),
+             radial-gradient(closest-side at 66% 64%, rgba(0,138,20,.10), transparent);
+  pointer-events:none; }
+[data-theme="night"] .hero::before{ opacity:.7; }
+@media (prefers-reduced-motion:no-preference){
+  .hero::before{ animation:ambient 26s ease-in-out infinite alternate; will-change:transform; }
+  @keyframes ambient{ from{ transform:translate3d(0,0,0) scale(1); } to{ transform:translate3d(-4%,6%,0) scale(1.08); } }
 }

@@ -266,6 +266,21 @@ document.querySelectorAll("[data-pj-list] .pj").forEach((row) => {
   }
 });
 
+/* ── Foco de luz bajo el puntero ──────────────────────────────────────────────
+   Solo escribe dos variables CSS (--mx/--my) en la tarjeta que se está
+   tocando; el dibujo lo hace el CSS. Sin puntero fino no hace nada. */
+if (window.matchMedia("(hover:hover) and (pointer:fine)").matches) {
+  document.querySelectorAll(".cap, .pj").forEach((el) => {
+    const target = el.classList.contains("pj") ? el.querySelector(".pj-shot") : el;
+    if (!target) return;
+    el.addEventListener("pointermove", (e) => {
+      const r = target.getBoundingClientRect();
+      target.style.setProperty("--mx", `${e.clientX - r.left}px`);
+      target.style.setProperty("--my", `${e.clientY - r.top}px`);
+    }, { passive: true });
+  });
+}
+
 /* ── Reveal al hacer scroll ───────────────────────────────────────────────────
    IntersectionObserver nativo, sin librería: el bloque se revela una vez y se
    queda. Los contenedores marcados con data-stagger escalonan además a sus
