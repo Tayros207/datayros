@@ -235,8 +235,35 @@ if (cmpInput && cmpSeg) {
    Si una foto no existe o falla al cargar, la quitamos del DOM. El CSS de cada
    una está condicionado con :has(), así que al retirarla el contenedor vuelve
    solo a su estado anterior sin ícono de imagen rota. */
-document.querySelectorAll(".founder-photo, .showroom-photo").forEach((img) => {
+document.querySelectorAll(".founder-photo, .showroom-photo, .pj-screen img").forEach((img) => {
   img.addEventListener("error", () => img.remove(), { once: true });
+});
+
+/* ── Vitrina de proyectos (#productos) ────────────────────────────────────────
+   Un único sitio donde pegar las URLs: el atributo data-url de cada .pj en el
+   HTML. Aquí se convierte en enlace (solo https, abre en pestaña nueva) y se
+   rotula la barra de la ventana con el dominio. Sin URL, la fila queda como
+   "Próximamente" y sin href: jamás un enlace muerto. */
+document.querySelectorAll("[data-pj-list] .pj").forEach((row) => {
+  const host = row.querySelector(".pj-host");
+  const label = row.querySelector(".pj-go-t");
+  let url = null;
+  try {
+    const u = new URL((row.dataset.url || "").trim());
+    if (u.protocol === "https:") url = u;
+  } catch (_) { /* vacío o inválido: queda como Próximamente */ }
+
+  if (url) {
+    row.href = url.href;
+    row.target = "_blank";
+    row.rel = "noopener noreferrer";
+    row.setAttribute("aria-label", `${row.dataset.name || "Proyecto"}: abrir el proyecto en vivo (se abre en otra pestaña)`);
+    if (host) host.textContent = url.host;
+  } else {
+    row.classList.add("pj-soon");
+    if (label) label.textContent = "Próximamente";
+    if (host) host.textContent = "próximamente";
+  }
 });
 
 /* ── Reveal al hacer scroll ───────────────────────────────────────────────────

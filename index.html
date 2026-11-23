@@ -397,7 +397,7 @@
       <span class="founder-initials">M.E.</span>
       <img class="founder-photo" src="/img/moises-escobar.jpg"
            alt="Moisés Escobar, fundador de Datayros"
-           loading="lazy" decoding="async">
+           loading="lazy" decoding="async" onerror="this.remove()">
       <div class="founder-tag">Moisés Escobar — fundador de Datayros</div>
     </div>
     <div>
@@ -504,32 +504,183 @@
   </div>
 </section>
 
-<section id="productos" class="section-tight">
+<!-- ── Lo que construimos (#productos) ──────────────────────────────────────
+     Vitrina de proyectos propios. Cada fila es UN enlace al proyecto en vivo.
+     PARA AÑADIR O ACTIVAR UN PROYECTO:
+       1) Pega la URL de Vercel en  data-url="..."  (una sola vez, aquí).
+       2) (Opcional) Sube una captura a img/proyectos/NOMBRE.jpg y apúntala en
+          el <img src>. Si el archivo no existe, se muestra la maqueta.
+     Mientras data-url esté vacío la fila se ve completa pero NO es un enlace
+     y dice "Próximamente": nunca hay un enlace muerto en producción.
+     Para un proyecto nuevo, copia una fila <a class="pj"> entera. -->
+<section id="productos" class="pjband">
   <div class="wrap">
-    <div class="section-head tight reveal">
-      <div class="eyebrow">Desarrollo propio</div>
-      <h2>Lo que construimos nosotros.</h2>
-      <p>Nacidos de un problema concreto en Atlantis y probados ahí antes de ofrecerlos afuera.</p>
+    <div class="pj-head reveal">
+      <p class="pj-kicker mono">Desarrollo propio</p>
+      <h2 class="pj-lead">Lo que construimos <em>nosotros.</em></h2>
+      <p class="pj-intro">Nacidos de un problema concreto en Atlantis y probados ahí antes de ofrecerlos afuera. Entra y míralos funcionando.</p>
     </div>
-    <div class="stock reveal" data-stagger>
 
-      <article class="stock-item">
-        <span class="stock-own">Desarrollo propio</span>
-        <div class="stock-id">
-          <h3>Registro Conversacional B02</h3>
-          <p class="stock-tags">Voz · Ingresos y egresos · Sin planillas</p>
-        </div>
-        <p>Registrar lo que entra y lo que sale hablando, mientras sigues trabajando — en vez de juntar papeles para llenar una planilla cada noche.</p>
-      </article>
+    <div class="pj-list reveal" data-pj-list data-stagger>
 
-      <article class="stock-item">
-        <span class="stock-own">Desarrollo propio</span>
-        <div class="stock-id">
-          <h3>Sistema de cobranza</h3>
-          <p class="stock-tags">Recordatorios · Seguimiento · Escalamiento</p>
-        </div>
-        <p>Dejar de perseguir pagos uno por uno: los recordatorios salen solos y una persona entra únicamente cuando el caso se complica.</p>
-      </article>
+      <a class="pj" data-url="" data-name="Registro Conversacional B02">
+        <span class="pj-n mono">01</span>
+        <span class="pj-body">
+          <span class="pj-tag mono"><i class="pj-dot" aria-hidden="true"></i>Desarrollo propio</span>
+          <span class="pj-title">Registro <em>Conversacional</em> B02</span>
+          <span class="pj-tags mono">Voz · Ingresos y egresos · Sin planillas</span>
+          <span class="pj-sub">Registrar lo que entra y lo que sale hablando, mientras sigues trabajando — en vez de juntar papeles para llenar una planilla cada noche.</span>
+          <span class="pj-go mono"><span class="pj-go-t">Ver el proyecto en vivo</span> <span class="arr" aria-hidden="true">↗</span></span>
+        </span>
+        <span class="pj-shot" aria-hidden="true">
+          <span class="pj-bar"><i></i><i></i><i></i><span class="pj-host mono">—</span></span>
+          <span class="pj-screen">
+            <svg class="pj-mock" viewBox="0 0 320 190" preserveAspectRatio="xMidYMid slice" focusable="false">
+              <rect width="320" height="190" fill="var(--pj-mock-bg)"/>
+              <rect x="22" y="22" width="276" height="16" rx="8" fill="var(--pj-mock-line)"/>
+              <g fill="var(--pj-accent)"><rect x="40" y="86" width="6" height="18" rx="3"/><rect x="54" y="74" width="6" height="42" rx="3"/><rect x="68" y="62" width="6" height="66" rx="3"/><rect x="82" y="78" width="6" height="34" rx="3"/><rect x="96" y="54" width="6" height="82" rx="3"/><rect x="110" y="70" width="6" height="50" rx="3"/><rect x="124" y="82" width="6" height="26" rx="3"/><rect x="138" y="66" width="6" height="58" rx="3"/></g>
+              <circle cx="244" cy="95" r="30" fill="var(--pj-accent)"/>
+              <rect x="237" y="80" width="14" height="22" rx="7" fill="var(--pj-mock-bg)"/>
+              <rect x="22" y="146" width="130" height="10" rx="5" fill="var(--pj-mock-line)"/>
+              <rect x="22" y="164" width="92" height="10" rx="5" fill="var(--pj-mock-line)"/>
+              <rect x="226" y="150" width="72" height="22" rx="11" fill="var(--pj-accent-soft)"/>
+            </svg>
+            <img src="img/proyectos/registro-b02.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()">
+          </span>
+        </span>
+      </a>
+
+      <a class="pj" data-url="" data-name="Sistema de cobranza">
+        <span class="pj-n mono">02</span>
+        <span class="pj-body">
+          <span class="pj-tag mono"><i class="pj-dot" aria-hidden="true"></i>Desarrollo propio</span>
+          <span class="pj-title">Sistema de <em>cobranza</em></span>
+          <span class="pj-tags mono">Recordatorios · Seguimiento · Escalamiento</span>
+          <span class="pj-sub">Dejar de perseguir pagos uno por uno: los recordatorios salen solos y una persona entra únicamente cuando el caso se complica.</span>
+          <span class="pj-go mono"><span class="pj-go-t">Ver el proyecto en vivo</span> <span class="arr" aria-hidden="true">↗</span></span>
+        </span>
+        <span class="pj-shot" aria-hidden="true">
+          <span class="pj-bar"><i></i><i></i><i></i><span class="pj-host mono">—</span></span>
+          <span class="pj-screen">
+            <svg class="pj-mock" viewBox="0 0 320 190" preserveAspectRatio="xMidYMid slice" focusable="false">
+              <rect width="320" height="190" fill="var(--pj-mock-bg)"/>
+              <rect x="22" y="22" width="120" height="14" rx="7" fill="var(--pj-mock-line)"/>
+              <g><rect x="22" y="56" width="276" height="30" rx="9" fill="var(--pj-mock-line)"/><rect x="22" y="96" width="276" height="30" rx="9" fill="var(--pj-mock-line)"/><rect x="22" y="136" width="276" height="30" rx="9" fill="var(--pj-mock-line)"/></g>
+              <circle cx="40" cy="71" r="6" fill="var(--pj-accent)"/><circle cx="40" cy="111" r="6" fill="var(--pj-accent)"/><circle cx="40" cy="151" r="6" fill="var(--pj-accent)" opacity=".45"/>
+              <rect x="58" y="67" width="110" height="8" rx="4" fill="var(--pj-mock-bg)"/><rect x="58" y="107" width="86" height="8" rx="4" fill="var(--pj-mock-bg)"/><rect x="58" y="147" width="98" height="8" rx="4" fill="var(--pj-mock-bg)"/>
+              <rect x="228" y="62" width="60" height="18" rx="9" fill="var(--pj-accent-soft)"/><rect x="228" y="102" width="60" height="18" rx="9" fill="var(--pj-accent-soft)"/><rect x="228" y="142" width="60" height="18" rx="9" fill="var(--pj-accent)"/>
+            </svg>
+            <img src="img/proyectos/cobranza.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()">
+          </span>
+        </span>
+      </a>
+
+      <a class="pj" data-url="" data-name="Capaz ERP">
+        <span class="pj-n mono">03</span>
+        <span class="pj-body">
+          <span class="pj-tag mono"><i class="pj-dot" aria-hidden="true"></i>Desarrollo propio</span>
+          <span class="pj-title"><em>Capaz</em> ERP</span>
+          <span class="pj-tags mono">ERP · Multiempresa · Voz y agentes</span>
+          <span class="pj-sub">ERP modular para la industria gráfica y publicitaria: se ve como un ERP de toda la vida y, por detrás, trabaja con agentes y voz — con una persona que aprueba.</span>
+          <span class="pj-go mono"><span class="pj-go-t">Ver el proyecto en vivo</span> <span class="arr" aria-hidden="true">↗</span></span>
+        </span>
+        <span class="pj-shot" aria-hidden="true">
+          <span class="pj-bar"><i></i><i></i><i></i><span class="pj-host mono">—</span></span>
+          <span class="pj-screen">
+            <svg class="pj-mock" viewBox="0 0 320 190" preserveAspectRatio="xMidYMid slice" focusable="false">
+              <rect width="320" height="190" fill="var(--pj-mock-bg)"/>
+              <rect x="0" y="0" width="64" height="190" fill="var(--pj-mock-line)"/>
+              <rect x="14" y="20" width="36" height="8" rx="4" fill="var(--pj-accent)"/>
+              <rect x="14" y="42" width="30" height="6" rx="3" fill="var(--pj-mock-bg)"/><rect x="14" y="58" width="34" height="6" rx="3" fill="var(--pj-mock-bg)"/><rect x="14" y="74" width="26" height="6" rx="3" fill="var(--pj-mock-bg)"/><rect x="14" y="90" width="32" height="6" rx="3" fill="var(--pj-mock-bg)"/>
+              <rect x="82" y="20" width="64" height="40" rx="9" fill="var(--pj-mock-line)"/><rect x="156" y="20" width="64" height="40" rx="9" fill="var(--pj-mock-line)"/><rect x="230" y="20" width="68" height="40" rx="9" fill="var(--pj-accent-soft)"/>
+              <rect x="82" y="76" width="216" height="92" rx="9" fill="var(--pj-mock-line)"/>
+              <g fill="var(--pj-mock-bg)"><rect x="96" y="92" width="90" height="7" rx="3.5"/><rect x="96" y="112" width="70" height="7" rx="3.5"/><rect x="96" y="132" width="104" height="7" rx="3.5"/></g>
+              <g fill="var(--pj-accent)"><rect x="236" y="92" width="48" height="7" rx="3.5"/><rect x="236" y="112" width="34" height="7" rx="3.5"/><rect x="236" y="132" width="42" height="7" rx="3.5" opacity=".5"/></g>
+            </svg>
+            <img src="img/proyectos/capaz-erp.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()">
+          </span>
+        </span>
+      </a>
+
+      <a class="pj" data-url="" data-name="Levi AI">
+        <span class="pj-n mono">04</span>
+        <span class="pj-body">
+          <span class="pj-tag mono"><i class="pj-dot" aria-hidden="true"></i>Desarrollo propio</span>
+          <span class="pj-title"><em>Levi</em> AI</span>
+          <span class="pj-tags mono">Video con IA · Guion y escenas · Exporta MP4</span>
+          <span class="pj-sub">De una idea, un prompt o un video existente a una pieza publicitaria editable: la IA arma el borrador, una persona lo revisa y lo exporta.</span>
+          <span class="pj-go mono"><span class="pj-go-t">Ver el proyecto en vivo</span> <span class="arr" aria-hidden="true">↗</span></span>
+        </span>
+        <span class="pj-shot" aria-hidden="true">
+          <span class="pj-bar"><i></i><i></i><i></i><span class="pj-host mono">—</span></span>
+          <span class="pj-screen">
+            <svg class="pj-mock" viewBox="0 0 320 190" preserveAspectRatio="xMidYMid slice" focusable="false">
+              <rect width="320" height="190" fill="var(--pj-mock-bg)"/>
+              <rect x="22" y="20" width="276" height="104" rx="10" fill="var(--pj-mock-line)"/>
+              <circle cx="160" cy="72" r="24" fill="var(--pj-accent)"/>
+              <path d="M152 60 L152 84 L174 72 Z" fill="var(--pj-mock-bg)"/>
+              <rect x="22" y="138" width="276" height="10" rx="5" fill="var(--pj-mock-line)"/>
+              <rect x="22" y="138" width="124" height="10" rx="5" fill="var(--pj-accent)"/>
+              <g fill="var(--pj-mock-line)"><rect x="22" y="158" width="60" height="16" rx="5"/><rect x="88" y="158" width="60" height="16" rx="5"/><rect x="154" y="158" width="60" height="16" rx="5"/></g>
+              <rect x="220" y="158" width="78" height="16" rx="8" fill="var(--pj-accent-soft)"/>
+            </svg>
+            <img src="img/proyectos/levi-ai.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()">
+          </span>
+        </span>
+      </a>
+
+      <a class="pj" data-url="https://cotizin.vercel.app" data-name="Cotizín">
+        <span class="pj-n mono">05</span>
+        <span class="pj-body">
+          <span class="pj-tag mono"><i class="pj-dot" aria-hidden="true"></i>Desarrollo propio</span>
+          <span class="pj-title"><em>Cotizín</em></span>
+          <span class="pj-tags mono">Cotizaciones · Costo real · Imprentas</span>
+          <span class="pj-sub">Tu ayudante de taller: cotiza trabajos de impresión rápido, con el costo real de producción y sin perder margen.</span>
+          <span class="pj-go mono"><span class="pj-go-t">Ver el proyecto en vivo</span> <span class="arr" aria-hidden="true">↗</span></span>
+        </span>
+        <span class="pj-shot" aria-hidden="true">
+          <span class="pj-bar"><i></i><i></i><i></i><span class="pj-host mono">—</span></span>
+          <span class="pj-screen">
+            <svg class="pj-mock" viewBox="0 0 320 190" preserveAspectRatio="xMidYMid slice" focusable="false">
+              <rect width="320" height="190" fill="var(--pj-mock-bg)"/>
+              <rect x="22" y="20" width="120" height="14" rx="7" fill="var(--pj-mock-line)"/>
+              <g fill="var(--pj-mock-line)"><rect x="22" y="48" width="276" height="24" rx="8"/><rect x="22" y="80" width="276" height="24" rx="8"/><rect x="22" y="112" width="276" height="24" rx="8"/></g>
+              <g fill="var(--pj-mock-bg)"><rect x="34" y="56" width="104" height="8" rx="4"/><rect x="34" y="88" width="82" height="8" rx="4"/><rect x="34" y="120" width="94" height="8" rx="4"/></g>
+              <g fill="var(--pj-accent-soft)"><rect x="236" y="55" width="50" height="10" rx="5"/><rect x="236" y="87" width="50" height="10" rx="5"/><rect x="236" y="119" width="50" height="10" rx="5"/></g>
+              <rect x="170" y="148" width="128" height="28" rx="14" fill="var(--pj-accent)"/>
+              <rect x="186" y="158" width="52" height="8" rx="4" fill="var(--pj-mock-bg)"/>
+            </svg>
+            <img src="img/proyectos/cotizin.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()">
+          </span>
+        </span>
+      </a>
+
+      <a class="pj" data-url="https://datairos-studio.vercel.app" data-name="Datairos Studio">
+        <span class="pj-n mono">06</span>
+        <span class="pj-body">
+          <span class="pj-tag mono"><i class="pj-dot" aria-hidden="true"></i>Desarrollo propio</span>
+          <span class="pj-title">Datairos <em>Studio</em></span>
+          <span class="pj-tags mono">Dielines · Packaging · Troquelado</span>
+          <span class="pj-sub">Plantillas de troquel y empaques en digital, con asesoría de troquelado estructural: tu troquel bien hecho a la primera.</span>
+          <span class="pj-go mono"><span class="pj-go-t">Ver el proyecto en vivo</span> <span class="arr" aria-hidden="true">↗</span></span>
+        </span>
+        <span class="pj-shot" aria-hidden="true">
+          <span class="pj-bar"><i></i><i></i><i></i><span class="pj-host mono">—</span></span>
+          <span class="pj-screen">
+            <svg class="pj-mock" viewBox="0 0 320 190" preserveAspectRatio="xMidYMid slice" focusable="false">
+              <rect width="320" height="190" fill="var(--pj-mock-bg)"/>
+              <g fill="none" stroke="var(--pj-accent)" stroke-width="2" stroke-dasharray="6 5" stroke-linejoin="round">
+                <rect x="112" y="64" width="64" height="64"/><rect x="48" y="64" width="64" height="64" stroke-dasharray="none" stroke="var(--pj-mock-line)" stroke-width="2"/>
+                <rect x="176" y="64" width="64" height="64" stroke-dasharray="none" stroke="var(--pj-mock-line)" stroke-width="2"/>
+                <rect x="240" y="64" width="32" height="64" stroke-dasharray="none" stroke="var(--pj-mock-line)" stroke-width="2"/>
+                <path d="M112 64 L124 36 L164 36 L176 64"/><path d="M112 128 L124 156 L164 156 L176 128"/>
+              </g>
+              <g stroke="var(--pj-accent-soft)" stroke-width="2"><line x1="22" y1="176" x2="298" y2="176"/><line x1="22" y1="172" x2="22" y2="180"/><line x1="298" y1="172" x2="298" y2="180"/></g>
+            </svg>
+            <img src="img/proyectos/datairos-studio.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()">
+          </span>
+        </span>
+      </a>
 
     </div>
   </div>
@@ -590,7 +741,7 @@
            srcset="/img/atlantis-taller-1200.jpg 1150w"
            sizes="(max-width:900px) 100vw, 45vw"
            alt="Interior del taller Atlantis: prensa Heidelberg al fondo y puestos de trabajo con diseño de troqueles y desarrollo de software"
-           loading="lazy" decoding="async">
+           loading="lazy" decoding="async" onerror="this.remove()">
       <span class="showroom-stamp mono" aria-hidden="true">Probado aquí</span>
       <div class="showroom-badge">
         <span class="badge-kicker mono">Medido en el taller</span>
